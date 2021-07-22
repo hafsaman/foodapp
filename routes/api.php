@@ -3,6 +3,7 @@
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\API\RegisterController;
+use App\Http\Controllers\API\UserController;
 
 /*
 |--------------------------------------------------------------------------
@@ -17,7 +18,15 @@ use App\Http\Controllers\API\RegisterController;
   
 Route::post('register', [RegisterController::class, 'register']);
 Route::post('login', [RegisterController::class, 'login']);
+
      
-Route::middleware('auth:api')->get('/user', function (Request $request) {
+/*Route::middleware('auth:api')->get('/user', function (Request $request) {
     return $request->user();
+});*/
+
+Route::middleware('auth:api')->group( function () {
+	
+    Route::get('getprofile/{id}', [UserController::class, 'getprofile']);
+Route::put('profileedit/{id}', [UserController::class, 'profileedit']);
+
 });
