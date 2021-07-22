@@ -25,7 +25,7 @@ class UserController extends BaseController
           $success[] = [
             'id'=>$users->id,
             'name'=>$users->name,
-            'avatar'=>Storage::url($users->avatar),
+            'avatar'=>$users->avatar,
             'about'=>$users->about,
             'photos'=>$user_photos,
             'videos'=>$user_videos,
