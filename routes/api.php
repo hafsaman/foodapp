@@ -4,6 +4,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\API\RegisterController;
 use App\Http\Controllers\API\UserController;
+use App\Http\Controllers\API\PostsController;
 
 /*
 |--------------------------------------------------------------------------
@@ -26,7 +27,9 @@ Route::post('login', [RegisterController::class, 'login']);
 
 Route::middleware('auth:api')->group( function () {
 	
-    Route::get('getprofile/{id}', [UserController::class, 'getprofile']);
+Route::get('getprofile/{id}', [UserController::class, 'getprofile']);
 Route::put('profileedit/{id}', [UserController::class, 'profileedit']);
+Route::post('createpost', [PostsController::class, 'create']);
+
 
 });

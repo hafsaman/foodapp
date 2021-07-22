@@ -17,7 +17,7 @@ class UserController extends BaseController
 
   //validator place
 
-  $users = user::find($id);
+       $users = user::find($id);
  
         if(isset($users)){
             $user_photos=UserGallary::where('user_id',$users->id)->where('media_type','=','photo')->get();
@@ -44,7 +44,7 @@ class UserController extends BaseController
   
 
       $users = user::find($id);
-       //return response()->json($request->about);
+       
       if(isset($users)){
           $users->name = $request->name;
           $users->about = $request->about;
