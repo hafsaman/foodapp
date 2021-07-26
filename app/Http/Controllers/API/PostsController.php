@@ -31,11 +31,9 @@ class PostsController extends BaseController
         }
         $input['title'] = $request->title;
         $input['comment'] = $request->comment;
-        
-   		 	$input['is_shopping'] ='yes';
+        $input['is_shopping'] ='yes';
         $input['price'] = $request->price;
-   		 
-        $input['user_id'] = Auth::user()->id;
+   		$input['user_id'] = Auth::user()->id;
        
         if($request->has('postmedia')) {
             $fileName = time().'.'.$request->postmedia->extension();
@@ -44,7 +42,8 @@ class PostsController extends BaseController
         }
          else
             {$img_path='';}
-         $input['media_path'] = $request->img_path;
+
+        $input['media_path'] = $request->img_path;
         $posts = Posts::create($input);
       if(isset($posts)){
           $success[] = [
@@ -58,4 +57,52 @@ class PostsController extends BaseController
       
 
     }
+
+    public function likepost($id){
+
+  //validator place
+
+       $posts = Posts::find($id);
+ 
+        if(isset($posts)){
+        	$input['post_id'] = $posts->id;
+   		 	$input['user_id'] = Auth::user()->id;
+   		 	$input['like'] = 1;
+            Posts_Likes::create($input);
+          $success[] = [
+            
+            'status'=>200,
+          ];
+            return $this->sendResponse($success, 'Post Like successfully.');
+        } 
+        else{ 
+            return $this->sendError('User Not Exists', ['error'=>'User Not Found']);
+        } 
+
+    }
+
+     public function commentpost($id,Request $request){
+
+  //validator place
+
+       $posts = Posts::find($id);
+ 
+        if(isset($posts)){
+        	$input['post_id'] = $posts->id;
+        	$input['comment'] = $request->comment;
+   		 	$input['user_id'] = Auth::user()->id;
+            Posts_Comments::create($input);
+          $success[] = [
+            
+            'status'=>200,
+          ];
+            return $this->sendResponse($success, 'Post Like successfully.');
+        } 
+        else{ 
+            return $this->sendError('User Not Exists', ['error'=>'User Not Found']);
+        } 
+
+    }
+
+
 }

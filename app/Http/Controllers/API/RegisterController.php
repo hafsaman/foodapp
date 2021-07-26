@@ -22,12 +22,20 @@ class RegisterController extends BaseController
             'email' => 'required|email',
             'password' => 'required',
             'c_password' => 'required|same:password',
+            'region'=>'required',
+            'country'=>'required'
         ]);
    
         if($validator->fails()){
             return $this->sendError('Validation Error.', $validator->errors());       
         }
-   
+        
+        $user=User::where('email',$request->email)->first();
+        if(isset($user)){
+             return $this->sendError('User Invalid.', 'User Already Exists'); 
+        }
+        else
+        {
         $input = $request->all();
         $input['password'] = bcrypt($input['password']);
         $user = User::create($input);
@@ -35,6 +43,7 @@ class RegisterController extends BaseController
         $success['name'] =  $user->name;
    
         return $this->sendResponse($success, 'User register successfully.');
+    }
     }
    
     /**

@@ -2,10 +2,14 @@
 
 namespace App\Http\Controllers\API;
 
-use App\Http\Controllers\Controller;
+
+use App\Http\Controllers\API\BaseController as BaseController;
+
 use Illuminate\Http\Request;
 
-class ForgotPasswordController extends Controller
+class ForgotPasswordController extends BaseController
+
 {
     //
+	    
 }
