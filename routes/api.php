@@ -28,7 +28,8 @@ Route::post('login', [RegisterController::class, 'login']);
 Route::middleware('auth:api')->group( function () {
 	
 Route::get('getprofile/{id}', [UserController::class, 'getprofile']);
-Route::put('profileedit/{id}', [UserController::class, 'profileedit']);
+Route::put('profileedit', [UserController::class, 'profileedit']);
+Route::put('profileabout', [UserController::class, 'profileabout']);
 Route::post('createpost', [PostsController::class, 'create']);
 
 

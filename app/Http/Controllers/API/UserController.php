@@ -94,4 +94,35 @@ class UserController extends BaseController
       
 
     }
+     public function profileabout( Request $request){
+
+      $id=Auth::user()->id;
+
+      $users = user::find($id);
+       
+      if(isset($users)){
+           $validator = Validator::make($request->all(), [
+            'about' => 'required',
+            ]);
+    
+        if($validator->fails()){
+            return $this->sendError('Validation Error.', $validator->errors());       
+        }
+     
+          $users->about = $request->about;
+          $users->save();
+
+          $success[] = [
+            'id'=>$users->id,
+            'name'=>$users->name,
+            'status'=>200,
+          ];
+        return $this->sendResponse($success, 'User Profile Edit successfully.');
+        } 
+        else{ 
+            return $this->sendError('User Not Exists.', ['error'=>'Userr Not Found']);
+        } 
+      
+
+    }
 }
