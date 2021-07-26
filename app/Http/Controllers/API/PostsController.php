@@ -34,7 +34,7 @@ class PostsController extends BaseController
         $input['comment'] = $request->comment;
         $input['is_shopping'] ='yes';
         $input['price'] = $request->price;
-        $input['region']=$request->region
+        $input['region']=$request->region;
    		$input['user_id'] = Auth::user()->id;
        
         if($request->has('postmedia')) {
