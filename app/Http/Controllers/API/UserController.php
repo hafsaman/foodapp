@@ -61,7 +61,7 @@ class UserController extends BaseController
         if($validator->fails()){
             return $this->sendError('Validation Error.', $validator->errors());       
         }
-        $user=User::where('email',$request->email)->first();
+        $user=User::where('email',$request->email)->where('id','!=',$id)->first();
         if(isset($user)){
              return $this->sendError('User Invalid.', 'User Already Exists'); 
         }
