@@ -10,6 +10,6 @@ class Posts extends Model
     use HasFactory;
      protected $table='posts';
     protected $fillable = [
-        'id',  'title',  'media_path','user_id','comment','is_shopping','price'
+        'id',  'title',  'media_path','user_id','comment','is_shopping','price','region'
     ];
 }

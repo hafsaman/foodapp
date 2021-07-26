@@ -23,7 +23,8 @@ class PostsController extends BaseController
          
             'comment' => 'required',
              'shopping' => 'required',
-            
+            'region' =>'required',
+            'postmedia'=>'required'
         ]);
    	
         if($validator->fails()){
@@ -33,6 +34,7 @@ class PostsController extends BaseController
         $input['comment'] = $request->comment;
         $input['is_shopping'] ='yes';
         $input['price'] = $request->price;
+        $input['region']=$request->region
    		$input['user_id'] = Auth::user()->id;
        
         if($request->has('postmedia')) {

@@ -23,7 +23,10 @@ class RegisterController extends BaseController
             'password' => 'required',
             'c_password' => 'required|same:password',
             'region'=>'required',
-            'country'=>'required'
+            'devicetype'=>'required',
+            'logintype'=>'required',
+            'devicetoken'=>'required'
+            
         ]);
    
         if($validator->fails()){

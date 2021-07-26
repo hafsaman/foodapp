@@ -24,8 +24,10 @@ class User extends Authenticatable
         'avatar',
         'about',
         'status',
-        'city',
-        'state'
+        'region',
+        'phoneno',
+        'logintype',
+        'devicetype','devicetoken'
     ];
 
     /**
