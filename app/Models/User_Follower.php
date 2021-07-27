@@ -5,11 +5,11 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class Posts_Likes extends Model
+class User_Follower extends Model
 {
     use HasFactory;
-     protected $table='posts_likes';
+     protected $table='user_follower';
     protected $fillable = [
-        'id',  'user_id','post_id','like'
+        'id',  'user_id','follower_id','follow'
     ];
 }

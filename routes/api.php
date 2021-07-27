@@ -30,7 +30,18 @@ Route::middleware('auth:api')->group( function () {
 Route::get('getprofile/{id}', [UserController::class, 'getprofile']);
 Route::put('profileedit', [UserController::class, 'profileedit']);
 Route::put('profileabout', [UserController::class, 'profileabout']);
+Route::put('follow', [UserController::class, 'follow']);
+Route::put('unfollow', [UserController::class, 'unfollow']);
 Route::post('createpost', [PostsController::class, 'create']);
+Route::get('getpostsall', [PostsController::class, 'getpostsall']);
+Route::get('getposts', [PostsController::class, 'getposts']);
+Route::get('likepost/{id}', [PostsController::class, 'likepost']);
+Route::get('unlikepost/{id}', [PostsController::class, 'unlikepost']);
+Route::get('favouritepost/{id}', [PostsController::class, 'favouritepost']);
+Route::get('unfavouritepost/{id}', [PostsController::class, 'unfavouritepost']);
+Route::put('commentpost', [PostsController::class, 'commentpost']);
+
+
 
 
 });

@@ -7,6 +7,7 @@ use App\Http\Controllers\API\BaseController as BaseController;
 use App\Models\User;
 use App\Models\UserGallary;
 use App\Models\Posts;
+use App\Models\Follower;
 use Illuminate\Support\Facades\Auth;
 use Validator;
 //use Illuminate\Support\Facades\Storage;
@@ -123,6 +124,52 @@ class UserController extends BaseController
             return $this->sendError('User Not Exists.', ['error'=>'Userr Not Found']);
         } 
       
+
+    }
+
+    public function follow($id){
+
+  //validator place
+
+       $users = Users::find($id);
+ 
+        if(isset($posts)){
+          $input['follower_id'] = $id;
+        $input['user_id'] = Auth::user()->id;
+        $input['follow'] = 1;
+            Follower::create($input);
+          $success[] = [
+            
+            'status'=>200,
+          ];
+            return $this->sendResponse($success, 'Follow successfully.');
+        } 
+        else{ 
+            return $this->sendError('User Not Exists', ['error'=>'User Not Found']);
+        } 
+
+    }
+
+    public function unfollow($id){
+
+  //validator place
+
+       $users = Users::find($id);
+ 
+        if(isset($posts)){
+          $input['follower_id'] = $id;
+        $input['user_id'] = Auth::user()->id;
+        $input['follow'] = 0;
+            Follower::create($input);
+          $success[] = [
+            
+            'status'=>200,
+          ];
+            return $this->sendResponse($success, 'UnFollow successfully.');
+        } 
+        else{ 
+            return $this->sendError('User Not Exists', ['error'=>'User Not Found']);
+        } 
 
     }
 }

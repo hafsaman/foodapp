@@ -13,7 +13,16 @@ class AddedPostlike extends Migration
      */
     public function up()
     {
-        //
+         Schema::create('posts_likes', function (Blueprint $table) {
+           
+           
+            $table->bigIncrements('id');
+              $table->integer('post_id')->nullable();
+            $table->integer('user_id')->nullable();
+            
+            $table->boolean('like')->default('1');
+            $table->timestamps();
+        });
     }
 
     /**
@@ -23,6 +32,6 @@ class AddedPostlike extends Migration
      */
     public function down()
     {
-        //
+        Schema::dropIfExists('posts_likes');
     }
 }

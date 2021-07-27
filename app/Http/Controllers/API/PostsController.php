@@ -7,6 +7,10 @@ use Illuminate\Http\Request;
 use App\Http\Controllers\API\BaseController as BaseController;
 use App\Models\User;
 use App\Models\Posts;
+use App\Models\Posts_favourite;
+use App\Models\Posts_Likes;
+use App\Models\Posts_Comments;
+
 use App\Models\UserGallary;
 //use Illuminate\Support\Facades\Auth;
 use Validator;
@@ -60,6 +64,39 @@ class PostsController extends BaseController
 
     }
 
+    public function getpostsall(){
+
+       
+            $posts=Posts::get();
+          $success[] = [
+            
+            'posts'=>$posts,
+            'status'=>200,
+          ];
+            return $this->sendResponse($success, 'Get All Posts Successfully.');
+        
+
+    }
+
+    public function getposts(){
+
+      $id= Auth::user()->id;
+      if(isset($id)){
+            $posts=Posts::where('user_id',$id)->get();
+          $success[] = [
+            
+            'posts'=>$posts,
+            'status'=>200,
+          ];
+            return $this->sendResponse($success, 'Get  Posts Successfully.');
+            } 
+        else{ 
+            return $this->sendError('Unauthorised.', ['error'=>'Unauthorised']);
+        } 
+        
+
+    }
+
     public function likepost($id){
 
   //validator place
@@ -78,16 +115,81 @@ class PostsController extends BaseController
             return $this->sendResponse($success, 'Post Like successfully.');
         } 
         else{ 
-            return $this->sendError('User Not Exists', ['error'=>'User Not Found']);
+            return $this->sendError('Post Not Exists', ['error'=>'Post Not Found']);
+        } 
+
+    }
+    public function unlikepost($id){
+
+ 
+       $posts = Posts::find($id);
+ 
+        if(isset($posts)){
+          $input['post_id'] = $posts->id;
+        $input['user_id'] = Auth::user()->id;
+        $input['like'] = 0;
+            Posts_Likes::create($input);
+          $success[] = [
+            
+            'status'=>200,
+          ];
+            return $this->sendResponse($success, 'Post Like successfully.');
+        } 
+        else{ 
+            return $this->sendError('Post Not Exists', ['error'=>'Post Not Found']);
         } 
 
     }
 
-     public function commentpost($id,Request $request){
+    public function favouritepost($id){
+
+ 
+       $posts = Posts::find($id);
+ 
+        if(isset($posts)){
+          $input['post_id'] = $posts->id;
+        $input['user_id'] = Auth::user()->id;
+        $input['favourite'] = 1;
+            Posts_favourite::create($input);
+          $success[] = [
+            
+            'status'=>200,
+          ];
+            return $this->sendResponse($success, 'Post Favourite successfully.');
+        } 
+        else{ 
+            return $this->sendError('Post Not Exists', ['error'=>'Post Not Found']);
+        } 
+
+    }
+
+     public function unfavouritepost($id){
+
+ 
+       $posts = Posts::find($id);
+ 
+        if(isset($posts)){
+          $input['post_id'] = $posts->id;
+        $input['user_id'] = Auth::user()->id;
+        $input['favourite'] = 0;
+            Posts_favourite::create($input);
+          $success[] = [
+            
+            'status'=>200,
+          ];
+            return $this->sendResponse($success, 'Post Added to UnFavourite successfully.');
+        } 
+        else{ 
+            return $this->sendError('Post Not Exists', ['error'=>'Post Not Found']);
+        } 
+
+    }
+
+     public function commentpost(Request $request){
 
   //validator place
 
-       $posts = Posts::find($id);
+       $posts = Posts::find($request->postid);
  
         if(isset($posts)){
         	$input['post_id'] = $posts->id;
@@ -101,7 +203,7 @@ class PostsController extends BaseController
             return $this->sendResponse($success, 'Post Like successfully.');
         } 
         else{ 
-            return $this->sendError('User Not Exists', ['error'=>'User Not Found']);
+            return $this->sendError('Post Not Exists', ['error'=>'Post Not Found']);
         } 
 
     }

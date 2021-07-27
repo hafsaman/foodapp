@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class AddedPostcomment extends Migration
+class UserFollower extends Migration
 {
     /**
      * Run the migrations.
@@ -13,14 +13,14 @@ class AddedPostcomment extends Migration
      */
     public function up()
     {
-         Schema::create('posts_comments', function (Blueprint $table) {
+         Schema::create('user_follower', function (Blueprint $table) {
            
            
             $table->bigIncrements('id');
-              $table->integer('post_id')->nullable();
+              $table->integer('follower_id')->nullable();
             $table->integer('user_id')->nullable();
             
-            $table->string('comment')->nullable();
+            $table->boolean('follow')->default('1');
             $table->timestamps();
         });
     }
@@ -33,6 +33,5 @@ class AddedPostcomment extends Migration
     public function down()
     {
         //
-        Schema::dropIfExists('posts_comments');
     }
 }
