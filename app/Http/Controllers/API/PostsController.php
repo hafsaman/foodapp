@@ -191,8 +191,9 @@ class PostsController extends BaseController
       $success[] = [
             
             'status'=>200,
+            'data'=>$request->postid
           ];
-return $this->sendResponse($success, $request->postid);
+return $this->sendResponse($success, 'postid');
        $posts = Posts::find($request->postid);
  
         if(isset($posts)){
