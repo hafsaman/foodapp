@@ -10,7 +10,7 @@ use App\Models\Posts;
 
 use App\Models\Posts_Likes;
 use App\Models\Posts_Comments;
-use App\Models\Posts_favourite;
+use App\Models\Postsfavourite;
 use App\Models\UserGallary;
 //use Illuminate\Support\Facades\Auth;
 use Validator;
@@ -150,7 +150,7 @@ class PostsController extends BaseController
           $input['post_id'] = $posts->id;
         $input['user_id'] = Auth::user()->id;
         $input['favourite'] = 1;
-            Posts_favourite::create($input);
+            Postsfavourite::create($input);
           $success[] = [
             
             'status'=>200,
@@ -172,7 +172,7 @@ class PostsController extends BaseController
         $input['post_id'] = $posts->id;
         $input['user_id'] = Auth::user()->id;
         $input['favourite'] = 0;
-        Posts_favourite::create($input);
+        Postsfavourite::create($input);
         $success[] = [
             
             'status'=>200,
@@ -200,7 +200,7 @@ class PostsController extends BaseController
             
             'status'=>200,
           ];
-            return $this->sendResponse($success, 'Post Like successfully.');
+            return $this->sendResponse($success, 'Post Comment Added successfully.');
         } 
         else{ 
             return $this->sendError('Post Not Exists', ['error'=>'Post Not Found']);
