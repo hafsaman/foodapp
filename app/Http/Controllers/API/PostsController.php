@@ -169,8 +169,13 @@ class PostsController extends BaseController
        $posts = Posts::find($id);
  
         if(isset($posts)){
-        
-        Postsfavourite::delete($posts->id);
+       
+       // $favourite=Postsfavourite::find($posts->id);
+         //$favourite->delete()
+          $user_id=Auth::user()->id;
+         Postsfavourite::where('user_id', $user_id)
+                            ->where('post_id', $posts->id)
+                            ->delete();
         $success[] = [
             
             'status'=>200,
