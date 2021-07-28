@@ -169,11 +169,11 @@ class PostsController extends BaseController
        $posts = Posts::find($id);
  
         if(isset($posts)){
-          $input['post_id'] = $posts->id;
+        $input['post_id'] = $posts->id;
         $input['user_id'] = Auth::user()->id;
         $input['favourite'] = 0;
-            Posts_favourite::create($input);
-          $success[] = [
+        Posts_favourite::create($input);
+        $success[] = [
             
             'status'=>200,
           ];
@@ -188,19 +188,14 @@ class PostsController extends BaseController
      public function commentpost(Request $request){
 
   //validator place
-      $success[] = [
-            
-            'status'=>200,
-            'data'=>$request
-          ];
-return $this->sendResponse($success, 'postid');
+      
        $posts = Posts::find($request->postid);
  
         if(isset($posts)){
         	$input['post_id'] = $posts->id;
         	$input['comment'] = $request->comment;
-   		 	$input['user_id'] = Auth::user()->id;
-            Posts_Comments::create($input);
+   		 	  $input['user_id'] = Auth::user()->id;
+          Posts_Comments::create($input);
           $success[] = [
             
             'status'=>200,

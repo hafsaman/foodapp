@@ -19,6 +19,7 @@ use App\Http\Controllers\API\PostsController;
   
 Route::post('register', [RegisterController::class, 'register']);
 Route::post('login', [RegisterController::class, 'login']);
+
 Route::get('getpostsall', [PostsController::class, 'getpostsall']);
      
 /*Route::middleware('auth:api')->get('/user', function (Request $request) {
@@ -32,8 +33,8 @@ Route::put('profileedit', [UserController::class, 'profileedit']);
 Route::put('profileabout', [UserController::class, 'profileabout']);
 Route::get('follow/{id}', [UserController::class, 'follow']);
 Route::get('unfollow/{id}', [UserController::class, 'unfollow']);
-Route::post('createpost', [PostsController::class, 'create']);
 
+Route::post('createpost', [PostsController::class, 'create']);
 Route::get('getposts', [PostsController::class, 'getposts']);
 Route::get('likepost/{id}', [PostsController::class, 'likepost']);
 Route::get('unlikepost/{id}', [PostsController::class, 'unlikepost']);
