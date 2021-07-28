@@ -149,7 +149,7 @@ class PostsController extends BaseController
         if(isset($posts)){
           $input['post_id'] = $posts->id;
         $input['user_id'] = Auth::user()->id;
-        $input['favourite'] = 1;
+        
             Postsfavourite::create($input);
           $success[] = [
             
@@ -169,10 +169,8 @@ class PostsController extends BaseController
        $posts = Posts::find($id);
  
         if(isset($posts)){
-        $input['post_id'] = $posts->id;
-        $input['user_id'] = Auth::user()->id;
-        $input['favourite'] = 0;
-        Postsfavourite::create($input);
+        
+        Postsfavourite::delete($posts->id;);
         $success[] = [
             
             'status'=>200,
