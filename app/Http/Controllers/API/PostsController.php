@@ -188,6 +188,10 @@ class PostsController extends BaseController
      public function commentpost(Request $request){
 
   //validator place
+      $success[] = [
+            
+            'status'=>200,
+          ];
 return $this->sendResponse($success, $request->postid);
        $posts = Posts::find($request->postid);
  
