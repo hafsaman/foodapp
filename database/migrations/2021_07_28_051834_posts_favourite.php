@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class UserFollower extends Migration
+class PostsFavourite extends Migration
 {
     /**
      * Run the migrations.
@@ -13,14 +13,15 @@ class UserFollower extends Migration
      */
     public function up()
     {
-         Schema::create('user_follower', function (Blueprint $table) {
+        //
+        Schema::create('posts_favourite', function (Blueprint $table) {
            
            
             $table->bigIncrements('id');
-              $table->integer('follower_id')->nullable();
+              $table->integer('post_id')->nullable();
             $table->integer('user_id')->nullable();
             
-            $table->boolean('follow')->default('1');
+            $table->boolean('like')->default('1');
             $table->timestamps();
         });
     }
@@ -33,7 +34,6 @@ class UserFollower extends Migration
     public function down()
     {
         //
-          Schema::dropIfExists('user_follower');
-    }
+        Schema::dropIfExists('posts_favourite');
     }
 }

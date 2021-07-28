@@ -188,7 +188,7 @@ class PostsController extends BaseController
      public function commentpost(Request $request){
 
   //validator place
-
+return $this->sendResponse($success, $request->postid);
        $posts = Posts::find($request->postid);
  
         if(isset($posts)){
