@@ -7,7 +7,7 @@ use App\Http\Controllers\API\BaseController as BaseController;
 use App\Models\User;
 use App\Models\UserGallary;
 use App\Models\Posts;
-use App\Models\Follower;
+use App\Models\User_Follower;
 use Illuminate\Support\Facades\Auth;
 use Validator;
 //use Illuminate\Support\Facades\Storage;
@@ -137,7 +137,7 @@ class UserController extends BaseController
           $input['follower_id'] = $id;
         $input['user_id'] = Auth::user()->id;
         $input['follow'] = 1;
-            Follower::create($input);
+            User_Follower::create($input);
           $success[] = [
             
             'status'=>200,
@@ -160,7 +160,7 @@ class UserController extends BaseController
           $input['follower_id'] = $id;
         $input['user_id'] = Auth::user()->id;
         $input['follow'] = 0;
-            Follower::create($input);
+            User_Follower::create($input);
           $success[] = [
             
             'status'=>200,
