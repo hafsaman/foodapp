@@ -131,7 +131,7 @@ class UserController extends BaseController
 
   //validator place
 
-       $users = Users::find($id);
+       $users = User::find($id);
  
         if(isset($posts)){
           $input['follower_id'] = $id;
@@ -154,7 +154,7 @@ class UserController extends BaseController
 
   //validator place
 
-       $users = Users::find($id);
+       $users = User::find($id);
  
         if(isset($posts)){
           $input['follower_id'] = $id;
