@@ -170,7 +170,7 @@ class PostsController extends BaseController
  
         if(isset($posts)){
         
-        Postsfavourite::delete($posts->id;);
+        Postsfavourite::delete($posts->id);
         $success[] = [
             
             'status'=>200,
