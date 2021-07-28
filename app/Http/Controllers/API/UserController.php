@@ -133,7 +133,7 @@ class UserController extends BaseController
 
        $users = User::find($id);
  
-        if(isset($posts)){
+        if(isset($users)){
           $input['follower_id'] = $id;
         $input['user_id'] = Auth::user()->id;
         $input['follow'] = 1;
@@ -156,7 +156,7 @@ class UserController extends BaseController
 
        $users = User::find($id);
  
-        if(isset($posts)){
+        if(isset($users)){
           $input['follower_id'] = $id;
         $input['user_id'] = Auth::user()->id;
         $input['follow'] = 0;
