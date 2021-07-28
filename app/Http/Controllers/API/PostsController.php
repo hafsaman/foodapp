@@ -7,10 +7,10 @@ use Illuminate\Http\Request;
 use App\Http\Controllers\API\BaseController as BaseController;
 use App\Models\User;
 use App\Models\Posts;
-use App\Models\Posts_favourite;
+
 use App\Models\Posts_Likes;
 use App\Models\Posts_Comments;
-
+use App\Models\Posts_favourite;
 use App\Models\UserGallary;
 //use Illuminate\Support\Facades\Auth;
 use Validator;
@@ -191,7 +191,7 @@ class PostsController extends BaseController
       $success[] = [
             
             'status'=>200,
-            'data'=>$request->postid
+            'data'=>$request
           ];
 return $this->sendResponse($success, 'postid');
        $posts = Posts::find($request->postid);
