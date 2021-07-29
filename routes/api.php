@@ -19,6 +19,7 @@ use App\Http\Controllers\API\PostsController;
   
 Route::post('register', [RegisterController::class, 'register']);
 Route::post('login', [RegisterController::class, 'login']);
+Route::get('getregion', [RegisterController::class, 'region']);
 
 Route::get('getpostsall', [PostsController::class, 'getpostsall']);
      

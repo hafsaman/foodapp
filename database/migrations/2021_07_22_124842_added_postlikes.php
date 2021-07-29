@@ -17,9 +17,7 @@ class AddedPostlikes extends Migration
            
            
             $table->bigIncrements('id');
-              $table->integer('post_id')->nullable();
-            $table->integer('user_id')->nullable();
-            
+            $table->string('region')->nullable();
             $table->boolean('like')->default('1');
             $table->timestamps();
         });

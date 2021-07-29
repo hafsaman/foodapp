@@ -5,11 +5,31 @@ namespace App\Http\Controllers\API;
 use Illuminate\Http\Request;
 use App\Http\Controllers\API\BaseController as BaseController;
 use App\Models\User;
+use App\Models\Region;
 use Illuminate\Support\Facades\Auth;
 use Validator;
    
 class RegisterController extends BaseController
 {
+
+
+    public function region()
+    {
+        $region = Region::get();
+ 
+        if(isset($region)){
+           
+          $success[] = [
+            
+            'status'=>200,
+            'data'=>$region
+          ];
+            return $this->sendResponse($success, 'Region get successfully.');
+        } 
+        else{ 
+            return $this->sendError('Region Not Exists', ['error'=>'Region Not Found']);
+        } 
+    }
     /**
      * Register api
      *
