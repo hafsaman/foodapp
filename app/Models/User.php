@@ -26,8 +26,8 @@ class User extends Authenticatable
         'status',
         'region',
         'phoneno',
-        'logintype',
-        'devicetype','devicetoken'
+        'login_type',
+        'device_type','devicetoken','social_id'
     ];
 
     /**

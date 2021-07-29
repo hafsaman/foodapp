@@ -35,5 +35,5 @@ class UserFollower extends Migration
         //
           Schema::dropIfExists('user_follower');
     }
-    }
+    
 }

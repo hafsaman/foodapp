@@ -23,8 +23,8 @@ class RegisterController extends BaseController
             'password' => 'required',
             'c_password' => 'required|same:password',
             'region'=>'required',
-            'devicetype'=>'required',
-            'logintype'=>'required',
+            'device_type'=>'required',
+            
             'devicetoken'=>'required'
             
         ]);
