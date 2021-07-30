@@ -44,9 +44,11 @@ class PostsController extends BaseController
        
 
         if($request->has('postmedia')) {
-            $fileName = time().'.'.$request->postmedia->extension();
-            $request->postmedia->move(public_path('/assets/posts/'), $fileName);
-            $img_path = 'assets/posts/'.$fileName;
+           foreach ($postmedia as $file) { 
+            $fileName = time().'.'.$request->file->extension();
+            $request->file->move(public_path('/assets/posts/'), $fileName);
+            $img_path .= 'assets/posts/'.$fileName.',';
+          }
         }
          else
             {$img_path='';}
@@ -93,8 +95,8 @@ class PostsController extends BaseController
 
             
               $user_data=array("id"=>$user->id,"name"=>$user->name,"email"=>$user->email,"avatar"=>$user->avatar,'is_follow'=>null);
-            
-
+            $media_path=explode(",",$post->media_path);
+                $post->media_path=$media_path;
               $post->no_of_like = $nooflike;
               $post->no_of_favourite = $nooffavourite;
               $post->is_like = null;
