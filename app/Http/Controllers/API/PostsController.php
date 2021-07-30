@@ -94,7 +94,14 @@ class PostsController extends BaseController
               $user_data=array("id"=>$user->id,"name"=>$user->name,"email"=>$user->email,"avatar"=>$user->avatar,'is_follow'=>null);
             
 
+              $post->no_of_like = $nooflike;
+              $post->no_of_favourite = $nooffavourite;
+              $post->is_like = null;
+              $post->is_favourite = null;
+              $post->comments = $comments;
+              $post->no_of_like = $user_data;
 
+             // $item['product'] = $product;
             $posts_all[] = array("id"=>$post->id,"title"=>$post->title,"comment"=>$post->comment,"is_shopping"=>$post->is_shopping,'price'=>$post->price,'region'=>$post->region,'user_id'=>$post->user_id,'media_path'=>$post->media_path,'created_at'=>$post->created_at,'no_of_like'=>$nooflike,'no_of_favourite'=>$nooffavourite,'is_like'=>null,'is_favourite'=>null,'comments'=>$comments,'user_data'=>$user_data);
      
 
@@ -103,7 +110,7 @@ class PostsController extends BaseController
 
                /*   $posts_all=array("next_page_url"=>$posts->next_page_url,"path"=> $posts->path,"per_page"=> $posts->per_page,"prev_page_url"=> $posts->prev_page_url,"to"=>$posts->to,"total"=> $posts->total);
 */
-            return $this->sendResponse($posts_all, 'Get All Posts Successfully.');
+            return $this->sendResponse($posts, 'Get All Posts Successfully.');
         
 
     }
