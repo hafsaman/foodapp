@@ -103,7 +103,7 @@ class PostsController extends BaseController
 
     }
 
-     public function getuserposts(){
+     public function getposts(){
 
       $user_id= Auth::user()->id;
       if(isset($user_id)){
