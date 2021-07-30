@@ -129,7 +129,7 @@ class PostsController extends BaseController
            
             foreach($user_follower as $user)
             {
-              $posts=Posts::where('user_id',$user->follower_id)->get();
+              $posts=Posts::where('user_id',$user->follower_id)->where('follow',1)->get();
             foreach($posts as $post)
             {
 
