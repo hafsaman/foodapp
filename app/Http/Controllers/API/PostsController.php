@@ -43,12 +43,21 @@ class PostsController extends BaseController
    		  $input['user_id'] = Auth::user()->id;
        
 
-        if($request->has('postmedia')) {
+        /*if($request->has('postmedia')) {
            foreach ($request->postmedia as $file) { 
             $fileName = time().'.'.$file->extension();
             $file->move(public_path('/assets/posts/'), $fileName);
             $img_path .= 'assets/posts/'.$fileName.',';
           }
+        }
+         else
+            {$img_path='';}
+        */
+              if($request->has('postmedia')) {
+            $fileName = time().'.'.$request->postmedia->extension();
+            $request->postmedia->move(public_path('/assets/posts/'), $fileName);
+            $img_path .= 'assets/posts/'.$fileName.',';
+          
         }
          else
             {$img_path='';}
