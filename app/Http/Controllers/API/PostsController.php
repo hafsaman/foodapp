@@ -102,7 +102,7 @@ class PostsController extends BaseController
                    
 
                   
-            return $this->sendResponse($posts_all, 'Get All Posts Successfully.');
+            return $this->sendResponse($posts, 'Get All Posts Successfully.');
         
 
     }
