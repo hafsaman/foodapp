@@ -65,10 +65,16 @@ class PostsController extends BaseController
 
     }
 
-    public function getpostsall(){
+    public function getpostsall(Request $request){
 
-       
-            $posts=Posts::get();
+       $limit=5;
+            $posts=Posts::paginate($limit);
+           /* $perPage=9;
+                   $page=$request->input('page');//key:'page',default:1
+                   $total =$query->count();
+                  // $offset=($page-1)*$perPage;
+                  $posts=$query()->offset(($page-1)*$perPage)->limit($perPage)->get();
+                   $lastpage=$total/$perPage; */
             $posts_all=array();
             $user_data=array();
             
@@ -93,11 +99,9 @@ class PostsController extends BaseController
      
 
             }
-                    /*  $success[] = [
-            
-            'posts'=>$posts_all,
-            'status'=>200,
-          ];*/
+                   
+
+                  
             return $this->sendResponse($posts_all, 'Get All Posts Successfully.');
         
 
