@@ -99,7 +99,7 @@ class PostsController extends BaseController
               $post->is_like = null;
               $post->is_favourite = null;
               $post->comments = $comments;
-              $post->no_of_like = $user_data;
+              $post->user_data = $user_data;
 
              // $item['product'] = $product;
             $posts_all[] = array("id"=>$post->id,"title"=>$post->title,"comment"=>$post->comment,"is_shopping"=>$post->is_shopping,'price'=>$post->price,'region'=>$post->region,'user_id'=>$post->user_id,'media_path'=>$post->media_path,'created_at'=>$post->created_at,'no_of_like'=>$nooflike,'no_of_favourite'=>$nooffavourite,'is_like'=>null,'is_favourite'=>null,'comments'=>$comments,'user_data'=>$user_data);
