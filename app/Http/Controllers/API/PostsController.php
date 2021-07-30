@@ -148,7 +148,7 @@ class PostsController extends BaseController
             if($postuserfavourite->userfavourite != 0){ $is_favourite=1; }
             else{ $is_favourite=0;}
 
-            $comments=Posts_Comments::where('post_id',$post->id)->get();
+            $comments=Posts_Comments::where('post_id',$post->id)->join('users','users.id','=','posts_comments.user_id')->select('posts_comments.id','posts_comments.post_id','posts_comments.user_id','posts_comments.comment','posts_comments.created_at','users.name','users.email','users.avatar')->get();
 
             $user_follower=User_Follower::where('follower_id',$user_id)->where('user_id',$post->user_id)->select('id')->first();
             if(isset($user_follower)){ $is_follow=1; }
