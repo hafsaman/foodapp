@@ -185,7 +185,7 @@ class UserController extends BaseController
            
             foreach($user_follower as $user)
             {
-              $posts=Posts::where('user_id',$user->user_id)->get();
+              $posts=Posts::where('user_id',$user->follower_id)->get();
            }
             return $this->sendResponse($posts, 'UnFollow successfully.');
         } 
