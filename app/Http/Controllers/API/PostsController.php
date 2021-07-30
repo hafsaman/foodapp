@@ -132,7 +132,7 @@ class PostsController extends BaseController
       $user_id= Auth::user()->id;
       if(isset($user_id)){
 
-            $user_follower=User_Follower::where('user_id',$user_id)->where('follow',1)->select('follower_id','user_id')->get();
+            $user_follower=User_Follower::where('user_id',$user_id)->where('follow',1)->select('follower_id')->distinct()->get();
             $posts_all=array();
             $user_data=array();
            
