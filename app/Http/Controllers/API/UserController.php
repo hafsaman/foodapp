@@ -180,7 +180,7 @@ class UserController extends BaseController
       if(isset($user_id)){
 
             $user_follower=User_Follower::where('user_id',$user_id)->select('follower_id')->get();
-            return $this->sendResponse($success, 'UnFollow successfully.');
+            return $this->sendResponse($user_follower, 'UnFollow successfully.');
         } 
         else{ 
             return $this->sendError('User Not Exists', ['error'=>'User Not Found']);
