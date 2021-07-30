@@ -132,13 +132,13 @@ class PostsController extends BaseController
       $user_id= Auth::user()->id;
       if(isset($user_id)){
 
-            $user_follower=User_Follower::where('user_id',$user_id)->select('follower_id','user_id')->get();
+            $user_follower=User_Follower::where('user_id',$user_id)->where('follow',1)->select('follower_id','user_id')->get();
             $posts_all=array();
             $user_data=array();
            
             foreach($user_follower as $user)
             {
-              $posts=Posts::where('user_id',$user->follower_id)->where('follow',1)->get();
+              $posts=Posts::where('user_id',$user->follower_id)->get();
             foreach($posts as $post)
             {
 
