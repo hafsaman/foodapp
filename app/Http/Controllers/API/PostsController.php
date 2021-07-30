@@ -101,8 +101,9 @@ class PostsController extends BaseController
             }
                    
 
-                  
-            return $this->sendResponse($posts, 'Get All Posts Successfully.');
+               /*   $posts_all=array("next_page_url"=>$posts->next_page_url,"path"=> $posts->path,"per_page"=> $posts->per_page,"prev_page_url"=> $posts->prev_page_url,"to"=>$posts->to,"total"=> $posts->total);
+*/
+            return $this->sendResponse($posts_all, 'Get All Posts Successfully.');
         
 
     }
@@ -112,7 +113,7 @@ class PostsController extends BaseController
       $user_id= Auth::user()->id;
       if(isset($user_id)){
 
-            $user_follower=User_Follower::where('follower_id',$user_id)->select('user_id')->get();
+            $user_follower=User_Follower::where('user_id',$user_id)->select('follower_id')->get();
         
 
             $posts_all=array();
