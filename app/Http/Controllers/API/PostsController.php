@@ -80,12 +80,12 @@ class PostsController extends BaseController
               $nooffavourite=$postfavourite->totalfavourite;
            
 
-            $comments=Posts_Comments::where('post_id',$post->id)->get();
+            $comments=Posts_Comments::where('post_id',$post->id)->join('users','users.id','=','posts_comments.user_id')->select('posts_comments.id','posts_comments.post_id','posts_comments.user_id','posts_comments.comment','posts_comments.created_at','users.name','users.email','users.avatar')->get();
 
             $user=User::where('id',$post->user_id)->first();
 
             
-              $user_data[]=array("id"=>$user->id,"name"=>$user->name,"email"=>$user->email,"avatar"=>$user->avatar);
+              $user_data=array("id"=>$user->id,"name"=>$user->name,"email"=>$user->email,"avatar"=>$user->avatar);
             
 
 
