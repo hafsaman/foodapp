@@ -34,6 +34,8 @@ Route::put('profileedit', [UserController::class, 'profileedit']);
 Route::put('profileabout', [UserController::class, 'profileabout']);
 Route::get('follow/{id}', [UserController::class, 'follow']);
 Route::get('unfollow/{id}', [UserController::class, 'unfollow']);
+Route::get('getfollwer', [UserController::class, 'getfollwer']);
+
 
 Route::post('createpost', [PostsController::class, 'create']);
 Route::get('getposts', [PostsController::class, 'getposts']);

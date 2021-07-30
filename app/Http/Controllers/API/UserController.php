@@ -172,4 +172,21 @@ class UserController extends BaseController
         } 
 
     }
+    public function getfollwer()
+    {
+
+
+      $user_id= Auth::user()->id;
+      if(isset($user_id)){
+
+            $user_follower=User_Follower::where('user_id',$user_id)->select('follower_id')->get();
+            return $this->sendResponse($success, 'UnFollow successfully.');
+        } 
+        else{ 
+            return $this->sendError('User Not Exists', ['error'=>'User Not Found']);
+        } 
+
+      
+        
+    }
 }
