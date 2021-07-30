@@ -42,6 +42,7 @@ class PostsController extends BaseController
         $input['region']=$request->region;
    		  $input['user_id'] = Auth::user()->id;
        
+
         if($request->has('postmedia')) {
             $fileName = time().'.'.$request->postmedia->extension();
             $request->postmedia->move(public_path('/assets/posts/'), $fileName);
@@ -50,7 +51,7 @@ class PostsController extends BaseController
          else
             {$img_path='';}
 
-        $input['media_path'] = $request->img_path;
+        $input['media_path'] = $img_path;
         $posts = Posts::create($input);
       if(isset($posts)){
           $success[] = [
@@ -67,7 +68,7 @@ class PostsController extends BaseController
 
     public function getpostsall(Request $request){
 
-       $limit=5;
+       $limit=$request->limit;
             $posts=Posts::paginate($limit);
            /* $perPage=9;
                    $page=$request->input('page');//key:'page',default:1
