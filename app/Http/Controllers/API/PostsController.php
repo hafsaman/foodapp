@@ -107,22 +107,31 @@ class PostsController extends BaseController
 
       $user_id= Auth::user()->id;
       if(isset($user_id)){
-           $posts=Posts::where('user_id',$user_id)->get();
+
+            $user_follower=User_Follower::where('follower_id',$user_id)->select('user_id')->get();
+        
+
             $posts_all=array();
             $user_data=array();
            
+            foreach($user_follower as $user)
+            {
+              $posts=Posts::where('user_id',$user->user_id)->get();
             foreach($posts as $post)
             {
-              $postlike=Posts_Likes::where('post_id',$post->id)->selectRaw('count(id) as totallike')->first();
+
+            $postlike=Posts_Likes::where('post_id',$post->id)->selectRaw('count(id) as totallike')->first();
                $nooflike=$postlike->totallike;
-              $postfavourite=Postsfavourite::where('post_id',$post->id)->selectRaw('count(id) as totalfavourite')->first();
-              $nooffavourite=$postfavourite->totalfavourite;
+            $postfavourite=Postsfavourite::where('post_id',$post->id)->selectRaw('count(id) as totalfavourite')->first();
+            $nooffavourite=$postfavourite->totalfavourite;
            
             $postuserlike=Posts_Likes::where('post_id',$post->id)->where('user_id',$user_id)->selectRaw('count(id) as userlike')->first();
+            
             if($postuserlike->userlike != 0){ $is_like=1; }
             else{ $is_like=0;}
             
             $postuserfavourite=Postsfavourite::where('post_id',$post->id)->where('user_id',$user_id)->selectRaw('count(id) as userfavourite')->first();
+            
             if($postuserfavourite->userfavourite != 0){ $is_favourite=1; }
             else{ $is_favourite=0;}
 
@@ -134,19 +143,16 @@ class PostsController extends BaseController
 
             $user=User::where('id',$post->user_id)->first();
 
-             $user_data[]=array("id"=>$user->id,"name"=>$user->name,"email"=>$user->email,"avatar"=>$user->avatar,'is_follow'=>$is_follow);
+             $user_data=array("id"=>$user->id,"name"=>$user->name,"email"=>$user->email,"avatar"=>$user->avatar,'is_follow'=>$is_follow);
 
 
             $posts_all[] = array("id"=>$post->id,"title"=>$post->title,"comment"=>$post->comment,"is_shopping"=>$post->is_shopping,'price'=>$post->price,'region'=>$post->region,'user_id'=>$post->user_id,'media_path'=>$post->media_path,'no_of_like'=>$nooflike,'no_of_favourite'=>$nooffavourite,'is_like'=>$is_like,'is_favourite'=>$is_favourite,'comments'=>$comments,'user_data'=>$user_data);
      
 
             }
-                      $success[] = [
-            
-            'posts'=>$posts_all,
-            'status'=>200,
-          ];
-            return $this->sendResponse($success, 'Get  Posts Successfully.');
+          }
+                    
+            return $this->sendResponse($posts_all, '');
           }
                 else{ 
             return $this->sendError('Unauthorised.', ['error'=>'Unauthorised']);
