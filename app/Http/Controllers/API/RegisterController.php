@@ -19,12 +19,8 @@ class RegisterController extends BaseController
  
         if(isset($region)){
            
-          $success[] = [
-            
-            'status'=>200,
-            'data'=>$region
-          ];
-            return $this->sendResponse($success, 'Region get successfully.');
+         
+            return $this->sendResponse($region, 'Region get successfully.');
         } 
         else{ 
             return $this->sendError('Region Not Exists', ['error'=>'Region Not Found']);
