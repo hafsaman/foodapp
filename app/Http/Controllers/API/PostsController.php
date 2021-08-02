@@ -100,10 +100,20 @@ class PostsController extends BaseController
         $input['price'] = $request->price;
         $input['region']=$request->region;
         $input['user_id'] = Auth::user()->id;
+        $img_path='';
         if($request->has('postmedia')) {
-            $fileName = time().'.'.$request->postmedia->extension();
+
+           /* $fileName = time().'.'.$request->postmedia->extension();
             $request->postmedia->move(public_path('/assets/posts/'), $fileName);
-            $img_path = 'assets/posts/'.$fileName;
+            $img_path = 'assets/posts/'.$fileName;*/
+
+            foreach($request->file('postmedia') as $mediaFiles) {
+       
+           
+            $fileName = time().'.'.$mediaFiles->extension();
+            $mediaFiles->move(public_path('/assets/posts/'), $fileName);
+            $img_path .= 'assets/posts/'.$fileName;
+          }
           
         }
          else
