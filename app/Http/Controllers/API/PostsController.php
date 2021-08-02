@@ -19,7 +19,7 @@ use Validator;
 
 class PostsController extends BaseController
 {
-    public function create(Request $request){
+  /*  public function create(Request $request){
 
   
     	//return response()->json($request->title);
@@ -53,7 +53,7 @@ class PostsController extends BaseController
           //}
         }
 
-  */
+  
          
         
           if($request->has('postmedia')) {
@@ -77,6 +77,48 @@ class PostsController extends BaseController
             return $this->sendError('User Not Exists.', ['error'=>'User Not Found']);
         } 
       
+
+    } */
+
+    function createpost(Request $request)
+    {
+      $validator = Validator::make($request->all(), [
+            'title' => 'required',
+         
+            'comment' => 'required',
+             'shopping' => 'required',
+            'region' =>'required',
+            'postmedia'=>'required'
+        ]);
+    
+        if($validator->fails()){
+            return $this->sendError('Validation Error.', $validator->errors());       
+        }
+        $input['title'] = $request->title;
+        $input['comment'] = $request->comment;
+        $input['is_shopping'] =$request->is_shopping;
+        $input['price'] = $request->price;
+        $input['region']=$request->region;
+        $input['user_id'] = Auth::user()->id;
+        if($request->has('postmedia')) {
+            $fileName = time().'.'.$request->postmedia->extension();
+            $request->postmedia->move(public_path('/assets/posts/'), $fileName);
+            $img_path = 'assets/posts/'.$fileName;
+          
+        }
+         else
+            {$img_path='';}
+    
+        $input['media_path'] = $img_path;
+        $posts = Posts::create($input);
+
+      if(isset($posts)){
+          return response()->json($posts, 200);
+        //return $this->sendResponse($success, 'Posts created successfully.');
+        } 
+        else{ 
+            return $this->sendError('User Not Exists.', ['error'=>'User Not Found']);
+        } 
 
     }
 

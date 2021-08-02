@@ -37,7 +37,7 @@ Route::get('unfollow/{id}', [UserController::class, 'unfollow']);
 Route::get('getfollwer', [UserController::class, 'getfollwer']);
 
 
-Route::post('createpost', [PostsController::class, 'create']);
+Route::post('createpost', [PostsController::class, 'createpost']);
 Route::get('getposts', [PostsController::class, 'getposts']);
 Route::get('likepost/{id}', [PostsController::class, 'likepost']);
 Route::get('unlikepost/{id}', [PostsController::class, 'unlikepost']);
