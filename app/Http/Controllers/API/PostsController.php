@@ -96,7 +96,7 @@ class PostsController extends BaseController
         }
         $input['title'] = $request->title;
         $input['comment'] = $request->comment;
-        $input['is_shopping'] =$request->is_shopping;
+        $input['is_shopping'] =$request->shopping;
         $input['price'] = $request->price;
         $input['region']=$request->region;
         $input['user_id'] = Auth::user()->id;
