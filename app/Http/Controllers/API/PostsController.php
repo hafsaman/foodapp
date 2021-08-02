@@ -56,9 +56,9 @@ class PostsController extends BaseController
             $img_path .= 'assets/posts/'.$fileName.',';
           }
         }
+        
       }
-         else
-            {$img_path='';}
+         
         
         /*      if($request->has('postmedia')) {
             $fileName = time().'.'.$request->postmedia->extension();
