@@ -37,23 +37,23 @@ class PostsController extends BaseController
         }
         $input['title'] = $request->title;
         $input['comment'] = $request->comment;
-        $input['is_shopping'] ='yes';
+        $input['is_shopping'] =$request->is_shopping;
         $input['price'] = $request->price;
         $input['region']=$request->region;
    		  $input['user_id'] = Auth::user()->id;
        
-         $files = $request->file('postmedia'); 
+       //  $files = $request->file('postmedia'); 
     
-  return response()->json($request->postmedia, 200);
+  //return response()->json($request->file('postmedia'), 200);
 
         if($request->has('postmedia')) {
-            foreach($request->postmedia as $mediaFiles) {
+            //foreach($request->file('postmedia') as $mediaFiles) {
        
            
-            $fileName = time().'.'.$mediaFiles->extension();
-            $mediaFiles->move(public_path('/assets/posts/'), $fileName);
-            $img_path .= 'assets/posts/'.$fileName.',';
-          }
+            $fileName = time().'.'.$request->postmedia->extension();
+            $request->postmedia->move(public_path('/assets/posts/'), $fileName);
+            $img_path .= 'assets/posts/'.$fileName;
+          //}
         }
 
   
