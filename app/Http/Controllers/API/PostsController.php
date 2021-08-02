@@ -7,6 +7,7 @@ use Illuminate\Http\Request;
 use App\Http\Controllers\API\BaseController as BaseController;
 use App\Models\User;
 use App\Models\Posts;
+use App\Models\Posts_Gallary;
 
 use App\Models\Posts_Likes;
 use App\Models\Posts_Comments;
@@ -43,14 +44,14 @@ class PostsController extends BaseController
    		  $input['user_id'] = Auth::user()->id;
        
        
-       /* if($request->has('postmedia')) {
-            //foreach($request->file('postmedia') as $mediaFiles) {
+        if($request->has('postmedia')) {
+            foreach($request->file('postmedia') as $mediaFiles) {
        
            
-            $fileName = time().'.'.$request->postmedia->extension();
-            $request->postmedia->move(public_path('/assets/posts/'), $fileName);
-            $img_path .= 'assets/posts/'.$fileName;
-          //}
+            $fileName = time().'.'.$mediaFiles->extension();
+            $mediaFiles->move(public_path('/assets/posts/'), $fileName);
+            $img_path .= 'assets/posts/'.$fileName.',';
+          }
         }
 
   
@@ -100,31 +101,36 @@ class PostsController extends BaseController
         $input['price'] = $request->price;
         $input['region']=$request->region;
         $input['user_id'] = Auth::user()->id;
-        $img_path='';
-        $i=0;
-        if($request->has('postmedia')) {
+        $posts = Posts::create($input);
+       // $img_path='';
+       
+       /* if($request->has('postmedia')) {
            return response()->json(count($request->postmedia), 200);
            /* $fileName = time().'.'.$request->postmedia->extension();
             $request->postmedia->move(public_path('/assets/posts/'), $fileName);
-            $img_path = 'assets/posts/'.$fileName;*/
-
-            for($i=0;$i<count($request->postmedia);$i++) {
-             
+            $img_path = 'assets/posts/'.$fileName;
            
-            $fileName = time().'.'.$request->postmedia->extension();
-            $request->postmedia->move(public_path('/assets/posts/'), $fileName);
-            $img_path .= 'assets/posts/'.$fileName .',';
-          }
           
+        } */
+        if($request->has('postmedia')) {
+            foreach($request->file('postmedia') as $mediaFiles) {
+                 
+            $fileName = time().'.'.$mediaFiles->getClientOriginalExtension();
+            $mediaFiles->move(public_path('/assets/posts/'), $fileName);
+            $img_path = 'assets/posts/'.$fileName;
+            $data['post_id']=$posts->id;
+            $data['media_path']=$img_path;
+            $data['media_type']='photo';//mime_content_type($mediaFiles->getClientOriginalName());
+            Posts_Gallary::create($data);
+
+          }
         }
-         else
-            {$img_path='';}
+         
     
-        $input['media_path'] = $img_path;
-        $posts = Posts::create($input);
+        
 
       if(isset($posts)){
-          return response()->json(count($request->postmedia), 200);
+          return response()->json($posts, 200);
         //return $this->sendResponse($success, 'Posts created successfully.');
         } 
         else{ 
@@ -148,6 +154,7 @@ class PostsController extends BaseController
             
             foreach($posts as $post)
             {
+              $post_media=Posts_Gallary::where('post_id',$post->id)->select('media_path','media_type')->get();
               $postlike=Posts_Likes::where('post_id',$post->id)->selectRaw('count(id) as totallike')->first();
               $nooflike=$postlike->totallike;
               $postfavourite=Postsfavourite::where('post_id',$post->id)->selectRaw('count(id) as totalfavourite')->first();
@@ -160,15 +167,15 @@ class PostsController extends BaseController
 
             
               $user_data=array("id"=>$user->id,"name"=>$user->name,"email"=>$user->email,"avatar"=>$user->avatar,'is_follow'=>null);
-            $media_path=explode(",",$post->media_path);
-                $post->media_path=$media_path;
+           // $media_path=explode(",",$post->media_path);
+             //   $post->media_path=$media_path;
               $post->no_of_like = $nooflike;
               $post->no_of_favourite = $nooffavourite;
               $post->is_like = null;
               $post->is_favourite = null;
               $post->comments = $comments;
               $post->user_data = $user_data;
-
+              $post->media_path=$post_media;
              // $item['product'] = $product;
             $posts_all[] = array("id"=>$post->id,"title"=>$post->title,"comment"=>$post->comment,"is_shopping"=>$post->is_shopping,'price'=>$post->price,'region'=>$post->region,'user_id'=>$post->user_id,'media_path'=>$post->media_path,'created_at'=>$post->created_at,'no_of_like'=>$nooflike,'no_of_favourite'=>$nooffavourite,'is_like'=>null,'is_favourite'=>null,'comments'=>$comments,'user_data'=>$user_data);
      
@@ -197,7 +204,8 @@ class PostsController extends BaseController
               $posts=Posts::where('user_id',$user->follower_id)->get();
             foreach($posts as $post)
             {
-
+              $post_media=Posts_Gallary::where('post_id',$post->id)->select('media_path','media_type')->get();
+           
             $postlike=Posts_Likes::where('post_id',$post->id)->selectRaw('count(id) as totallike')->first();
                $nooflike=$postlike->totallike;
             $postfavourite=Postsfavourite::where('post_id',$post->id)->selectRaw('count(id) as totalfavourite')->first();
@@ -224,7 +232,7 @@ class PostsController extends BaseController
              $user_data=array("id"=>$user->id,"name"=>$user->name,"email"=>$user->email,"avatar"=>$user->avatar,'is_follow'=>$is_follow);
 
 
-            $posts_all[] = array("id"=>$post->id,"title"=>$post->title,"comment"=>$post->comment,"is_shopping"=>$post->is_shopping,'price'=>$post->price,'region'=>$post->region,'user_id'=>$post->user_id,'media_path'=>$post->media_path,'no_of_like'=>$nooflike,'no_of_favourite'=>$nooffavourite,'is_like'=>$is_like,'is_favourite'=>$is_favourite,'comments'=>$comments,'user_data'=>$user_data);
+            $posts_all[] = array("id"=>$post->id,"title"=>$post->title,"comment"=>$post->comment,"is_shopping"=>$post->is_shopping,'price'=>$post->price,'region'=>$post->region,'user_id'=>$post->user_id,'media_path'=>$post_media,'no_of_like'=>$nooflike,'no_of_favourite'=>$nooffavourite,'is_like'=>$is_like,'is_favourite'=>$is_favourite,'comments'=>$comments,'user_data'=>$user_data);
      
 
             }
