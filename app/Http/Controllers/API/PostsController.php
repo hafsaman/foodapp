@@ -108,7 +108,7 @@ class PostsController extends BaseController
             $request->postmedia->move(public_path('/assets/posts/'), $fileName);
             $img_path = 'assets/posts/'.$fileName;*/
 
-            foreach($request->file('postmedia') as $mediaFiles) {
+            foreach($request->postmedia as $mediaFiles) {
               $i++;
            
             $fileName = time().'.'.$mediaFiles->extension();
