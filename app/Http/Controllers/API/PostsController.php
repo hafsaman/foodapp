@@ -42,11 +42,8 @@ class PostsController extends BaseController
         $input['region']=$request->region;
    		  $input['user_id'] = Auth::user()->id;
        
-       //  $files = $request->file('postmedia'); 
-    
-  //return response()->json($request->file('postmedia'), 200);
-
-        if($request->has('postmedia')) {
+       
+       /* if($request->has('postmedia')) {
             //foreach($request->file('postmedia') as $mediaFiles) {
        
            
@@ -56,18 +53,18 @@ class PostsController extends BaseController
           //}
         }
 
-  
+  */
          
         
-        /*      if($request->has('postmedia')) {
+          if($request->has('postmedia')) {
             $fileName = time().'.'.$request->postmedia->extension();
             $request->postmedia->move(public_path('/assets/posts/'), $fileName);
-            $img_path .= 'assets/posts/'.$fileName.',';
+            $img_path = 'assets/posts/'.$fileName;
           
         }
          else
             {$img_path='';}
-          */
+    
         $input['media_path'] = $img_path;
         $posts = Posts::create($input);
       if(isset($posts)){
