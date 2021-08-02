@@ -103,16 +103,16 @@ class PostsController extends BaseController
         $img_path='';
         $i=0;
         if($request->has('postmedia')) {
-
+           return response()->json(count($request->postmedia), 200);
            /* $fileName = time().'.'.$request->postmedia->extension();
             $request->postmedia->move(public_path('/assets/posts/'), $fileName);
             $img_path = 'assets/posts/'.$fileName;*/
 
-            foreach($request->postmedia as $mediaFiles) {
-              $i++;
+            for($i=0;$i<count($request->postmedia);$i++) {
+             
            
-            $fileName = time().'.'.$mediaFiles->extension();
-            $mediaFiles->move(public_path('/assets/posts/'), $fileName);
+            $fileName = time().'.'.$request->postmedia->extension();
+            $request->postmedia->move(public_path('/assets/posts/'), $fileName);
             $img_path .= 'assets/posts/'.$fileName .',';
           }
           
@@ -124,7 +124,7 @@ class PostsController extends BaseController
         $posts = Posts::create($input);
 
       if(isset($posts)){
-          return response()->json($i, 200);
+          return response()->json(count($request->postmedia), 200);
         //return $this->sendResponse($success, 'Posts created successfully.');
         } 
         else{ 
