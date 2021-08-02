@@ -28,8 +28,8 @@ class PostsController extends BaseController
          
             'comment' => 'required',
              'shopping' => 'required',
-            'region' =>'required'
-           // 'postmedia'=>'required'
+            'region' =>'required',
+            'postmedia'=>'required'
         ]);
    	
         if($validator->fails()){
@@ -42,18 +42,25 @@ class PostsController extends BaseController
         $input['region']=$request->region;
    		  $input['user_id'] = Auth::user()->id;
        
-
-        /*if($request->has('postmedia')) {
-           foreach ($request->postmedia as $file) { 
-            $fileName = time().'.'.$file->extension();
-            $file->move(public_path('/assets/posts/'), $fileName);
+         $files = $request->file('postmedia'); 
+    
+ 
+    foreach ($files as $file) {      
+ 
+         if($request->has('postmedia')) {
+            foreach($request->postmedia as $mediaFiles) {
+       
+           
+            $fileName = time().'.'.$mediaFiles->extension();
+            $mediaFiles->move(public_path('/assets/posts/'), $fileName);
             $img_path .= 'assets/posts/'.$fileName.',';
           }
         }
+      }
          else
             {$img_path='';}
-        */
-            /*  if($request->has('postmedia')) {
+        
+        /*      if($request->has('postmedia')) {
             $fileName = time().'.'.$request->postmedia->extension();
             $request->postmedia->move(public_path('/assets/posts/'), $fileName);
             $img_path .= 'assets/posts/'.$fileName.',';
@@ -61,8 +68,8 @@ class PostsController extends BaseController
         }
          else
             {$img_path='';}
-
-        $input['media_path'] = $img_path;*/
+          */
+        $input['media_path'] = $img_path;
         $posts = Posts::create($input);
       if(isset($posts)){
           $success[] = [
