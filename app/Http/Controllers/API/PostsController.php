@@ -44,7 +44,8 @@ class PostsController extends BaseController
        
          $files = $request->file('postmedia'); 
     
- 
+  return response()->json($files, 200);
+
     foreach ($files as $file) {      
  
          if($request->has('postmedia')) {
@@ -56,7 +57,7 @@ class PostsController extends BaseController
             $img_path .= 'assets/posts/'.$fileName.',';
           }
         }
-        
+
       }
          
         
