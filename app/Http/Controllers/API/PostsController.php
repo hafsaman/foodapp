@@ -355,4 +355,22 @@ class PostsController extends BaseController
     }
 
 
+    public function getcomment($postid){
+
+  //validator place
+      
+       $posts = Posts::find($postid);
+ 
+        if(isset($posts)){
+            $post_comment =Posts_Comments::where('post_id',$posts->id);
+         
+            return $this->sendResponse($post_comment, 'Post Comments get successfully.');
+        } 
+        else{ 
+            return $this->sendError('Post Not Exists', ['error'=>'Post Not Found']);
+        } 
+
+    }
+
+
 }
