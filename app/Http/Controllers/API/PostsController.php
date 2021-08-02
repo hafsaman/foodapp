@@ -84,12 +84,7 @@ class PostsController extends BaseController
 
        $limit=$request->limit;
             $posts=Posts::paginate($limit);
-           /* $perPage=9;
-                   $page=$request->input('page');//key:'page',default:1
-                   $total =$query->count();
-                  // $offset=($page-1)*$perPage;
-                  $posts=$query()->offset(($page-1)*$perPage)->limit($perPage)->get();
-                   $lastpage=$total/$perPage; */
+          
             $posts_all=array();
             $user_data=array();
             
@@ -362,7 +357,7 @@ class PostsController extends BaseController
        $posts = Posts::find($postid);
  
         if(isset($posts)){
-            $post_comment =Posts_Comments::where('post_id',$posts->id);
+            $post_comment =Posts_Comments::where('post_id',$postid)->join('users','users.id','=','posts_comments.user_id')->select('posts_comments.id','posts_comments.post_id','posts_comments.user_id','posts_comments.comment','posts_comments.created_at','users.name','users.email','users.avatar')->get();
          
             return $this->sendResponse($post_comment, 'Post Comments get successfully.');
         } 
