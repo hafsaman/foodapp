@@ -44,11 +44,9 @@ class PostsController extends BaseController
        
          $files = $request->file('postmedia'); 
     
-  return response()->json($files, 200);
+  return response()->json($request->postmedia, 200);
 
-    foreach ($files as $file) {      
- 
-         if($request->has('postmedia')) {
+        if($request->has('postmedia')) {
             foreach($request->postmedia as $mediaFiles) {
        
            
@@ -58,7 +56,7 @@ class PostsController extends BaseController
           }
         }
 
-      }
+  
          
         
         /*      if($request->has('postmedia')) {
