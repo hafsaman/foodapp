@@ -54,9 +54,7 @@ class PostsController extends BaseController
         } */
         if($request->has('postmedia')) {
             foreach($request->file('postmedia') as $mediaFiles) {
-                 //json($mediaFiles);
-                // return response()->json($request->file('postmedia'), 200);
-              $input_file = $mediaFiles->getClientOriginalName();
+                 $input_file = $mediaFiles->getClientOriginalName();
 
             $file_name = pathinfo($input_file, PATHINFO_FILENAME);
             $fileName = $file_name.time().'.'.$mediaFiles->getClientOriginalExtension();
@@ -65,7 +63,7 @@ class PostsController extends BaseController
             $data['post_id']=$posts->id;
             $data['media_path']=$img_path;
             $mediatype=mime_content_type($img_path);//$mediaFiles->getMimeType();
-            $data['media_type']=$mediatype;//mime_content_type($mediaFiles->getClientOriginalName());
+            $data['media_type']=$mediatype;
             Posts_Gallary::create($data);
 
           }
