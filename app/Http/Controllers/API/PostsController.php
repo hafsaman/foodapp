@@ -73,7 +73,7 @@ class PostsController extends BaseController
         
 
       if(isset($posts)){
-          return $this->sendResponse($posts, '');
+          return $this->sendResponse($posts, 'Create Post successfully');
         //return $this->sendResponse($success, 'Posts created successfully.');
         } 
         else{ 
@@ -265,15 +265,17 @@ class PostsController extends BaseController
        $posts = Posts::find($id);
  
         if(isset($posts)){
-          $input['post_id'] = $posts->id;
-        $input['user_id'] = Auth::user()->id;
-        $input['like'] = 0;
-            Posts_Likes::create($input);
+          $user_id=Auth::user()->id;
+         Posts_Likes::where('user_id', $user_id)
+                            ->where('post_id', $posts->id)
+                            ->delete();
+          
+           
           $success[] = [
             
             'status'=>200,
           ];
-            return $this->sendResponse($success, 'Post Like successfully.');
+            return $this->sendResponse($success, 'Post unLike successfully.');
         } 
         else{ 
             return $this->sendError('Post Not Exists', ['error'=>'Post Not Found']);
@@ -346,7 +348,7 @@ class PostsController extends BaseController
             return $this->sendResponse($success, 'Post Comment Added successfully.');
         } 
         else{ 
-            return $this->sendError('Post Not Exists', ['error'=>'Post Not Found']);
+            return $this->sendError('Post Not Exists', ['error'=>'Post Comments Not Found']);
         } 
 
     }
@@ -364,7 +366,7 @@ class PostsController extends BaseController
             return $this->sendResponse($post_comment, 'Post Comments get successfully.');
         } 
         else{ 
-            return $this->sendError('Post Not Exists', ['error'=>'Post Not Found']);
+            return $this->sendError('Post Not Exists', ['error'=>'Post  Comments Not Found']);
         } 
 
     }

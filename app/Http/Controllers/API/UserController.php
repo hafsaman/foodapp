@@ -157,10 +157,14 @@ class UserController extends BaseController
        $users = User::find($id);
  
         if(isset($users)){
-          $input['follower_id'] = $id;
-        $input['user_id'] = Auth::user()->id;
-        $input['follow'] = 0;
-            User_Follower::create($input);
+         
+
+            $user_id=Auth::user()->id;
+         User_Follower::where('user_id', $user_id)
+                            ->where('follower_id', $id)
+                            ->delete();
+          
+       
           $success[] = [
             
             'status'=>200,
