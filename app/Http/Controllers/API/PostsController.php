@@ -43,8 +43,7 @@ class PostsController extends BaseController
         $input['region']=$request->region;
         $input['user_id'] = Auth::user()->id;
         $posts = Posts::create($input);
-       // $img_path='';
-       
+        
        /* if($request->has('postmedia')) {
            return response()->json(count($request->postmedia), 200);
            /* $fileName = time().'.'.$request->postmedia->extension();
@@ -55,13 +54,18 @@ class PostsController extends BaseController
         } */
         if($request->has('postmedia')) {
             foreach($request->file('postmedia') as $mediaFiles) {
-                 
-            $fileName = time().'.'.$mediaFiles->getClientOriginalExtension();
+                 //json($mediaFiles);
+                // return response()->json($request->file('postmedia'), 200);
+              $input_file = $mediaFiles->getClientOriginalName();
+
+            $file_name = pathinfo($input_file, PATHINFO_FILENAME);
+            $fileName = $file_name.time().'.'.$mediaFiles->getClientOriginalExtension();
             $mediaFiles->move(public_path('/assets/posts/'), $fileName);
             $img_path = 'assets/posts/'.$fileName;
             $data['post_id']=$posts->id;
             $data['media_path']=$img_path;
-            $data['media_type']='photo';//mime_content_type($mediaFiles->getClientOriginalName());
+            $mediatype=mime_content_type($img_path);//$mediaFiles->getMimeType();
+            $data['media_type']=$mediatype;//mime_content_type($mediaFiles->getClientOriginalName());
             Posts_Gallary::create($data);
 
           }
