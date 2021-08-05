@@ -88,7 +88,7 @@ class PostsController extends BaseController
 
        if (auth('api')->check()) { 
     $user = auth('api')->user();
-    $user_id= Auth::user()->id;
+    $user_id= $user->id;
 }
        
   if(isset($user_id)){ return response()->json($user_id, 200);
