@@ -85,49 +85,10 @@ class PostsController extends BaseController
     public function getpostsall(Request $request){
 
        $limit=$request->limit;
-
-        $user_id= Auth::user()->id;
-      if(isset($user_id)){
-
-            $posts=Posts::paginate($limit);
+       if(isset(Auth::user())){$user_id= Auth::user()->id;}
+  
           
-            $posts_all=array();
-            $user_data=array();
-            
-            foreach($posts as $post)
-            {
-              $post_media=Posts_Gallary::where('post_id',$post->id)->select('media_path','media_type')->get();
-              $postlike=Posts_Likes::where('post_id',$post->id)->selectRaw('count(id) as totallike')->first();
-              $nooflike=$postlike->totallike;
-              $postfavourite=Postsfavourite::where('post_id',$post->id)->selectRaw('count(id) as totalfavourite')->first();
-              $nooffavourite=$postfavourite->totalfavourite;
-           
-
-            $comments=Posts_Comments::where('post_id',$post->id)->join('users','users.id','=','posts_comments.user_id')->select('posts_comments.id','posts_comments.post_id','posts_comments.user_id','posts_comments.comment','posts_comments.created_at','users.name','users.email','users.avatar')->get();
-
-            $user=User::where('id',$post->user_id)->first();
-
-            
-              $user_data=array("id"=>$user->id,"name"=>$user->name,"email"=>$user->email,"avatar"=>$user->avatar,'is_follow'=>null);
-           // $media_path=explode(",",$post->media_path);
-             //   $post->media_path=$media_path;
-              $post->no_of_like = $nooflike;
-              $post->no_of_favourite = $nooffavourite;
-              $post->is_like = null;
-              $post->is_favourite = null;
-              $post->comments = $comments;
-              $post->user_data = $user_data;
-              $post->media_path=$post_media;
-             // $item['product'] = $product;
-            $posts_all[] = array("id"=>$post->id,"title"=>$post->title,"comment"=>$post->comment,"is_shopping"=>$post->is_shopping,'price'=>$post->price,'region'=>$post->region,'user_id'=>$post->user_id,'media_path'=>$post->media_path,'created_at'=>$post->created_at,'no_of_like'=>$nooflike,'no_of_favourite'=>$nooffavourite,'is_like'=>null,'is_favourite'=>null,'comments'=>$comments,'user_data'=>$user_data);
-     
-
-            }
-                   
-
-            return $this->sendResponse($posts, 'Get All Posts Successfully.');
-          }else
-          {
+      if(isset($user_id)){
 
             $posts=Posts::paginate($limit);
           
@@ -180,7 +141,45 @@ class PostsController extends BaseController
 
             return $this->sendResponse($posts, 'Get All Posts Successfully.');
           }
-        
+          else {
+         $posts=Posts::paginate($limit);
+          
+            $posts_all=array();
+            $user_data=array();
+            
+            foreach($posts as $post)
+            {
+              $post_media=Posts_Gallary::where('post_id',$post->id)->select('media_path','media_type')->get();
+              $postlike=Posts_Likes::where('post_id',$post->id)->selectRaw('count(id) as totallike')->first();
+              $nooflike=$postlike->totallike;
+              $postfavourite=Postsfavourite::where('post_id',$post->id)->selectRaw('count(id) as totalfavourite')->first();
+              $nooffavourite=$postfavourite->totalfavourite;
+           
+
+            $comments=Posts_Comments::where('post_id',$post->id)->join('users','users.id','=','posts_comments.user_id')->select('posts_comments.id','posts_comments.post_id','posts_comments.user_id','posts_comments.comment','posts_comments.created_at','users.name','users.email','users.avatar')->get();
+
+            $user=User::where('id',$post->user_id)->first();
+
+            
+              $user_data=array("id"=>$user->id,"name"=>$user->name,"email"=>$user->email,"avatar"=>$user->avatar,'is_follow'=>null);
+           // $media_path=explode(",",$post->media_path);
+             //   $post->media_path=$media_path;
+              $post->no_of_like = $nooflike;
+              $post->no_of_favourite = $nooffavourite;
+              $post->is_like = null;
+              $post->is_favourite = null;
+              $post->comments = $comments;
+              $post->user_data = $user_data;
+              $post->media_path=$post_media;
+             // $item['product'] = $product;
+            $posts_all[] = array("id"=>$post->id,"title"=>$post->title,"comment"=>$post->comment,"is_shopping"=>$post->is_shopping,'price'=>$post->price,'region'=>$post->region,'user_id'=>$post->user_id,'media_path'=>$post->media_path,'created_at'=>$post->created_at,'no_of_like'=>$nooflike,'no_of_favourite'=>$nooffavourite,'is_like'=>null,'is_favourite'=>null,'comments'=>$comments,'user_data'=>$user_data);
+     
+
+            }
+                   
+
+            return $this->sendResponse($posts, 'Get All Posts Successfully.');
+          }
 
     }
 
