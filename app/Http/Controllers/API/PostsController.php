@@ -85,7 +85,7 @@ class PostsController extends BaseController
     public function getpostsall(Request $request){
 
        $limit=$request->limit;
-       if(isset(Auth::user())){$user_id= Auth::user()->id;}
+       if(isset(Auth::user()->id)){$user_id= Auth::user()->id;}
   
           
       if(isset($user_id)){
