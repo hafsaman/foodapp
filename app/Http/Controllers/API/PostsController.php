@@ -86,7 +86,8 @@ class PostsController extends BaseController
 
        $limit=$request->limit;
        if(isset(Auth::user()->id)){$user_id= Auth::user()->id;}
-  
+  if(isset($user_id)){ return response()->json($user_id, 200);
+          }
           
       if(isset($user_id)){
 
