@@ -91,8 +91,7 @@ class PostsController extends BaseController
     $user_id= $user->id;
 }
        
-  if(isset($user_id)){ return response()->json($user_id, 200);
-          }
+  
           
       if(isset($user_id)){
 
