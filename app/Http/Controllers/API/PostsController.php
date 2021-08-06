@@ -220,13 +220,10 @@ class PostsController extends BaseController
 
             $comments=Posts_Comments::where('post_id',$post->id)->join('users','users.id','=','posts_comments.user_id')->select('posts_comments.id','posts_comments.post_id','posts_comments.user_id','posts_comments.comment','posts_comments.created_at','users.name','users.email','users.avatar')->get();
 
-            $user_follower=User_Follower::where('follower_id',$user_id)->where('user_id',$post->user_id)->select('id')->first();
-            if(isset($user_follower)){ $is_follow=1; }
-            else{ $is_follow=0;}
-
+           
             $user=User::where('id',$post->user_id)->first();
 
-             $user_data=array("id"=>$user->id,"name"=>$user->name,"email"=>$user->email,"avatar"=>$user->avatar,'is_follow'=>$is_follow);
+             $user_data=array("id"=>$user->id,"name"=>$user->name,"email"=>$user->email,"avatar"=>$user->avatar,'is_follow'=>1);
 
 
               $post->no_of_like = $nooflike;
