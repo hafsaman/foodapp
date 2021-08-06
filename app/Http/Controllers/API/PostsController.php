@@ -188,19 +188,18 @@ class PostsController extends BaseController
 
     }
 
-     public function getposts(){
+     public function getposts(Request $request){
 
       $user_id= Auth::user()->id;
+       $limit=$request->limit;
+       //$posts=Posts::paginate($limit);
+         
       if(isset($user_id)){
 
-            $user_follower=User_Follower::where('user_id',$user_id)->where('follow',1)->select('follower_id')->distinct()->get();
-            $posts_all=array();
+            $user_follower=User_Follower::where('user_id',$user_id)->where('follow',1)->distinct()->pluck('follower_id')->toarray();
+              $posts_all=array();
             $user_data=array();
-           
-            foreach($user_follower as $user)
-            {
-              $posts=Posts::where('user_id',$user->follower_id)->get();
-            foreach($posts as $post)
+                 $posts=Posts::whereIn('user_id',$user_follower)->paginate($limit);     foreach($posts as $post)
             {
               $post_media=Posts_Gallary::where('post_id',$post->id)->select('media_path','media_type')->get();
            
@@ -230,13 +229,22 @@ class PostsController extends BaseController
              $user_data=array("id"=>$user->id,"name"=>$user->name,"email"=>$user->email,"avatar"=>$user->avatar,'is_follow'=>$is_follow);
 
 
+              $post->no_of_like = $nooflike;
+              $post->no_of_favourite = $nooffavourite;
+              $post->is_like = $is_like;
+              $post->is_favourite = $is_favourite;
+              $post->comments = $comments;
+              $post->user_data = $user_data;
+              $post->media_path=$post_media;
+    
+
             $posts_all[] = array("id"=>$post->id,"title"=>$post->title,"comment"=>$post->comment,"is_shopping"=>$post->is_shopping,'price'=>$post->price,'region'=>$post->region,'user_id'=>$post->user_id,'media_path'=>$post_media,'no_of_like'=>$nooflike,'no_of_favourite'=>$nooffavourite,'is_like'=>$is_like,'is_favourite'=>$is_favourite,'comments'=>$comments,'user_data'=>$user_data);
      
 
             }
-          }
+        //  }
                     
-            return $this->sendResponse($posts_all, '');
+            return $this->sendResponse($posts, '');
           }
                 else{ 
             return $this->sendError('Unauthorised.', ['error'=>'Unauthorised']);
