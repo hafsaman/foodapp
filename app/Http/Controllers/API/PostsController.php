@@ -399,7 +399,7 @@ class PostsController extends BaseController
 
   //validator place
      // return response()->json($request->postid, 200);
-        $posts = Posts::where('id',$request->postid)->pluck();
+        $posts = Posts::where('id',$request->postid)->pluck('id');
  return response()->json($posts, 200);
      
         if(isset($posts)){
