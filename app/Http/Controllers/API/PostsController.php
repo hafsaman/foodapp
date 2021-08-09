@@ -398,6 +398,7 @@ class PostsController extends BaseController
      public function commentpost(Request $request){
 
   //validator place
+      return response()->json($request->postid, 200);
       
        $posts = Posts::find($request->postid);
  
