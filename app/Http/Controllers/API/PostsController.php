@@ -398,7 +398,7 @@ class PostsController extends BaseController
      public function commentpost(Request $request){
 
   //validator place
-      return response()->json($request->postid, 200);
+     // return response()->json($request->postid, 200);
       
        $posts = Posts::find($request->postid);
  
@@ -406,12 +406,9 @@ class PostsController extends BaseController
         	$input['post_id'] = $posts->id;
         	$input['comment'] = $request->comment;
    		 	  $input['user_id'] = Auth::user()->id;
-          Posts_Comments::create($input);
-          $success[] = [
-            
-            'status'=>200,
-          ];
-            return $this->sendResponse($success, 'Post Comment Added successfully.');
+          $Post_comment=Posts_Comments::create($input);
+        
+            return $this->sendResponse($Post_comment, 'Post Comment Added successfully.');
         } 
         else{ 
             return $this->sendError('Post Not Exists', ['error'=>'Post Comments Not Found']);
