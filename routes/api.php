@@ -23,11 +23,11 @@ Route::get('getregion', [RegisterController::class, 'region']);
 
 Route::get('getpostsall', [PostsController::class, 'getpostsall']);
      
-/*Route::middleware('auth:api')->get('/user', function (Request $request) {
+/*Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
     return $request->user();
 });*/
 
-Route::middleware('auth:api')->group( function () {
+Route::middleware('auth:sanctum')->group( function () {
 	
 Route::get('getprofile/{id}', [UserController::class, 'getprofile']);
 Route::put('profileedit', [UserController::class, 'profileedit']);
@@ -45,6 +45,9 @@ Route::get('favouritepost/{id}', [PostsController::class, 'favouritepost']);
 Route::get('unfavouritepost/{id}', [PostsController::class, 'unfavouritepost']);
 Route::put('commentpost', [PostsController::class, 'commentpost']);
 Route::get('getpostcomment/{postid}',[PostsController::class,'getcomment']);
+Route::get('getpostfavourite/{postid}',[PostsController::class,'getfavourite']);
+
+
 
 
 

@@ -435,4 +435,23 @@ class PostsController extends BaseController
     }
 
 
+
+     public function getfavourite($postid){
+
+  //validator place
+      
+       $posts = Posts::find($postid);
+ 
+        if(isset($posts)){
+            $post_favourite =Postsfavourite::where('post_id',$postid)->join('users','users.id','=','posts_favourite.user_id')->select('posts_favourite.id','posts_favourite.post_id','posts_favourite.user_id','posts_favourite.created_at','users.name','users.email','users.avatar')->get();
+         
+            return $this->sendResponse($post_favourite, 'Post Favourites get successfully.');
+        } 
+        else{ 
+            return $this->sendError('Post Not Exists', ['error'=>'Post  Favourites Not Found']);
+        } 
+
+    }
+
+
 }
