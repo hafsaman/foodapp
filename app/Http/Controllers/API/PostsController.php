@@ -399,11 +399,11 @@ class PostsController extends BaseController
 
   //validator place
      // return response()->json($request->postid, 200);
-        $posts = Posts::find($request->postid);
+        $posts = Posts::where('id',$request->postid)->pluck();
  return response()->json($posts, 200);
      
         if(isset($posts)){
-          
+
         	$input['post_id'] = $posts->id;
         	$input['comment'] = $request->comment;
    		 	  $input['user_id'] = Auth::user()->id;
