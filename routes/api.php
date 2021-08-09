@@ -27,8 +27,9 @@ Route::get('getpostsall', [PostsController::class, 'getpostsall']);
     return $request->user();
 });*/
 
-Route::middleware('auth:sanctum')->group( function () {
-	
+//Route::middleware('auth:sanctum')->group( function () {
+Route::middleware('auth:api')->group( function () {
+
 Route::get('getprofile/{id}', [UserController::class, 'getprofile']);
 Route::put('profileedit', [UserController::class, 'profileedit']);
 Route::put('profileabout', [UserController::class, 'profileabout']);
