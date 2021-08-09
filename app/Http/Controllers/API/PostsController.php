@@ -403,7 +403,7 @@ class PostsController extends BaseController
      
         if(isset($posts)){
 
-        	$input['post_id'] = $posts->id;
+        	$input['post_id'] = $request->postid;
         	$input['comment'] = $request->comment;
    		 	  $input['user_id'] = Auth::user()->id;
           $Post_comment=Posts_Comments::create($input);
