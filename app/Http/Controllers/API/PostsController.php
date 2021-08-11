@@ -444,7 +444,7 @@ class PostsController extends BaseController
 
 
 
-     public function getfavourite($postid){
+     public function getfavourite(){
 
   //validator place
       
