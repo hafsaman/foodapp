@@ -126,10 +126,12 @@ class PostsController extends BaseController
 
             $user=User::where('id',$post->user_id)->first();
 
-            
-              $user_data=array("id"=>$user->id,"name"=>$user->name,"email"=>$user->email,"avatar"=>$user->avatar,'is_follow'=>$is_follow);
-           // $media_path=explode(",",$post->media_path);
+             $user_data=array("id"=>$user->id,"name"=>$user->name,"email"=>$user->email,"avatar"=>$user->avatar,'is_follow'=>$is_follow);
+         
+              $comment_data=array("post_id"=>$post->id,"user_id"=>$user->id,"comment"=>$post->comment,"created_at"=>$post->created_at,"name"=>$user->name,"email"=>$user->email,"avatar"=>$user->avatar);
+               // $media_path=explode(",",$post->media_path);
              //   $post->media_path=$media_path;
+              $post->comment=$comment_data;
               $post->no_of_like = $nooflike;
               $post->no_of_favourite = $nooffavourite;
               $post->is_like = $is_like;
@@ -167,8 +169,10 @@ class PostsController extends BaseController
 
             
               $user_data=array("id"=>$user->id,"name"=>$user->name,"email"=>$user->email,"avatar"=>$user->avatar,'is_follow'=>null);
-           // $media_path=explode(",",$post->media_path);
+             $comment_data=array("post_id"=>$post->id,"user_id"=>$user->id,"comment"=>$post->comment,"created_at"=>$post->created_at,"name"=>$user->name,"email"=>$user->email,"avatar"=>$user->avatar);
+               // $media_path=explode(",",$post->media_path);
              //   $post->media_path=$media_path;
+              $post->comment=$comment_data;
               $post->no_of_like = $nooflike;
               $post->no_of_favourite = $nooffavourite;
               $post->is_like = null;
@@ -225,7 +229,10 @@ class PostsController extends BaseController
             $user=User::where('id',$post->user_id)->first();
 
              $user_data=array("id"=>$user->id,"name"=>$user->name,"email"=>$user->email,"avatar"=>$user->avatar,'is_follow'=>1);
-
+            $comment_data=array("post_id"=>$post->id,"user_id"=>$user->id,"comment"=>$post->comment,"created_at"=>$post->created_at,"name"=>$user->name,"email"=>$user->email,"avatar"=>$user->avatar);
+               // $media_path=explode(",",$post->media_path);
+             //   $post->media_path=$media_path;
+              $post->comment=$comment_data;
 
               $post->no_of_like = $nooflike;
               $post->no_of_favourite = $nooffavourite;
