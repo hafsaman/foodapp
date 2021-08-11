@@ -147,7 +147,7 @@ class PostsController extends BaseController
             return $this->sendResponse($posts, 'Get All Posts Successfully.');
           }
           else {
-         $posts=Posts::paginate($limit);
+         $posts=Posts::orderby('id','desc')->paginate($limit);
           
             $posts_all=array();
             $user_data=array();
@@ -199,7 +199,8 @@ class PostsController extends BaseController
             $user_follower=User_Follower::where('user_id',$user_id)->where('follow',1)->distinct()->pluck('follower_id')->toarray();
               $posts_all=array();
             $user_data=array();
-                 $posts=Posts::whereIn('user_id',$user_follower)->paginate($limit);     foreach($posts as $post)
+                 $posts=Posts::whereIn('user_id',$user_follower)->orderby('id','desc')->paginate($limit);   
+            foreach($posts as $post)
             {
               $post_media=Posts_Gallary::where('post_id',$post->id)->select('media_path','media_type')->get();
            
