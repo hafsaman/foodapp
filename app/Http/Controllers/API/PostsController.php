@@ -95,7 +95,7 @@ class PostsController extends BaseController
           
       if(isset($user_id)){
 
-            $posts=Posts::paginate($limit);
+            $posts=Posts::orderby('id','desc')->paginate($limit);
           
             $posts_all=array();
             $user_data=array();
@@ -448,15 +448,15 @@ class PostsController extends BaseController
 
   //validator place
       
-       $posts = Posts::find($postid);
- 
-        if(isset($posts)){
-            $post_favourite =Postsfavourite::where('post_id',$postid)->join('users','users.id','=','posts_favourite.user_id')->select('posts_favourite.id','posts_favourite.post_id','posts_favourite.user_id','posts_favourite.created_at','users.name','users.email','users.avatar')->get();
+      // $posts = Posts::find($postid);
+    $user_id=Auth::user()->id;
+        if(isset($user_id)){
+            $post_favourite =Postsfavourite::where('user_id',$user_id)->join('users','users.id','=','posts_favourite.user_id')->select('posts_favourite.id','posts_favourite.post_id','posts_favourite.user_id','posts_favourite.created_at','users.name','users.email','users.avatar')->get();
          
             return $this->sendResponse($post_favourite, 'Post Favourites get successfully.');
         } 
         else{ 
-            return $this->sendError('Post Not Exists', ['error'=>'Post  Favourites Not Found']);
+            return $this->sendError('User Not Exists', ['error'=>'UserNot Found']);
         } 
 
     }
