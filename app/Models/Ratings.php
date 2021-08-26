@@ -10,6 +10,6 @@ class Ratings extends Model
     use HasFactory;
      protected $table='ratings';
     protected $fillable = [
-        'id',  'user_id','rate','status'
+        'id',  'user_id','rate_id','rate','status'
     ];
 }

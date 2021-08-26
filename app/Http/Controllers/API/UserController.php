@@ -10,6 +10,7 @@ use App\Models\Posts;
 use App\Models\User_Follower;
 use App\Models\UserLabels;
 use App\Models\Labels;
+use App\Models\Ratings;
 use Illuminate\Support\Facades\Auth;
 use Validator;
 //use Illuminate\Support\Facades\Storage;
@@ -28,6 +29,7 @@ class UserController extends BaseController
             $user_videos=UserGallary::where('user_id',$users->id)->where('media_type','=','video')->get();
             // $user_label=UserLabels::where('user_id',$users->id)->where('media_type','=','video')->get();
             $user_label=UserLabels::join('labels', 'labels.id', '=', 'user_labels.label_id')->where('user_id',$users->id)->get();
+            $user_rating=Ratings::where('user_id',$users->id)->avg('rate');
             $user_posts=Posts::where('user_id',$users->id)->get();
           $success[] = [
             'id'=>$users->id,
@@ -37,7 +39,8 @@ class UserController extends BaseController
             'photos'=>$user_photos,
             'videos'=>$user_videos,
             'posts'=>$user_posts,
-            'labels' =>$user_label,
+            'labels'=>$user_label,
+            'ratings'=>$user_rating, 
             'status'=>200,
           ];
             return $this->sendResponse($success, 'Get User profile successfully.');

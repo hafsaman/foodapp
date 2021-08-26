@@ -56,7 +56,6 @@ Route::get('getlabel', [LabelController::class, 'getlabel']);
 Route::post('edituserlabel', [LabelController::class, 'edituserlabel']);
 
 Route::post('addrate', [LabelController::class, 'addrate']);
-Route::get('getrate', [LabelController::class, 'getrate']);
 
 
 

@@ -16,6 +16,7 @@ class Ratings extends Migration
         Schema::create('ratings', function (Blueprint $table) {
             $table->bigIncrements('id');
             $table->bigInteger('user_id')->unsigned();
+            $table->bigInteger('rate_id')->unsigned();
             $table->integer('rate')->nullable();
             $table->boolean('status')->default('1');
             $table->timestamps();
