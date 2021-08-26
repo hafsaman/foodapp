@@ -55,7 +55,7 @@ Route::post('createlabel', [LabelController::class, 'createlabel']);
 Route::get('getlabel', [LabelController::class, 'getlabel']);
 Route::post('edituserlabel', [LabelController::class, 'edituserlabel']);
 
-Route::post('addrate', [LabelController::class, 'addrate']);
+Route::post('addrate', [RatingController::class, 'addrate']);
 
 
 
