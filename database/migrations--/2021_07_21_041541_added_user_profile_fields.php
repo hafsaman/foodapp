@@ -14,7 +14,7 @@ class AddedUserProfileFields extends Migration
     public function up()
     {
         Schema::table('users', function (Blueprint $table) {
-       $table->text('avatar')->after('password')->nullable();
+             $table->text('avatar')->after('password')->nullable();
         $table->text('about')->after('avatar')->nullable();
         $table->boolean('status')->default('1')->after('about');
         $table->string('region')->after('status')->nullable();
@@ -33,8 +33,8 @@ class AddedUserProfileFields extends Migration
                 $table->dropColumn('avatar');
                 $table->dropColumn('about');
                 $table->dropColumn('status');
-                $table->dropColumn('country');
-                $table->dropColumn('region');
+                $table->dropColumn('city');
+                $table->dropColumn('state');
             //
         });
     }
