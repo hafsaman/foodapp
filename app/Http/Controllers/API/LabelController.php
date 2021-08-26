@@ -1,7 +1,5 @@
- <?php
-
+<?php
 namespace App\Http\Controllers\API;
-
 
 use Illuminate\Http\Request;
 use App\Http\Controllers\API\BaseController as BaseController;
@@ -41,7 +39,7 @@ class LabelController extends BaseController
 
             $file_name = pathinfo($input_file, PATHINFO_FILENAME);
             $fileName = $file_name.time().'.'.$request->image->getClientOriginalExtension();
-            $mediaFiles->move(public_path('/assets/label/'), $fileName);
+            $request->image->move(public_path('/assets/label/'), $fileName);
             $img_path = 'assets/label/'.$fileName;
             
           
