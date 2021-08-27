@@ -53,6 +53,8 @@ Route::get('getpostfavourite',[PostsController::class,'getfavourite']);
 
 Route::post('createlabel', [LabelController::class, 'createlabel']);
 Route::get('getlabel', [LabelController::class, 'getlabel']);
+Route::post('editlabel/{id}', [LabelController::class, 'editlabel']);
+Route::post('deletelabel/{id}', [LabelController::class, 'deletelabel']);
 Route::post('edituserlabel', [LabelController::class, 'edituserlabel']);
 
 Route::post('addrate', [RatingController::class, 'addrate']);

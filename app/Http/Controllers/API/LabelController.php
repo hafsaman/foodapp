@@ -61,6 +61,57 @@ class LabelController extends BaseController
 
     }
 
+    function editlabel(Request $request,$id)
+    {
+        $labels=Labels::find($id);
+        if($request->has('name')){
+            $input['name'] = $request->name;
+        }
+        else{
+            $input['name']=$labels->name;
+        }
+
+        if($request->has('image')) {
+                 $input_file = $request->image->getClientOriginalName();
+
+            $file_name = pathinfo($input_file, PATHINFO_FILENAME);
+            $fileName = $file_name.time().'.'.$request->image->getClientOriginalExtension();
+            $request->image->move(public_path('/assets/label/'), $fileName);
+            $img_path = 'assets/label/'.$fileName;
+            $input['image'] = $img_path;
+        }
+        else{
+            $input['image']=$labels->image;
+        }
+        $label = Labels::where('id',$id)->update($input);
+       
+         
+    
+        
+
+      if(isset($label)){
+          return $this->sendResponse($label, 'Edit Label successfully');
+        //return $this->sendResponse($success, 'Posts created successfully.');
+        } 
+        else{ 
+            return $this->sendError('User Not Exists.', ['error'=>'User Not Found']);
+        } 
+
+    }
+
+    public function deletelabel($id)
+    {
+        $label=Labels::find($id);
+        
+        if(isset($label)){
+            Labels::where('id',$id)->delete();
+            return $this->sendResponse($label, 'Label deleted successfully.');
+        } 
+        else{ 
+            return $this->sendError('Label Not Exists', ['error'=>'Label Not Found']);
+        } 
+    }
+
     public function getlabel()
     {
         $label = Labels::get();
