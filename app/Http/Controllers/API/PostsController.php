@@ -453,15 +453,57 @@ class PostsController extends BaseController
 
 
 
-     public function getfavourite(){
+     public function getfavourite(Request $request){
 
   //validator place
-      
-      // $posts = Posts::find($postid);
+       $limit=$request->limit;
     $user_id=Auth::user()->id;
         if(isset($user_id)){
-            $post_favourite =Postsfavourite::where('user_id',$user_id)->join('users','users.id','=','posts_favourite.user_id')->select('posts_favourite.id','posts_favourite.post_id','posts_favourite.user_id','posts_favourite.created_at','users.name','users.email','users.avatar')->get();
+            $post_favourite =Postsfavourite::where('user_id',$user_id)->select('posts_favourite.id','posts_favourite.post_id','posts_favourite.user_id','posts_favourite.created_at')->orderby('id','desc')->paginate($limit);   
          
+             foreach($post_favourite as $post)
+            {
+              $post_media=Posts_Gallary::where('post_id',$post->post_id)->select('media_path','media_type')->get();
+           
+            $postlike=Posts_Likes::where('post_id',$post->post_id)->selectRaw('count(id) as totallike')->first();
+               $nooflike=$postlike->totallike;
+            $postfavourite=Postsfavourite::where('post_id',$post->post_id)->selectRaw('count(id) as totalfavourite')->first();
+            $nooffavourite=$postfavourite->totalfavourite;
+           
+            $postuserlike=Posts_Likes::where('post_id',$post->post_id)->where('user_id',$user_id)->selectRaw('count(id) as userlike')->first();
+            
+            if($postuserlike->userlike != 0){ $is_like=1; }
+            else{ $is_like=0;}
+            
+            $postuserfavourite=Postsfavourite::where('post_id',$post->post_id)->where('user_id',$user_id)->selectRaw('count(id) as userfavourite')->first();
+            
+            if($postuserfavourite->userfavourite != 0){ $is_favourite=1; }
+            else{ $is_favourite=0;}
+
+            $comments=Posts_Comments::where('post_id',$post->post_id)->join('users','users.id','=','posts_comments.user_id')->select('posts_comments.id','posts_comments.post_id','posts_comments.user_id','posts_comments.comment','posts_comments.created_at','users.name','users.email','users.avatar')->get();
+
+           
+            $user=User::where('id',$user_id)->first();
+
+             $user_data=array("id"=>$user->id,"name"=>$user->name,"email"=>$user->email,"avatar"=>$user->avatar,'is_follow'=>1);
+            $comment_data=array("post_id"=>$post->id,"user_id"=>$user->id,"comment"=>$post->comment,"created_at"=>$post->created_at,"name"=>$user->name,"email"=>$user->email,"avatar"=>$user->avatar);
+               // $media_path=explode(",",$post->media_path);
+             //   $post->media_path=$media_path;
+              $post->comment=$comment_data;
+
+              $post->no_of_like = $nooflike;
+              $post->no_of_favourite = $nooffavourite;
+              $post->is_like = $is_like;
+              $post->is_favourite = $is_favourite;
+              $post->comments = $comments;
+              $post->user_data = $user_data;
+              $post->media_path=$post_media;
+    
+
+                       }
+        
+
+         /*ends*/
             return $this->sendResponse($post_favourite, 'Post Favourites get successfully.');
         } 
         else{ 
@@ -483,5 +525,8 @@ class PostsController extends BaseController
             
     }
 
+    public function getsearch(){
+
+    }
 
 }
