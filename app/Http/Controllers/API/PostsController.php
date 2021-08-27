@@ -14,6 +14,7 @@ use App\Models\Posts_Comments;
 use App\Models\Postsfavourite;
 use App\Models\UserGallary;
 use App\Models\User_Follower;
+use App\Models\UserNotification;
 //use Illuminate\Support\Facades\Auth;
 use Validator;
  use Auth; 
@@ -316,20 +317,23 @@ class PostsController extends BaseController
 
        $posts = Posts::find($id);
  
-        if(isset($posts)){
+        //if(isset($posts)){
         	$input['post_id'] = $posts->id;
    		 	$input['user_id'] = Auth::user()->id;
    		 	$input['like'] = 1;
             Posts_Likes::create($input);
+            $inputnot['user_id']=Auth::user()->id;
+            $inputnot['description']="Like Post";
+            $inputnot['status']='unread';
+            UserNotification::create($inputnot);
+        
           $success[] = [
             
             'status'=>200,
           ];
             return $this->sendResponse($success, 'Post Like successfully.');
-        } 
-        else{ 
-            return $this->sendError('Post Not Exists', ['error'=>'Post Not Found']);
-        } 
+       // } 
+        
 
     }
     public function unlikepost($id){
@@ -415,6 +419,11 @@ class PostsController extends BaseController
         	$input['comment'] = $request->comment;
    		 	  $input['user_id'] = Auth::user()->id;
           $Post_comment=Posts_Comments::create($input);
+            $inputnot['user_id']=Auth::user()->id;
+            $inputnot['description']="Follow";
+            $inputnot['status']='unread';
+            UserNotification::create($inputnot);
+        
         
             return $this->sendResponse($Post_comment, 'Post Comment Added successfully.');
         } 
@@ -459,6 +468,19 @@ class PostsController extends BaseController
             return $this->sendError('User Not Exists', ['error'=>'UserNot Found']);
         } 
 
+    }
+
+    public function getnotification(){
+        $user_id=Auth::user()->id;
+        
+        if(isset($user_id)){
+            $notification = UserNotification::where('user_id',$user_id)->orderby('id','desc')->get();
+            return $this->sendResponse($notification, 'Notification get successfully.');
+        } 
+        else{ 
+            return $this->sendError('User Not Exists', ['error'=>'UserNot Found']);
+        } 
+            
     }
 
 

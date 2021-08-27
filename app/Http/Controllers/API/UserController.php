@@ -11,6 +11,8 @@ use App\Models\User_Follower;
 use App\Models\UserLabels;
 use App\Models\Labels;
 use App\Models\Ratings;
+use App\Models\UserNotification;
+
 use Illuminate\Support\Facades\Auth;
 use Validator;
 //use Illuminate\Support\Facades\Storage;
@@ -146,6 +148,10 @@ class UserController extends BaseController
         $input['user_id'] = Auth::user()->id;
         $input['follow'] = 1;
             User_Follower::create($input);
+            $inputnot['user_id']=Auth::user()->id;
+            $inputnot['description']="Follow";
+            $inputnot['status']='unread';
+            UserNotification::create($inputnot);
           $success[] = [
             
             'status'=>200,

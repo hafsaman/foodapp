@@ -57,7 +57,9 @@ Route::post('edituserlabel', [LabelController::class, 'edituserlabel']);
 
 Route::post('addrate', [RatingController::class, 'addrate']);
 
+Route::get('getsearch', [PostsController::class, 'getsearch']);
 
+Route::get('getnotification', [PostsController::class, 'getnotification']);
 
 
 });
