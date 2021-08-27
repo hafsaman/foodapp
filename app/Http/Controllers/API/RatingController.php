@@ -52,6 +52,18 @@ class RatingController extends BaseController
 
     }
 
+    public function listrate(){
+        $user_id=Auth::user()->id;
+        
+        if(isset($user_id)){
+            $rate = Ratings::where('user_id',$user_id)->join('users','users.id','=','ratings.rate_id')->select('users.name','users.email','users.profile_photo_path','ratings.rate')->get();
+            return $this->sendResponse($rate, 'Rating get successfully.');
+        } 
+        else{ 
+            return $this->sendError('User Not Exists', ['error'=>'UserNot Found']);
+        } 
+            
+    }
     
     
 }
