@@ -525,8 +525,22 @@ class PostsController extends BaseController
             
     }
 
-    public function getsearch(){
-
+    public function getsearch(Request $request){
+        $search=$request->search;
+        $user_id=Auth::user()->id;
+        if(isset($user_id)){
+            $userdata = User::where('name','LIKE',"%{$search}%")->orWhere('email','LIKE',"%{$search}%")->orWhere('region','LIKE',"%{$search}%")->get();
+            if($userdata){
+                return $this->sendResponse($userdata, 'User found successfully.');
+            }
+            else{
+                return $this->sendResponse('No such users found');
+            }
+        } 
+        else{ 
+            return $this->sendError('User Not Exists', ['error'=>'UserNot Found']);
+        }
+            
     }
 
 }
