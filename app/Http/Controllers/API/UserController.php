@@ -148,8 +148,10 @@ class UserController extends BaseController
         $input['user_id'] = Auth::user()->id;
         $input['follow'] = 1;
             User_Follower::create($input);
-            $inputnot['user_id']=Auth::user()->id;
-            $inputnot['description']="Follow";
+            $inputnot['user_id']= $users->id;
+            $inputnot['description']= Auth::user()->name ." Follow You";
+            $inputnot['postlikeby_userid']= Auth::user()->id;
+            $inputnot['post_id']= '0';
             $inputnot['status']='unread';
             UserNotification::create($inputnot);
           $success[] = [
