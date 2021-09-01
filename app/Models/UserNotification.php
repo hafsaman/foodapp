@@ -10,6 +10,6 @@ class UserNotification extends Model
     use HasFactory;
      protected $table='user_notification';
     protected $fillable = [
-        'id',  'user_id','description','status'
+        'id',  'user_id','description','status','postlikeby_userid','post_id'
     ];
 }
