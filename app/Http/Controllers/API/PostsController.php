@@ -322,8 +322,10 @@ class PostsController extends BaseController
        		 	$input['user_id'] = Auth::user()->id;
        		 	$input['like'] = 1;
             Posts_Likes::create($input);
-            $inputnot['user_id']=Auth::user()->id;
-            $inputnot['description']="Like Post";
+            $inputnot['user_id']=$posts->user_id;
+            $inputnot['description']= Auth::user()->name." Liked Your Post";
+            $inputnot['postlikeby_userid']= Auth::user()->id;
+            $inputnot['post_id']=$posts->id;
             $inputnot['status']='unread';
             UserNotification::create($inputnot);
         
