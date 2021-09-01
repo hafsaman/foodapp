@@ -14,8 +14,7 @@ class AddLikeUser extends Migration
     public function up()
     {
         Schema::table('posts_likes', function (Blueprint $table) {
-            $table->bigInteger('post_id')->unsigned();
-            $table->bigInteger('user_id')->unsigned();
+            
             
         });
     }
