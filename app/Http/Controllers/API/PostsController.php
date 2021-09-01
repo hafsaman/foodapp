@@ -420,8 +420,10 @@ class PostsController extends BaseController
    		 	  $input['user_id'] = Auth::user()->id;
           $Post_comment=Posts_Comments::create($input);
           $post_comment1 =Posts_Comments::where('posts_comments.id',$Post_comment->id)->join('users','users.id','=','posts_comments.user_id')->select('posts_comments.id','posts_comments.post_id','posts_comments.user_id','posts_comments.comment','posts_comments.created_at','users.name','users.email','users.avatar')->first();
-            $inputnot['user_id']=Auth::user()->id;
-            $inputnot['description']="Follow";
+            $inputnot['user_id']=$posts->user_id;
+            $inputnot['description']= Auth::user()->name." Commented on Your Post";
+            $inputnot['postlikeby_userid']=Auth::user()->id;
+            $inputnot['post_id']=$request->postid;
             $inputnot['status']='unread';
             UserNotification::create($inputnot);
         
