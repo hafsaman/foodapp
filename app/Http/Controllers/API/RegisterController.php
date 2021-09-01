@@ -131,7 +131,6 @@ class RegisterController extends BaseController
 
 
                 $input = $request->all();
-                return $input;
                 $user = User::create($input);
                 $success['token'] =  $user->createToken('MyApp')->accessToken;
                 $success['name'] =  $user->name;

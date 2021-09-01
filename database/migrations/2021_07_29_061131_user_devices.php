@@ -14,14 +14,13 @@ class UserDevices extends Migration
     public function up()
     {
          Schema::table('users', function (Blueprint $table) {
-           $table->enum('device_type',['ios', 'android'])->default('ios')->after('region');
-           
-           $table->enum('login_type',['apple', 'google','normal'])->default('normal')->after('device_type')->nullable();
+            $table->enum('device_type',['ios', 'android'])->default('ios')->after('region');          
+            $table->enum('login_type',['apple', 'google','normal'])->default('normal')->after('device_type')->nullable();
             $table->string('social_id')->after('login_type')->nullable();
             $table->string('devicetoken')->after('social_id')->nullable();
-        $table->string('phoneno')->after('devicetoken')->nullable();
-         $table->string('google_id')->after('phoneno')->nullable();
-             $table->string('apple_id')->after('google_id')->nullable();
+            $table->string('phoneno')->after('devicetoken')->nullable();
+            $table->string('google_id')->after('phoneno')->nullable();
+            $table->string('apple_id')->after('google_id')->nullable();
 
       
            
