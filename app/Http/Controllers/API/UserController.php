@@ -12,6 +12,7 @@ use App\Models\UserLabels;
 use App\Models\Labels;
 use App\Models\Ratings;
 use App\Models\UserNotification;
+use Illuminate\Database\Eloquent\Builder;
 
 use Illuminate\Support\Facades\Auth;
 use Validator;
@@ -259,7 +260,11 @@ class UserController extends BaseController
            $followinguser_id  = User_Follower::where('user_id',$user_id)->where('follow',1)->pluck('follower_id');
 
           if($request->search){
-                $user_follower = User::whereIn('id',$followinguser_id)->where('name', 'ilike', '"%'. $request->search .'%"')->get();
+                $user_follower = User::whereIn('id',$followinguser_id)->where('name', 'like', '%'.$request->search.'%')->with('following_data')
+                                     ->whereHas('following_data', function (Builder $query) use ($user_id) {
+                                     $query->where('user_id',$user_id);
+                                     })
+                                     ->get();
           }else{
 
                 $user_follower = User::whereIn('id',$followinguser_id)->get();
