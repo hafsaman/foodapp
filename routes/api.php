@@ -66,6 +66,7 @@ Route::get('listrate', [RatingController::class, 'listrate']);
 Route::get('getsearch', [PostsController::class, 'getsearch']);
 
 Route::get('discover', [PostsController::class, 'discover']);
+Route::get('seasonal', [PostsController::class, 'seasonal']);
 Route::get('getnotification', [PostsController::class, 'getnotification']);
 
 
