@@ -11,5 +11,15 @@ class User_Follower extends Model
      protected $table='user_follower';
     protected $fillable = [
         'id',  'user_id','follower_id','follow'
-    ];
+    ];   
+
+	public function userdatafollowing()
+	{
+	    return $this->hasOne('App\Models\User', 'id', 'follower_id');
+	}
+
+	  public function userdatafollower()
+	{
+	    return $this->hasOne('App\Models\User', 'id', 'user_id');
+	}
 }

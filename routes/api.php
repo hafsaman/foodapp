@@ -67,4 +67,9 @@ Route::get('discover', [PostsController::class, 'discover']);
 Route::get('getnotification', [PostsController::class, 'getnotification']);
 
 
+Route::post('follwersdata', [UserController::class, 'follwersdata']);
+Route::post('follwingdata', [UserController::class, 'follwingdata']);
+
+
+
 });
