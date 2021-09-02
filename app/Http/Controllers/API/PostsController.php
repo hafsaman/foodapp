@@ -38,6 +38,12 @@ class PostsController extends BaseController
         if($validator->fails()){
             return $this->sendError('Validation Error.', $validator->errors());       
         }
+
+        if($request->seasonal){
+           $input['seasonal'] = $request->seasonal;
+        }else{
+          $input['seasonal'] = '0';
+        }
         $input['title'] = $request->title;
         $input['comment'] = $request->comment;
         $input['is_shopping'] =$request->shopping;
