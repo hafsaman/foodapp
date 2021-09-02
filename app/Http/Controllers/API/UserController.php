@@ -230,7 +230,7 @@ class UserController extends BaseController
                 $user_follower = User::whereIn('id',$followeruser_id)->where('name', 'like', '%'.$request->search.'%')->with('followdata')->whereHas('followdata',  function (Builder $query) {
                                 $query->where('follower_id',$user_id);
                                 
-                            });
+                            })->get();
 
                 
           }else{
