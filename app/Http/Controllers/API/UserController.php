@@ -283,31 +283,5 @@ class UserController extends BaseController
         
     }
 
-     public function follwingdata(Request $request)
-    {
-
-
-      $user_id= Auth::user()->id;
-      if(isset($user_id)){
-
-        if($request->search){
-
-            $user_followings=User_Follower::where('user_id',$user_id)->where('follow',1)->with('userdatafollowing')->whereHas('userdatafollowing', function (Builder $query) {
-                                $query->whereRaw("UPPER('name') LIKE '%'". strtoupper($request->search)."'%'");
-                                //$query->where('name', 'like', '%'.$request->search.'%');
-                            })->get();
-        }else{
-
-             $user_followings=User_Follower::where('user_id',$user_id)->where('follow',1)->with('userdatafollowing')->get();
-        }
-
-            return $this->sendResponse($user_follower, 'UnFollow successfully.');
-        } 
-        else{ 
-            return $this->sendError('User Not Exists', ['error'=>'User Not Found']);
-        } 
-
-      
-        
-    }
+  
 }
