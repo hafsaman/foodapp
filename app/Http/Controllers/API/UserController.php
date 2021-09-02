@@ -259,7 +259,7 @@ class UserController extends BaseController
            $followinguser_id  = User_Follower::where('user_id',$user_id)->where('follow',1)->pluck('follower_id');
 
           if($request->search){
-                $user_follower = User::whereIn('id',$followinguser_id)->where('name', 'like', '%'.$request->search.'%')->get();
+                $user_follower = User::whereIn('id',$followinguser_id)->where('name', 'ilike', '"%'. $request->search .'%"')->get();
           }else{
 
                 $user_follower = User::whereIn('id',$followinguser_id)->get();
