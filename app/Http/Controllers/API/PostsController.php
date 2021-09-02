@@ -470,7 +470,7 @@ class PostsController extends BaseController
 
   //validator place
        $limit=$request->limit;
-    $user_id=Auth::user()->id;
+       $user_id=Auth::user()->id;
         if(isset($user_id)){
             $post_favourite =Postsfavourite::where('user_id',$user_id)->select('posts_favourite.id','posts_favourite.post_id','posts_favourite.user_id','posts_favourite.created_at')->orderby('id','desc')->paginate($limit);   
          
@@ -525,11 +525,11 @@ class PostsController extends BaseController
 
     }
 
-    public function getnotification(){
+    public function getnotification(Request $request){
         $user_id=Auth::user()->id;
-        
+        $limit=$request->limit;
         if(isset($user_id)){
-            $notification = UserNotification::where('user_id',$user_id)->orderby('id','desc')->get();
+            $notification = UserNotification::where('user_id',$user_id)->orderby('id','desc')->paginate($limit);
             return $this->sendResponse($notification, 'Notification get successfully.');
         } 
         else{ 
@@ -566,11 +566,11 @@ class PostsController extends BaseController
     }
 
     public function discover(Request $request){
-     
+     $limit=$request->limit;
       $posts_likes_data =Posts_likes::select('post_id', DB::raw('count(id) as total_likes'))
              ->groupBy('post_id')->with('Posts')
              ->orderBy('total_likes')
-             ->paginate(10);
+             ->paginate($limit);
         if($posts_likes_data){
             return $this->sendResponse($posts_likes_data, 'Discover Data found successfully.');
         }
@@ -580,14 +580,31 @@ class PostsController extends BaseController
     } 
 
     public function seasonal(Request $request){
-     
-      $seasonal_data =Posts::where('seasonal','1')->paginate(10);
+     $limit=$request->limit;
+      $seasonal_data =Posts::where('seasonal','1')->paginate($limit);
         if($seasonal_data){
             return $this->sendResponse($seasonal_data, 'Seasonl Data found successfully.');
         }
         else{
             return $this->sendResponse('No such data found');
         }
+    } 
+
+    public function discover_seasonal_posts(Request $request){
+     $limit=$request->limit;
+
+     $posts_likes_data =Posts_likes::select('post_id', DB::raw('count(id) as total_likes'))
+             ->groupBy('post_id')->with('Posts')
+             ->orderBy('total_likes')
+             ->paginate($limit);
+      $seasonal_data =Posts::where('seasonal','1')->paginate($limit);
+
+      $data = array();
+      $data['posts_likes_data'] = $posts_likes_data;
+      $data['seasonal_data'] = $seasonal_data;
+
+         return $this->sendResponse($data, 'Data found successfully.');
+       
     } 
         
 
