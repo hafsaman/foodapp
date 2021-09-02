@@ -18,6 +18,7 @@ use App\Models\UserNotification;
 //use Illuminate\Support\Facades\Auth;
 use Validator;
  use Auth; 
+ use  DB;
 
 class PostsController extends BaseController
 {
@@ -548,5 +549,20 @@ class PostsController extends BaseController
         }
             
     }
+
+        public function discover(Request $request){
+          $posts_likes_data =Posts_likes::select('post_id', DB::raw('count(id) as total_likes'))
+                 ->groupBy('post_id')->with('Posts')
+                 ->get();
+            if($posts_likes_data){
+                return $this->sendResponse($posts_likes_data, 'Discover Data found successfully.');
+            }
+            else{
+                return $this->sendResponse('No such data found');
+            }
+        } 
+        
+
+    
 
 }
