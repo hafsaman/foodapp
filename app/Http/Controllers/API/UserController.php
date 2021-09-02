@@ -229,12 +229,45 @@ class UserController extends BaseController
 
                
 
-                $user_follower = User::whereIn('id',$followeruser_id)->where('name', 'like', '%'.$request->search.'%')->get();
+                $user_follower = User::whereIn('id',$followeruser_id)->where('name', 'like', '%'.$request->search.'%')->with('followdata')->get();
 
                 
           }else{
 
                 $user_follower = User::whereIn('id',$followeruser_id)->with('followdata')->get();
+
+          }
+
+           
+        
+            return $this->sendResponse($user_follower, 'UnFollow successfully.');
+        } 
+        else{ 
+            return $this->sendError('User Not Exists', ['error'=>'User Not Found']);
+        } 
+
+      
+        
+    }
+
+     public function follwingdata(Request $request)
+    {
+
+      $user_id= Auth::user()->id;
+      if(isset($user_id)){
+
+           $followinguser_id  = User_Follower::where('user_id',$user_id)->where('follow',1)->pluck('follower_id');
+
+          if($request->search){
+
+               
+
+                $user_follower = User::whereIn('id',$followinguser_id)->whereRaw("UPPER('name') LIKE '%'". strtoupper($request->search)."'%'")->with('followimgdata')->get();
+
+                
+          }else{
+
+                $user_follower = User::whereIn('id',$followinguser_id)->with('followimgdata')->get();
 
           }
 
