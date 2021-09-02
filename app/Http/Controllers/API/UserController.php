@@ -262,12 +262,12 @@ class UserController extends BaseController
 
                
 
-                $user_follower = User::whereIn('id',$followinguser_id)->whereRaw("UPPER('name') LIKE '%'". strtoupper($request->search)."'%'")->with('followimgdata')->get();
+                $user_follower = User::whereIn('id',$followinguser_id)->whereRaw("UPPER('name') LIKE '%'". strtoupper($request->search)."'%'")->with('following_data')->get();
 
                 
           }else{
 
-                $user_follower = User::whereIn('id',$followinguser_id)->with('followimgdata')->get();
+                $user_follower = User::whereIn('id',$followinguser_id)->with('following_data')->get();
 
           }
 
