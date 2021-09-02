@@ -94,7 +94,7 @@ class UserController extends BaseController
             }
          else
             {
-              $img_path='';
+              $img_path= $users->avatar;
             }
           $users->name = $name;
           $users->password= $password;
