@@ -267,7 +267,11 @@ class UserController extends BaseController
                 
           }else{
 
-                $user_follower = User::whereIn('id',$followinguser_id)->with('following_data')->get();
+                $user_follower = User::whereIn('id',$followinguser_id)->with(['following_data' => function($query) { 
+                       // $query->sum('quantity');
+                       $query->where('user_id',$user_id); // without `order_id`
+                   }
+              ])->get();
 
           }
 
