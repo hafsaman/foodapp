@@ -24,6 +24,8 @@ Route::post('register', [RegisterController::class, 'register']);
 Route::post('login', [RegisterController::class, 'login']);
 Route::post('sociallogin', [RegisterController::class, 'sociallogin']);
 Route::get('getregion', [RegisterController::class, 'region']);
+Route::post('teslike', [PostsController::class, 'teslike']);
+
 
 Route::get('getpostsall', [PostsController::class, 'getpostsall']);
      
