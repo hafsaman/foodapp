@@ -289,9 +289,6 @@ class UserController extends BaseController
                                      ->paginate(10);
 
           }
-
-           
-        
             return $this->sendResponse($user_follower, 'Data found  successfully.');
         } 
         else{ 
