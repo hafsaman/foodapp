@@ -62,35 +62,45 @@ class UserController extends BaseController
       $users = user::find($id);
        
       if(isset($users)){
-           $validator = Validator::make($request->all(), [
-            'name' => 'required',
-            'email' => 'required',
-             'password' => 'required',
-            'phoneno' =>'required',
-            'region'=>'required',
-            'avatar'=>'required'
-        ]);
-    
-        if($validator->fails()){
-            return $this->sendError('Validation Error.', $validator->errors());       
+
+        if($request->name){
+          $name = $request->name;
+        }else{
+           $name = $users->name;
         }
-        $user=User::where('email',$request->email)->where('id','!=',$id)->first();
-        if(isset($user)){
-             return $this->sendError('User Invalid.', 'User Already Exists'); 
+
+        if($request->password){
+          $password = bcrypt($request->password);;
+        }else{
+           $password = $users->password;
         }
+
+        if($request->phoneno){
+          $phoneno = $request->phoneno;
+        }else{
+           $phoneno = $users->phoneno;
+        }
+
+        if($request->region){
+          $region = $request->region;
+        }else{
+           $region = $users->region;
+        }
+
           if($request->has('avatar')) {
             $fileName = time().'.'.$request->avatar->extension();
             $request->avatar->move(public_path('/assets/users/'), $fileName);
             $img_path = 'assets/users/'.$fileName;
             }
          else
-            {$img_path='';}
-          $users->name = $request->name;
-          $users->email = $request->email;
-          $users->password=bcrypt( $request->password);
-          $users->phoneno=$request->phoneno;
-          $users->region=$request->region;
-          $users->avatar = $request->img_path;
+            {
+              $img_path='';
+            }
+          $users->name = $name;
+          $users->password= $password;
+          $users->phoneno=$phoneno;
+          $users->region=$region;
+          $users->avatar = $img_path;
           $users->save();
 
           $success[] = [
