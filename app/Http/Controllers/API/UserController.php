@@ -230,12 +230,16 @@ class UserController extends BaseController
 
                
 
-                $user_follower = User::whereIn('id',$followeruser_id)->where('name', 'like', '%'.$request->search.'%')->with('followdata')->get();
+                $user_follower = User::whereIn('id',$followeruser_id)->where('name', 'like', '%'.$request->search.'%')->with('followdata')->whereHas('followdata', function (Builder $query)                  use ($user_id) {
+                                     $query->where('user_id',$user_id);
+                                     })->get();
 
                 
           }else{
 
-                $user_follower = User::whereIn('id',$followeruser_id)->with('followdata')->get();
+                $user_follower = User::whereIn('id',$followeruser_id)->with('followdata')->whereHas('followdata', function (Builder $query) use ($user_id) {
+                                     $query->where('user_id',$user_id);
+                                     })->get();
 
           }
 
@@ -267,7 +271,11 @@ class UserController extends BaseController
                                      ->get();
           }else{
 
-                $user_follower = User::whereIn('id',$followinguser_id)->get();
+                $user_follower = User::whereIn('id',$followinguser_id)->with('following_data')
+                                     ->whereHas('following_data', function (Builder $query) use ($user_id) {
+                                     $query->where('user_id',$user_id);
+                                     })
+                                     ->get();
 
           }
 
