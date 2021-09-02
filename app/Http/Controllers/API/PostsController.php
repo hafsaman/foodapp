@@ -578,6 +578,17 @@ class PostsController extends BaseController
             return $this->sendResponse('No such data found');
         }
     } 
+
+    public function seasonal(Request $request){
+     
+      $seasonal_data =Posts::where('seasonal','1')->paginate(10);
+        if($seasonal_data){
+            return $this->sendResponse($seasonal_data, 'Seasonl Data found successfully.');
+        }
+        else{
+            return $this->sendResponse('No such data found');
+        }
+    } 
         
 
     
