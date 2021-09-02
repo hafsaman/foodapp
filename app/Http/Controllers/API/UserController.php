@@ -220,6 +220,7 @@ class UserController extends BaseController
     public function follwersdata(Request $request)
     {
 
+      return $request;
 
       $user_id= Auth::user()->id;
       if(isset($user_id)){
