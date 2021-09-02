@@ -245,7 +245,7 @@ class UserController extends BaseController
 
            
         
-            return $this->sendResponse($user_follower, 'UnFollow successfully.');
+            return $this->sendResponse($user_follower, 'Data found successfully.');
         } 
         else{ 
             return $this->sendError('User Not Exists', ['error'=>'User Not Found']);
@@ -281,7 +281,7 @@ class UserController extends BaseController
 
            
         
-            return $this->sendResponse($user_follower, 'UnFollow successfully.');
+            return $this->sendResponse($user_follower, 'Data found  successfully.');
         } 
         else{ 
             return $this->sendError('User Not Exists', ['error'=>'User Not Found']);
