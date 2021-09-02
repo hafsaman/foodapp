@@ -568,7 +568,7 @@ class PostsController extends BaseController
     public function discover(Request $request){
      
       $posts_likes_data =Posts_likes::select('post_id', DB::raw('count(id) as total_likes'))
-             ->groupBy('total_likespost_id')->with('Posts')
+             ->groupBy('post_id')->with('Posts')
              ->orderBy('total_likes')
              ->paginate(10);
         if($posts_likes_data){
