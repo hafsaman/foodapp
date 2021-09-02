@@ -15,6 +15,7 @@ use App\Models\UserNotification;
 use Illuminate\Database\Eloquent\Builder;
 
 use Illuminate\Support\Facades\Auth;
+use DB;
 use Validator;
 //use Illuminate\Support\Facades\Storage;
    
