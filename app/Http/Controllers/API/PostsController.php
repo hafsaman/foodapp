@@ -41,7 +41,7 @@ class PostsController extends BaseController
             'set_notifications_send' => $request->set_notifications_send,
         ]);
 
-         $users = Auth::user();
+         $users = User::find($user_id);
 
       if(isset($users)){
           return $this->sendResponse($users, 'Notification Set successfully');
