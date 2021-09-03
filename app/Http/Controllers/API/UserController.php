@@ -301,7 +301,7 @@ class UserController extends BaseController
            $result['to'] = $user_follower->to;
            $result['total'] = $user_follower->total;
 
-         -
+         
 
 
           
