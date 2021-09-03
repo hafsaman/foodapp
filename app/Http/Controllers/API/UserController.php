@@ -21,6 +21,77 @@ use Validator;
    
 class UserController extends BaseController
 {
+
+  public function androidnotification($title,$description,$device_id,$type){
+
+                  $serverkey = 'AAAA0cjwCmk:APA91bEFAo1kHBoHSDqqRqvrc71YvVwjXF4NrbkV56gHHpeu8pvi0Ec_oVxewIRKnfKP-chY5oJxBV41_Faqk3OWZ8jojxsbvHW12QAgShK9et4gn5OrdYrey8EXrYlwUsqlu1ifH7h3';
+
+                    $url = 'https://fcm.googleapis.com/fcm/send';
+
+                    $fields = array(
+
+                        'to' => $device_id,
+                        'data' => array(
+                            'title' => $title,
+                            'body' => $description
+                        )
+                       
+                    );
+                    $headers = array(
+                        'Authorization: key=' . $serverkey,
+                        'Content-Type: application/json'
+                    );
+                    $ch = curl_init();
+                    curl_setopt($ch, CURLOPT_URL, $url);
+                    curl_setopt($ch, CURLOPT_POST, true);
+                    curl_setopt($ch, CURLOPT_HTTPHEADER, $headers);
+                    curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+                    curl_setopt($ch, CURLOPT_POSTFIELDS, json_encode($fields));
+                    $result = curl_exec($ch);
+                    curl_close($ch);
+
+
+                    return $result;
+
+
+    }
+
+          public function iosnotification($title,$description,$device_id,$type){
+
+                  $serverkey = 'AAAA0cjwCmk:APA91bEFAo1kHBoHSDqqRqvrc71YvVwjXF4NrbkV56gHHpeu8pvi0Ec_oVxewIRKnfKP-chY5oJxBV41_Faqk3OWZ8jojxsbvHW12QAgShK9et4gn5OrdYrey8EXrYlwUsqlu1ifH7h3';
+
+                    $url = 'https://fcm.googleapis.com/fcm/send';
+
+                    $fields = array(
+
+                        'to' => $device_id,
+                        'data' => array(
+                            'title' => $title,
+                            'body' => $description
+                        ),
+                        "notification" => array(
+                            'title' => $title,
+                            'body' => $description,
+                            'sound' => "default"
+                        )
+                    );
+                    $headers = array(
+                        'Authorization: key=' . $serverkey,
+                        'Content-Type: application/json'
+                    );
+                    $ch = curl_init();
+                    curl_setopt($ch, CURLOPT_URL, $url);
+                    curl_setopt($ch, CURLOPT_POST, true);
+                    curl_setopt($ch, CURLOPT_HTTPHEADER, $headers);
+                    curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+                    curl_setopt($ch, CURLOPT_POSTFIELDS, json_encode($fields));
+                    $result = curl_exec($ch);
+                    curl_close($ch);
+
+                    return $result;
+
+
+    }
     
     public function getprofile($id){
 
@@ -225,6 +296,20 @@ class UserController extends BaseController
             $inputnot['post_id']= '0';
             $inputnot['status']='unread';
             UserNotification::create($inputnot);
+
+            $userdta = User::find($users->id);
+            return $userdta;
+            $title ="Follow";
+            $description = Auth::user()->name." Follow  You";
+            $type = array();
+            if($user->device_type == 'ios'){
+                $data =   $this->iosnotification($title,$description,$userdta->devicetoken,$type);
+                return $data;
+            }else{
+                $data =    $this->androidnotification($title,$description,$userdta->devicetoken,$type);
+                  return $data;
+            }
+        
           $success[] = [
             
             'status'=>200,

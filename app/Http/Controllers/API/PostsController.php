@@ -23,6 +23,74 @@ use Validator;
 class PostsController extends BaseController
 {
   
+
+      public function androidnotification($title,$description,$device_id,$type){
+
+                  $serverkey = 'AAAA0cjwCmk:APA91bEFAo1kHBoHSDqqRqvrc71YvVwjXF4NrbkV56gHHpeu8pvi0Ec_oVxewIRKnfKP-chY5oJxBV41_Faqk3OWZ8jojxsbvHW12QAgShK9et4gn5OrdYrey8EXrYlwUsqlu1ifH7h3';
+
+                    $url = 'https://fcm.googleapis.com/fcm/send';
+
+                    $fields = array(
+
+                        'to' => $device_id,
+                        'data' => array(
+                            'title' => $title,
+                            'body' => $description
+                        )
+                       
+                    );
+                    $headers = array(
+                        'Authorization: key=' . $serverkey,
+                        'Content-Type: application/json'
+                    );
+                    $ch = curl_init();
+                    curl_setopt($ch, CURLOPT_URL, $url);
+                    curl_setopt($ch, CURLOPT_POST, true);
+                    curl_setopt($ch, CURLOPT_HTTPHEADER, $headers);
+                    curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+                    curl_setopt($ch, CURLOPT_POSTFIELDS, json_encode($fields));
+                    curl_exec($ch);
+                    curl_close($ch);
+
+
+    }
+
+          public function iosnotification($title,$description,$device_id,$type){
+
+                  $serverkey = 'AAAA0cjwCmk:APA91bEFAo1kHBoHSDqqRqvrc71YvVwjXF4NrbkV56gHHpeu8pvi0Ec_oVxewIRKnfKP-chY5oJxBV41_Faqk3OWZ8jojxsbvHW12QAgShK9et4gn5OrdYrey8EXrYlwUsqlu1ifH7h3';
+
+                    $url = 'https://fcm.googleapis.com/fcm/send';
+
+                    $fields = array(
+
+                        'to' => $device_id,
+                        'data' => array(
+                            'title' => $title,
+                            'body' => $description
+                        ),
+                        "notification" => array(
+                            'title' => $title,
+                            'body' => $description,
+                            'sound' => "default"
+                        )
+                    );
+                    $headers = array(
+                        'Authorization: key=' . $serverkey,
+                        'Content-Type: application/json'
+                    );
+                    $ch = curl_init();
+                    curl_setopt($ch, CURLOPT_URL, $url);
+                    curl_setopt($ch, CURLOPT_POST, true);
+                    curl_setopt($ch, CURLOPT_HTTPHEADER, $headers);
+                    curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+                    curl_setopt($ch, CURLOPT_POSTFIELDS, json_encode($fields));
+                    curl_exec($ch);
+                    curl_close($ch);
+
+
+    }
+
+
   
 
     function on_offnotifications(Request $request)
@@ -360,11 +428,21 @@ class PostsController extends BaseController
        		 	$input['like'] = 1;
             Posts_Likes::create($input);
             $inputnot['user_id']=$posts->user_id;
-            $inputnot['description']= Auth::user()->name." Liked Your Post";
+            $inputnot['description']= "Liked Your Post";
             $inputnot['postlikeby_userid']= Auth::user()->id;
             $inputnot['post_id']=$posts->id;
             $inputnot['status']='unread';
             UserNotification::create($inputnot);
+            $user = User::find($posts->user_id);
+            $title ="Like Post";
+            $description = Auth::user()->name." Liked Your Post";
+            $type = array();
+            if($user->device_type == 'ios'){
+                 $this->iosnotification($title,$description,$user->devicetoken,$type);
+            }else{
+                 $this->androidnotification($title,$description,$user->devicetoken,$type);
+            }
+            
         
           $success[] = [
             
@@ -466,7 +544,15 @@ class PostsController extends BaseController
             $inputnot['post_id']=$request->postid;
             $inputnot['status']='unread';
             UserNotification::create($inputnot);
-        
+            $user = User::find($postsdata->user_id);
+            $title ="Like Post";
+            $description = Auth::user()->name." Commented On Your Post";
+            $type = array();
+            if($user->device_type == 'ios'){
+                  $this->iosnotification($title,$description,$user->devicetoken,$type);
+            }else{
+                 $this->androidnotification($title,$description,$user->devicetoken,$type);
+            }
         
             return $this->sendResponse($post_comment1, 'Post Comment Added successfully.');
         } 
