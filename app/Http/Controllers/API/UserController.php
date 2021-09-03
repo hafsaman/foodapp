@@ -301,7 +301,7 @@ class UserController extends BaseController
 
      public function follwingdata(Request $request)
     {
-
+    $limit = $request->limit;
       $user_id= Auth::user()->id;
       if(isset($user_id)){
 
@@ -312,7 +312,7 @@ class UserController extends BaseController
                                      ->whereHas('following_data', function (Builder $query) use ($user_id) {
                                      $query->where('user_id',$user_id);
                                      })
-                                     ->paginate(10);
+                                     ->paginate($limit);
 
               foreach ($user_follower as $key => $value) {
 
@@ -335,7 +335,7 @@ class UserController extends BaseController
                                      ->whereHas('following_data', function (Builder $query) use ($user_id) {
                                      $query->where('user_id',$user_id);
                                      })
-                                     ->paginate(10);
+                                     ->paginate($limit);
 
                 foreach ($user_follower as $key => $value) {
 
