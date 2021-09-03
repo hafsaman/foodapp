@@ -29,24 +29,84 @@ class UserController extends BaseController
        $users = user::find($id);
  
         if(isset($users)){
-            $user_photos=UserGallary::where('user_id',$users->id)->where('media_type','=','photo')->get();
-            $user_videos=UserGallary::where('user_id',$users->id)->where('media_type','=','video')->get();
-            // $user_label=UserLabels::where('user_id',$users->id)->where('media_type','=','video')->get();
+            $user_photos=UserGallary::where('user_id',$users->id)->where('media_type','=','photo')->take(10);
+            $user_videos=UserGallary::where('user_id',$users->id)->where('media_type','=','video')->take(10);
             $user_label=UserLabels::join('labels', 'labels.id', '=', 'user_labels.label_id')->where('user_id',$users->id)->get();
             $user_rating=Ratings::where('user_id',$users->id)->avg('rate');
+            $recommendation=Ratings::where('user_id',$users->id)->orderby('id','DESC')->first();
+            $shopping = Posts::where('user_id',$users->id)->where('is_shopping','yes')->get();
             $user_posts=Posts::where('user_id',$users->id)->get();
-          $success[] = [
-            'id'=>$users->id,
-            'name'=>$users->name,
-            'avatar'=>$users->avatar,
-            'about'=>$users->about,
-            'photos'=>$user_photos,
-            'videos'=>$user_videos,
-            'posts'=>$user_posts,
-            'labels'=>$user_label,
-            'ratings'=>$user_rating, 
-            'status'=>200,
-          ];
+            $success[] = [
+              'user' => $users,
+              'photos'=>$user_photos,
+              'videos'=>$user_videos,
+              'posts'=>$user_posts,
+              'labels'=>$user_label,
+              'ratings'=>$user_rating, 
+              'shopping' => $shopping,
+              'recommendation'=>$recommendation,
+              'status'=>200,
+            ];
+            return $this->sendResponse($success, 'Get User profile successfully.');
+        } 
+        else{ 
+            return $this->sendError('User Not Exists', ['error'=>'User Not Found']);
+        } 
+
+    }
+
+    public function getshoppingposts(){
+
+       $users = Auth::user();
+
+        if(isset($users)){
+     
+            $shopping = Posts::where('user_id',$users->id)->where('is_shopping','yes')->paginate($request->limit);
+            
+            $success[] = [
+              'shopping' => $shopping,
+              'status'=>200,
+            ];
+            return $this->sendResponse($success, 'Get User profile successfully.');
+        } 
+        else{ 
+            return $this->sendError('User Not Exists', ['error'=>'User Not Found']);
+        } 
+
+    }
+
+     public function getvideos(){
+
+       $users = Auth::user();
+
+        if(isset($users)){
+     
+            $user_videos=UserGallary::where('user_id',$users->id)->where('media_type','=','video')->paginate($request->limit);
+            
+            $success[] = [
+              'user_videos' => $user_videos,
+              'status'=>200,
+            ];
+            return $this->sendResponse($success, 'Get User profile successfully.');
+        } 
+        else{ 
+            return $this->sendError('User Not Exists', ['error'=>'User Not Found']);
+        } 
+
+    }
+
+    public function getphotos(){
+
+       $users = Auth::user();
+
+        if(isset($users)){
+     
+            $user_photos=UserGallary::where('user_id',$users->id)->where('media_type','=','photo')->paginate($request->limit);
+            
+            $success[] = [
+              'user_photos' => $user_photos,
+              'status'=>200,
+            ];
             return $this->sendResponse($success, 'Get User profile successfully.');
         } 
         else{ 
@@ -136,8 +196,7 @@ class UserController extends BaseController
           $users->save();
 
           $success[] = [
-            'id'=>$users->id,
-            'name'=>$users->name,
+            'data'=>$users,
             'status'=>200,
           ];
         return $this->sendResponse($success, 'User Profile Edit successfully.');
@@ -232,8 +291,6 @@ class UserController extends BaseController
     public function follwersdata(Request $request)
     {
 
-      $limit = $request->limit;
-        $user_follower_data = array();
       $user_id= Auth::user()->id;
       if(isset($user_id)){
 
@@ -241,74 +298,24 @@ class UserController extends BaseController
 
           if($request->search){
 
-                $user_follower = User::whereIn('id',$followeruser_id)->where(DB::raw('lower(name)'), 'like', '%' . strtolower($request->search) . '%')->with('followdata')->whereHas('followdata', function (Builder $query)   use ($user_id) {
+               
+
+                $user_follower = User::whereIn('id',$followeruser_id)->where(DB::raw('lower(name)'), 'like', '%' . strtolower($request->search) . '%')->with('followdata')->whereHas('followdata', function (Builder $query)                  use ($user_id) {
                                      $query->where('follower_id',$user_id);
-                                     })->paginate($limit);
-
-              
-                foreach ($user_follower['data'] as $key => $value) {
-
-                  $is_olloweruser_id  = User_Follower::where('user_id',$user_id)->where('follower_id',$value->id)->first();
-
-                  if( $is_olloweruser_id){
-                      $is_follow = '1';
-                  }else{
-                      $is_follow = '0';
-                  }
-
-                  $user_follower_data[$key] = $value;
-                  $user_follower_data[$key]['is_follow'] = $is_follow ;
-
-                  
-                }
+                                     })->paginate(10);
 
                 
           }else{
 
                 $user_follower = User::whereIn('id',$followeruser_id)->with('followdata')->whereHas('followdata', function (Builder $query) use ($user_id) {
                                      $query->where('follower_id',$user_id);
-                                     })->paginate($limit);
-
-                 foreach ($user_follower['data'] as $key => $value) {
-
-                  $is_olloweruser_id  = User_Follower::where('user_id',$user_id)->where('follower_id',$value->id)->first();
-
-                  if( $is_olloweruser_id){
-                      $is_follow = '1';
-                  }else{
-                      $is_follow = '0';
-                  }
-
-                  $user_follower_data[$key] = $value;
-                  $user_follower_data[$key]['is_follow'] = $is_follow ;
-
-                  
-                }
+                                     })->paginate(10);
 
           }
 
-          $result = array();
-
-            return $user_follower['current_page'];
-
-           $result['current_page'] = $user_follower['current_page'];
-           $result['data'] =  $user_follower_data;
-           $result['from'] = $user_follower->from;
-           $result['last_page'] = $user_follower->last_page;
-           $result['last_page_url'] = $user_follower->last_page_url;
-           $result['links'] = $user_follower->links;
-           $result['next_page_url'] = $user_follower->next_page_url;
-           $result['per_page'] = $user_follower->per_page;
-           $result['prev_page_url'] = $user_follower->prev_page_url;
-           $result['to'] = $user_follower->to;
-           $result['total'] = $user_follower->total;
-
-         
-
-
-          
+           
         
-            return $this->sendResponse($result, 'Data found successfully.');
+            return $this->sendResponse($user_follower, 'Data found successfully.');
         } 
         else{ 
             return $this->sendError('User Not Exists', ['error'=>'User Not Found']);
@@ -320,7 +327,7 @@ class UserController extends BaseController
 
      public function follwingdata(Request $request)
     {
-    $limit = $request->limit;
+
       $user_id= Auth::user()->id;
       if(isset($user_id)){
 
@@ -331,48 +338,14 @@ class UserController extends BaseController
                                      ->whereHas('following_data', function (Builder $query) use ($user_id) {
                                      $query->where('user_id',$user_id);
                                      })
-                                     ->paginate($limit);
-
-              foreach ($user_follower['data'] as $key => $value) {
-
-                  $is_olloweruser_id  = User_Follower::where('user_id',$value->id)->where('follower_id',$user_id)->first();
-
-                  if( $is_olloweruser_id){
-                      $is_follow = '1';
-                  }else{
-                      $is_follow = '0';
-                  }
-
-                  $user_follower_data[$key] = $value;
-                  $user_follower_data[$key]['is_follow'] = $is_follow ;
-
-                  
-              }
+                                     ->paginate(10);
           }else{
 
                 $user_follower = User::whereIn('id',$followinguser_id)->with('following_data')
                                      ->whereHas('following_data', function (Builder $query) use ($user_id) {
                                      $query->where('user_id',$user_id);
                                      })
-                                     ->paginate($limit);
-
-                foreach ($user_follower['data'] as $key => $value) {
-
-                  $is_olloweruser_id  = User_Follower::where('user_id',$value->id)->where('follower_id',$user_id)->first();
-
-                  if( $is_olloweruser_id){
-                      $is_follow = '1';
-                  }else{
-                      $is_follow = '0';
-                  }
-
-                  $user_follower_data[$key] = $value;
-                  $user_follower_data[$key]['is_follow'] = $is_follow ;
-
-                  
-              }
-
-              $user_follower->data = $user_follower_data;
+                                     ->paginate(10);
 
           }
             return $this->sendResponse($user_follower, 'Data found  successfully.');

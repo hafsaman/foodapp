@@ -75,6 +75,13 @@ Route::get('getnotification', [PostsController::class, 'getnotification']);
 
 Route::post('follwersdata', [UserController::class, 'follwersdata']);
 Route::post('follwingdata', [UserController::class, 'follwingdata']);
+Route::post('getvideos', [UserController::class, 'getvideos']);
+Route::post('getphotos', [UserController::class, 'getphotos']);
+Route::post('getshoppingposts', [UserController::class, 'getshoppingposts']);
+
+
+
+
 
 
 
