@@ -24,7 +24,7 @@ class UserController extends BaseController
 
   public function androidnotification($title,$description,$device_id,$type){
 
-                  $serverkey = 'AAAA0cjwCmk:APA91bEFAo1kHBoHSDqqRqvrc71YvVwjXF4NrbkV56gHHpeu8pvi0Ec_oVxewIRKnfKP-chY5oJxBV41_Faqk3OWZ8jojxsbvHW12QAgShK9et4gn5OrdYrey8EXrYlwUsqlu1ifH7h3';
+                  $serverkey = 'AAAARM9xBp4:APA91bEx1zcoXyTjzFVZMh3pQZwATyPObQxowIaxuB9SzqjpFne3JDlChWS7eLT7U7-yasKk6SIGuWx-XbklmxBYO1fXfGLrtESTHHBh--qWhZ7UTH0E2mt5bqfUUsi6uVo2WFZm2oi5';
 
                     $url = 'https://fcm.googleapis.com/fcm/send';
 
