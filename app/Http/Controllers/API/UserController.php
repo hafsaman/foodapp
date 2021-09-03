@@ -311,7 +311,7 @@ class UserController extends BaseController
         }
         $user=Auth::id();
          
-        $language_update = User::where('id',$user->id)->update([
+        $language_update = User::where('id',$user)->update([
             'language' =>  $request->language,
         ]);
        
