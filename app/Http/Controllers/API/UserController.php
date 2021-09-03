@@ -231,6 +231,8 @@ class UserController extends BaseController
 
     public function follwersdata(Request $request)
     {
+
+      $limit = $request->limit;
         $user_follower_data = array();
       $user_id= Auth::user()->id;
       if(isset($user_id)){
@@ -241,7 +243,7 @@ class UserController extends BaseController
 
                 $user_follower = User::whereIn('id',$followeruser_id)->where(DB::raw('lower(name)'), 'like', '%' . strtolower($request->search) . '%')->with('followdata')->whereHas('followdata', function (Builder $query)                  use ($user_id) {
                                      $query->where('follower_id',$user_id);
-                                     })->paginate(10);
+                                     })->paginate($limit);
 
               
                 foreach ($user_follower as $key => $value) {
@@ -265,7 +267,7 @@ class UserController extends BaseController
 
                 $user_follower = User::whereIn('id',$followeruser_id)->with('followdata')->whereHas('followdata', function (Builder $query) use ($user_id) {
                                      $query->where('follower_id',$user_id);
-                                     })->with('is_following')->paginate(10);
+                                     })->paginate($limit);
 
                  foreach ($user_follower as $key => $value) {
 
@@ -314,7 +316,7 @@ class UserController extends BaseController
 
               foreach ($user_follower as $key => $value) {
 
-                  $is_olloweruser_id  = User_Follower::where('user_id',$value->id)->where('folloer_id',$user_id)->first();
+                  $is_olloweruser_id  = User_Follower::where('user_id',$value->id)->where('follower_id',$user_id)->first();
 
                   if( $is_olloweruser_id){
                       $is_follow = '1';
@@ -337,7 +339,7 @@ class UserController extends BaseController
 
                 foreach ($user_follower as $key => $value) {
 
-                  $is_olloweruser_id  = User_Follower::where('user_id',$value->id)->where('folloer_id',$user_id)->first();
+                  $is_olloweruser_id  = User_Follower::where('user_id',$value->id)->where('follower_id',$user_id)->first();
 
                   if( $is_olloweruser_id){
                       $is_follow = '1';
