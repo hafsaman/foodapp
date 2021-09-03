@@ -237,21 +237,19 @@ class UserController extends BaseController
 
            $followeruser_id  = User_Follower::where('follower_id',$user_id)->where('follow',1)->pluck('user_id');
 
-           return $followeruser_id;
-
           if($request->search){
 
                
 
                 $user_follower = User::whereIn('id',$followeruser_id)->where(DB::raw('lower(name)'), 'like', '%' . strtolower($request->search) . '%')->with('followdata')->whereHas('followdata', function (Builder $query)                  use ($user_id) {
-                                     $query->where('user_id',$user_id);
+                                     $query->where('follower_id',$user_id);
                                      })->paginate(10);
 
                 
           }else{
 
                 $user_follower = User::whereIn('id',$followeruser_id)->with('followdata')->whereHas('followdata', function (Builder $query) use ($user_id) {
-                                     $query->where('user_id',$user_id);
+                                     $query->where('follower_id',$user_id);
                                      })->paginate(10);
 
           }
