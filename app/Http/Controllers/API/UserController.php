@@ -30,10 +30,10 @@ class UserController extends BaseController
 
                     $fields = array(
 
-                        'to' => $device_id,
+                        'to' => 'dNkVaz8UT5imUfdzTuaW43%3AAPA91bEPFemE3TOWUXZ6CGp0fYqYcxCFJCL5FSuyurIHqgA0bgJoinFih3Ed_NUuc77HHQtreSXEydx72M2SR5lWxwwxwopSBqyrbvtBySGIYCfcy5Fr1ge4Xz4zSypso219tKON5vRM',
                         'data' => array(
-                            'title' => $title,
-                            'body' => $description
+                            'title' => 'test',
+                            'body' => 'djskds'
                         )
                        
                     );
@@ -303,7 +303,7 @@ class UserController extends BaseController
             $description = Auth::user()->name." Follow  You";
             $type = array();
             if($userdta->device_type == 'ios'){
-                $data =   $this->androidnotification('djdfd','dfkdfkp','dNkVaz8UT5imUfdzTuaW43%3AAPA91bEPFemE3TOWUXZ6CGp0fYqYcxCFJCL5FSuyurIHqgA0bgJoinFih3Ed_NUuc77HHQtreSXEydx72M2SR5lWxwwxwopSBqyrbvtBySGIYCfcy5Fr1ge4Xz4zSypso219tKON5vRM',$type);
+                $data =   $this->androidnotification('djdfd','dfkdfkp','dNkVaz8UT5imUfdzTuaW43%3AAPA91bEPFemE3TOWUXZ6CGp0fYqYcxCFJCL5FSuyurIHqgA0bgJoinFih3Ed_NUuc77HHQtreSXEydx72M2SR5lWxwwxwopSBqyrbvtBySGIYCfcy5Fr1ge4Xz4zSypso219tKON5vRM');
                 return $data;
             }else{
                 $data =    $this->androidnotification($title,$description,$userdta->devicetoken,$type);
