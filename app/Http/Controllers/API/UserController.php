@@ -277,7 +277,7 @@ class UserController extends BaseController
                       $is_follow = '0';
                   }
 
-                  $[$key] = $value;
+                  $user_follower_data[$key] = $value;
                   $user_follower_data[$key]['is_follow'] = $is_follow ;
 
                   
@@ -322,7 +322,7 @@ class UserController extends BaseController
                       $is_follow = '0';
                   }
 
-                  $[$key] = $value;
+                  $user_follower_data[$key] = $value;
                   $user_follower_data[$key]['is_follow'] = $is_follow ;
 
                   
@@ -345,7 +345,7 @@ class UserController extends BaseController
                       $is_follow = '0';
                   }
 
-                  $[$key] = $value;
+                  $user_follower_data[$key] = $value;
                   $user_follower_data[$key]['is_follow'] = $is_follow ;
 
                   
