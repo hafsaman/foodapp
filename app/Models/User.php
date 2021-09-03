@@ -18,7 +18,6 @@ class User extends Authenticatable
      * @var array
      */
 
-    protected $appends = [ 'isfollowing_data' ]
     protected $fillable = [
         'name',
         'email',
