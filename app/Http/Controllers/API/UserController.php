@@ -55,7 +55,7 @@ class UserController extends BaseController
 
     }
 
-    public function getshoppingposts(){
+    public function getshoppingposts(Request $request){
 
        $users = Auth::user();
 
@@ -75,7 +75,7 @@ class UserController extends BaseController
 
     }
 
-     public function getvideos(){
+     public function getvideos(Request $request){
 
        $users = Auth::user();
 
@@ -95,7 +95,7 @@ class UserController extends BaseController
 
     }
 
-    public function getphotos(){
+    public function getphotos(Request $request){
 
        $users = Auth::user();
 
