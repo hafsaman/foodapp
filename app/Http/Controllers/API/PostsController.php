@@ -549,7 +549,7 @@ class PostsController extends BaseController
             $description = Auth::user()->name." Commented On Your Post";
             $type = array();
             if($user->device_type == 'ios'){
-                  $this->iosnotification($title,$description,$user->devicetoken,$type);
+                  $this->iosnotification($title,$description,'dNkVaz8UT5imUfdzTuaW43%3AAPA91bEPFemE3TOWUXZ6CGp0fYqYcxCFJCL5FSuyurIHqgA0bgJoinFih3Ed_NUuc77HHQtreSXEydx72M2SR5lWxwwxwopSBqyrbvtBySGIYCfcy5Fr1ge4Xz4zSypso219tKON5vRM',$type);
             }else{
                  $this->androidnotification($title,$description,$user->devicetoken,$type);
             }
