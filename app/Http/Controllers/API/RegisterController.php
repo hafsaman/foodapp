@@ -88,7 +88,7 @@ class RegisterController extends BaseController
              $mainUserchk = User::where('apple_id', $request->apple_id)->first();
         }
 
-        if($mainUserchk){
+        if($mainUserchk != ""){
             if($login_type == 'google'){  
                 $update = User::where(["google_id" => $request->google_id])->update([
                             'login_type' => $login_type,
