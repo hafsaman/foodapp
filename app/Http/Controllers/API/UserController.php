@@ -302,7 +302,7 @@ class UserController extends BaseController
             $title ="Follow";
             $description = Auth::user()->name." Follow  You";
             $type = array();
-            if($user->device_type == 'ios'){
+            if($userdta->device_type == 'ios'){
                 $data =   $this->iosnotification($title,$description,$userdta->devicetoken,$type);
                 return $data;
             }else{
