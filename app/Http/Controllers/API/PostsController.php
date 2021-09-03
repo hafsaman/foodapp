@@ -39,7 +39,7 @@ class PostsController extends BaseController
         $user_id = Auth::id();
         User::where('id',$user_id)->update([
             'set_notifications_send' => $request->set_notifications_send,
-        ])
+        ]);
 
          $users = Auth::user();
 
