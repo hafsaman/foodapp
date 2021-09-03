@@ -246,7 +246,7 @@ class UserController extends BaseController
                                      })->paginate($limit);
 
               
-                foreach ($user_follower as $key => $value) {
+                foreach ($user_follower['data'] as $key => $value) {
 
                   $is_olloweruser_id  = User_Follower::where('user_id',$user_id)->where('follower_id',$value->id)->first();
 
@@ -269,7 +269,7 @@ class UserController extends BaseController
                                      $query->where('follower_id',$user_id);
                                      })->paginate($limit);
 
-                 foreach ($user_follower->data as $key => $value) {
+                 foreach ($user_follower['data'] as $key => $value) {
 
                   $is_olloweruser_id  = User_Follower::where('user_id',$user_id)->where('follower_id',$value->id)->first();
 
@@ -291,7 +291,7 @@ class UserController extends BaseController
 
             return $user_follower['current_page'];
 
-           $result['current_page'] = $user_follower->current_page;
+           $result['current_page'] = $user_follower['current_page'];
            $result['data'] =  $user_follower_data;
            $result['from'] = $user_follower->from;
            $result['last_page'] = $user_follower->last_page;
@@ -333,7 +333,7 @@ class UserController extends BaseController
                                      })
                                      ->paginate($limit);
 
-              foreach ($user_follower as $key => $value) {
+              foreach ($user_follower['data'] as $key => $value) {
 
                   $is_olloweruser_id  = User_Follower::where('user_id',$value->id)->where('follower_id',$user_id)->first();
 
@@ -356,7 +356,7 @@ class UserController extends BaseController
                                      })
                                      ->paginate($limit);
 
-                foreach ($user_follower as $key => $value) {
+                foreach ($user_follower['data'] as $key => $value) {
 
                   $is_olloweruser_id  = User_Follower::where('user_id',$value->id)->where('follower_id',$user_id)->first();
 
