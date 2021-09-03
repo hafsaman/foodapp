@@ -241,7 +241,7 @@ class UserController extends BaseController
 
           if($request->search){
 
-                $user_follower = User::whereIn('id',$followeruser_id)->where(DB::raw('lower(name)'), 'like', '%' . strtolower($request->search) . '%')->with('followdata')->whereHas('followdata', function (Builder $query)                  use ($user_id) {
+                $user_follower = User::whereIn('id',$followeruser_id)->where(DB::raw('lower(name)'), 'like', '%' . strtolower($request->search) . '%')->with('followdata')->whereHas('followdata', function (Builder $query)   use ($user_id) {
                                      $query->where('follower_id',$user_id);
                                      })->paginate($limit);
 
@@ -287,9 +287,9 @@ class UserController extends BaseController
 
           }
 
-           
+           $user_follower->data = $user_follower_data;
         
-            return $this->sendResponse($user_follower_data, 'Data found successfully.');
+            return $this->sendResponse($user_follower, 'Data found successfully.');
         } 
         else{ 
             return $this->sendError('User Not Exists', ['error'=>'User Not Found']);
@@ -352,6 +352,8 @@ class UserController extends BaseController
 
                   
               }
+
+              $user_follower->data = $user_follower_data;
 
           }
             return $this->sendResponse($user_follower, 'Data found  successfully.');
