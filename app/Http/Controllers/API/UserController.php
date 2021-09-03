@@ -231,7 +231,7 @@ class UserController extends BaseController
 
     public function follwersdata(Request $request)
     {
-
+        $user_follower_data = array();
       $user_id= Auth::user()->id;
       if(isset($user_id)){
 
@@ -239,24 +239,55 @@ class UserController extends BaseController
 
           if($request->search){
 
-               
-
                 $user_follower = User::whereIn('id',$followeruser_id)->where(DB::raw('lower(name)'), 'like', '%' . strtolower($request->search) . '%')->with('followdata')->whereHas('followdata', function (Builder $query)                  use ($user_id) {
                                      $query->where('follower_id',$user_id);
                                      })->paginate(10);
+
+              
+                foreach ($user_follower as $key => $value) {
+
+                  $is_olloweruser_id  = User_Follower::where('user_id',$user_id)->where('follower_id',$value->id)->first();
+
+                  if( $is_olloweruser_id){
+                      $is_follow = '1';
+                  }else{
+                      $is_follow = '0';
+                  }
+
+                  $user_follower_data[$key] = $value;
+                  $user_follower_data[$key]['is_follow'] = $is_follow ;
+
+                  
+                }
 
                 
           }else{
 
                 $user_follower = User::whereIn('id',$followeruser_id)->with('followdata')->whereHas('followdata', function (Builder $query) use ($user_id) {
                                      $query->where('follower_id',$user_id);
-                                     })->paginate(10);
+                                     })->with('is_following')->paginate(10);
+
+                 foreach ($user_follower as $key => $value) {
+
+                  $is_olloweruser_id  = User_Follower::where('user_id',$user_id)->where('follower_id',$value->id)->first();
+
+                  if( $is_olloweruser_id){
+                      $is_follow = '1';
+                  }else{
+                      $is_follow = '0';
+                  }
+
+                  $[$key] = $value;
+                  $user_follower_data[$key]['is_follow'] = $is_follow ;
+
+                  
+                }
 
           }
 
            
         
-            return $this->sendResponse($user_follower, 'Data found successfully.');
+            return $this->sendResponse($user_follower_data, 'Data found successfully.');
         } 
         else{ 
             return $this->sendError('User Not Exists', ['error'=>'User Not Found']);
@@ -280,6 +311,22 @@ class UserController extends BaseController
                                      $query->where('user_id',$user_id);
                                      })
                                      ->paginate(10);
+
+              foreach ($user_follower as $key => $value) {
+
+                  $is_olloweruser_id  = User_Follower::where('user_id',$value->id)->where('folloer_id',$user_id)->first();
+
+                  if( $is_olloweruser_id){
+                      $is_follow = '1';
+                  }else{
+                      $is_follow = '0';
+                  }
+
+                  $[$key] = $value;
+                  $user_follower_data[$key]['is_follow'] = $is_follow ;
+
+                  
+              }
           }else{
 
                 $user_follower = User::whereIn('id',$followinguser_id)->with('following_data')
@@ -287,6 +334,22 @@ class UserController extends BaseController
                                      $query->where('user_id',$user_id);
                                      })
                                      ->paginate(10);
+
+                foreach ($user_follower as $key => $value) {
+
+                  $is_olloweruser_id  = User_Follower::where('user_id',$value->id)->where('folloer_id',$user_id)->first();
+
+                  if( $is_olloweruser_id){
+                      $is_follow = '1';
+                  }else{
+                      $is_follow = '0';
+                  }
+
+                  $[$key] = $value;
+                  $user_follower_data[$key]['is_follow'] = $is_follow ;
+
+                  
+              }
 
           }
             return $this->sendResponse($user_follower, 'Data found  successfully.');

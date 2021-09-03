@@ -17,6 +17,8 @@ class User extends Authenticatable
      *
      * @var array
      */
+
+    protected $appends = [ 'isfollowing_data' ]
     protected $fillable = [
         'name',
         'email',
@@ -59,4 +61,7 @@ class User extends Authenticatable
         {
             return $this->hasMany('App\Models\User_Follower', 'follower_id', 'id');
         }
+
+      
+    
 }
