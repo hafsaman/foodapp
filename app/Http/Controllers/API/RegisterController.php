@@ -124,7 +124,7 @@ class RegisterController extends BaseController
                      ]);
             }
 
-            $success['token'] =  $mainUserchk->createToken('MyApp')->accessToken;
+            $success['token'] =  $emailchk_alreadyexist->createToken('MyApp')->accessToken;
             $success['name'] =  $emailchk_alreadyexist->name;  
              $success['region'] =  $emailchk_alreadyexist->region;    
 
@@ -158,7 +158,7 @@ class RegisterController extends BaseController
             $user = Auth::user(); 
             $success['token'] =  $user->createToken('MyApp')-> accessToken; 
             $success['name'] =  $user->name;
-   
+            $success['role'] =  $user->role;
             return $this->sendResponse($success, 'User login successfully.');
         } 
         else{ 
