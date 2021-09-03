@@ -27,7 +27,7 @@ class User extends Authenticatable
         'region',
         'phoneno',
         'login_type',
-        'device_type','devicetoken','social_id'
+        'device_type','devicetoken','social_id','google_id','apple_id'
     ];
 
     /**
