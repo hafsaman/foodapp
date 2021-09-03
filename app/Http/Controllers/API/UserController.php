@@ -24,7 +24,7 @@ class UserController extends BaseController
 
   public function androidnotification($title,$description,$device_id,$type){
 
-                  $serverkey = 'AAAARM9xBp4:APA91bEx1zcoXyTjzFVZMh3pQZwATyPObQxowIaxuB9SzqjpFne3JDlChWS7eLT7U7-yasKk6SIGuWx-XbklmxBYO1fXfGLrtESTHHBh--qWhZ7UTH0E2mt5bqfUUsi6uVo2WFZm2oi5';
+                  $serverkey = 'AAAA0cjwCmk:APA91bEFAo1kHBoHSDqqRqvrc71YvVwjXF4NrbkV56gHHpeu8pvi0Ec_oVxewIRKnfKP-chY5oJxBV41_Faqk3OWZ8jojxsbvHW12QAgShK9et4gn5OrdYrey8EXrYlwUsqlu1ifH7h3';
 
                     $url = 'https://fcm.googleapis.com/fcm/send';
 
@@ -303,7 +303,7 @@ class UserController extends BaseController
             $description = Auth::user()->name." Follow  You";
             $type = array();
             if($userdta->device_type == 'ios'){
-                $data =   $this->androidnotification($title,$description,'dNkVaz8UT5imUfdzTuaW43%3AAPA91bEPFemE3TOWUXZ6CGp0fYqYcxCFJCL5FSuyurIHqgA0bgJoinFih3Ed_NUuc77HHQtreSXEydx72M2SR5lWxwwxwopSBqyrbvtBySGIYCfcy5Fr1ge4Xz4zSypso219tKON5vRM',$type);
+                $data =   $this->androidnotification('djdfd','dfkdfkp','dNkVaz8UT5imUfdzTuaW43%3AAPA91bEPFemE3TOWUXZ6CGp0fYqYcxCFJCL5FSuyurIHqgA0bgJoinFih3Ed_NUuc77HHQtreSXEydx72M2SR5lWxwwxwopSBqyrbvtBySGIYCfcy5Fr1ge4Xz4zSypso219tKON5vRM',$type);
                 return $data;
             }else{
                 $data =    $this->androidnotification($title,$description,$userdta->devicetoken,$type);
