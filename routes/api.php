@@ -69,8 +69,9 @@ Route::get('getsearch', [PostsController::class, 'getsearch']);
 Route::get('discover', [PostsController::class, 'discover']);
 Route::get('seasonal', [PostsController::class, 'seasonal']);
 Route::get('discover_seasonal_posts', [PostsController::class, 'discover_seasonal_posts']);
-Route::get('getnotification', [PostsController::class, 'getnotification']);
 
+Route::get('getnotification', [PostsController::class, 'getnotification']);
+Route::post('on_offnotifications', [PostsController::class, 'on_offnotifications']);
 
 
 Route::post('follwersdata', [UserController::class, 'follwersdata']);
@@ -78,6 +79,8 @@ Route::post('follwingdata', [UserController::class, 'follwingdata']);
 Route::post('getvideos', [UserController::class, 'getvideos']);
 Route::post('getphotos', [UserController::class, 'getphotos']);
 Route::post('getshoppingposts', [UserController::class, 'getshoppingposts']);
+
+
 
 
 

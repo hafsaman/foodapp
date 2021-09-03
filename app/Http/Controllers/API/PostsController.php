@@ -23,6 +23,36 @@ use Validator;
 class PostsController extends BaseController
 {
   
+  
+
+    function on_offnotifications(Request $request)
+    {
+      $validator = Validator::make($request->all(), [
+            'set_notifications_send' => 'required',
+         
+        ]);
+    
+        if($validator->fails()){
+            return $this->sendError('Validation Error.', $validator->errors());       
+        }
+
+        $user_id = Auth::id();
+        User::where('id',$user_id)->update([
+            'set_notifications_send' => $request->set_notifications_send,
+        ])
+
+         $users = Auth::user();
+
+      if(isset($users)){
+          return $this->sendResponse($users, 'Notification Set successfully');
+        //return $this->sendResponse($success, 'Posts created successfully.');
+        } 
+        else{ 
+            return $this->sendError('User Not Exists.', ['error'=>'User Not Found']);
+        } 
+
+    }
+
 
     function createpost(Request $request)
     {
