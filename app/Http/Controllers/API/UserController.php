@@ -306,11 +306,10 @@ class UserController extends BaseController
                  
             if($userdta->device_type == 'ios'){
                  $this->iosnotification($title,$description,$userdta->devicetoken,$type);
-               // $data =   $this->androidnotification('djdfd','dfkdfkp','dNkVaz8UT5imUfdzTuaW43%3AAPA91bEPFemE3TOWUXZ6CGp0fYqYcxCFJCL5FSuyurIHqgA0bgJoinFih3Ed_NUuc77HHQtreSXEydx72M2SR5lWxwwxwopSBqyrbvtBySGIYCfcy5Fr1ge4Xz4zSypso219tKON5vRM');
-                return $data;
+               
             }else{
-                $data =    $this->androidnotification($title,$description,$userdta->devicetoken,$type);
-                 // return $data;
+               $this->androidnotification($title,$description,$userdta->devicetoken,$type);
+                
             }
         
           $success[] = [
