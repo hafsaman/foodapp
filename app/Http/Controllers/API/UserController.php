@@ -314,9 +314,9 @@ class UserController extends BaseController
         $language_update = User::where('id',$user)->update([
             'language' =>  $request->language,
         ]);
-       
+        $user=Auth::user();
       if(isset($language_update)){
-          return $this->sendResponse($rating, 'Added Language successfully');
+          return $this->sendResponse($user, 'Added Language successfully');
         //return $this->sendResponse($success, 'Posts created successfully.');
         } 
         else{ 
