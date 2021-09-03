@@ -298,7 +298,7 @@ class UserController extends BaseController
             UserNotification::create($inputnot);
 
             $userdta = User::find($users->id);
-            return $userdta;
+           
             $title ="Follow";
             $description = Auth::user()->name." Follow  You";
             $type = array();
