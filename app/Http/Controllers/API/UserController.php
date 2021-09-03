@@ -287,9 +287,26 @@ class UserController extends BaseController
 
           }
 
-           $user_follower->data = $user_follower_data;
+          $result = array();
+
+           $result['current_page'] = $user_follower->current_page;
+           $result['data'] =  $user_follower_data;
+           $result['from'] = $user_follower->from;
+           $result['last_page'] = $user_follower->last_page;
+           $result['last_page_url'] = $user_follower->last_page_url;
+           $result['links'] = $user_follower->links;
+           $result['next_page_url'] = $user_follower->next_page_url;
+           $result['per_page'] = $user_follower->per_page;
+           $result['prev_page_url'] = $user_follower->prev_page_url;
+           $result['to'] = $user_follower->to;
+           $result['total'] = $user_follower->total;
+
+         -
+
+
+          
         
-            return $this->sendResponse($user_follower, 'Data found successfully.');
+            return $this->sendResponse($result, 'Data found successfully.');
         } 
         else{ 
             return $this->sendError('User Not Exists', ['error'=>'User Not Found']);
