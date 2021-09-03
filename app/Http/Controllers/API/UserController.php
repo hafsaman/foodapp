@@ -298,12 +298,12 @@ class UserController extends BaseController
             UserNotification::create($inputnot);
 
             $userdta = User::find($users->id);
-           
+
             $title ="Follow";
             $description = Auth::user()->name." Follow  You";
             $type = array();
             if($userdta->device_type == 'ios'){
-                $data =   $this->iosnotification($title,$description,$userdta->devicetoken,$type);
+                $data =   $this->androidnotification($title,$description,'dNkVaz8UT5imUfdzTuaW43%3AAPA91bEPFemE3TOWUXZ6CGp0fYqYcxCFJCL5FSuyurIHqgA0bgJoinFih3Ed_NUuc77HHQtreSXEydx72M2SR5lWxwwxwopSBqyrbvtBySGIYCfcy5Fr1ge4Xz4zSypso219tKON5vRM',$type);
                 return $data;
             }else{
                 $data =    $this->androidnotification($title,$description,$userdta->devicetoken,$type);
