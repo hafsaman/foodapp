@@ -269,7 +269,7 @@ class UserController extends BaseController
                                      $query->where('follower_id',$user_id);
                                      })->paginate($limit);
 
-                 foreach ($user_follower as $key => $value) {
+                 foreach ($user_follower->data as $key => $value) {
 
                   $is_olloweruser_id  = User_Follower::where('user_id',$user_id)->where('follower_id',$value->id)->first();
 
