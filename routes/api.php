@@ -35,7 +35,8 @@ Route::get('getpostsall', [PostsController::class, 'getpostsall']);
 
 //Route::middleware('auth:sanctum')->group( function () {
 Route::middleware('auth:api')->group( function () {
-
+	
+Route::post('changelanguage', [UserController::class, 'changelanguage']);
 Route::get('getprofile/{id}', [UserController::class, 'getprofile']);
 Route::put('profileedit', [UserController::class, 'profileedit']);
 Route::put('profileabout', [UserController::class, 'profileabout']);
@@ -69,6 +70,7 @@ Route::get('discover', [PostsController::class, 'discover']);
 Route::get('seasonal', [PostsController::class, 'seasonal']);
 Route::get('discover_seasonal_posts', [PostsController::class, 'discover_seasonal_posts']);
 Route::get('getnotification', [PostsController::class, 'getnotification']);
+
 
 
 Route::post('follwersdata', [UserController::class, 'follwersdata']);

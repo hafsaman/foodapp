@@ -38,7 +38,7 @@ class RatingController extends BaseController
         $input['user_id'] = $user;
         $input['rate'] = $request->rate;
         $input['rate_id'] = $request->rate_id;
-        
+        $input['commment'] = $request->comment;
          
         $rating = Ratings::create($input);
        

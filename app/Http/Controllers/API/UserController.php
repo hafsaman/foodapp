@@ -299,5 +299,35 @@ class UserController extends BaseController
         
     }
 
+     public function changelanguage(Request $request)
+    {
+
+      $validator = Validator::make($request->all(), [
+            'language' => 'required',
+        ]);
+    
+        if($validator->fails()){
+            return $this->sendError('Validation Error.', $validator->errors());       
+        }
+        $user=Auth::id();
+         
+        $language_update = User::where('id',$user->id)->update([
+            'language' =>  $request->language,
+        ]);
+       
+      if(isset($language_update)){
+          return $this->sendResponse($rating, 'Added Language successfully');
+        //return $this->sendResponse($success, 'Posts created successfully.');
+        } 
+        else{ 
+            return $this->sendError('User Not Exists.', ['error'=>'User Not Found']);
+        } 
+
+        
+    }
+
+
+    
+
   
 }
