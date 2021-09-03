@@ -289,6 +289,7 @@ class UserController extends BaseController
 
           $result = array();
 
+            return $user_follower->current_page;
 
            $result['current_page'] = $user_follower->current_page;
            $result['data'] =  $user_follower_data;
