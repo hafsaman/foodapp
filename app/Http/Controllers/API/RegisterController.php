@@ -89,14 +89,14 @@ class RegisterController extends BaseController
         if($mainUserchk != ""){
             if($login_type == 'google'){  
                 $update = User::where(["google_id" => $request->google_id])->update([
-                            'login_type' => $login_type,
+                            'login_type' => $request->login_type,
                             'device_type' => $request->device_type,
                             'devicetoken' => $request->devicetoken,
                             
                          ]);  
                 }else{
                     $update = User::where(["apple_id" => $request->apple_id])->update([
-                            'login_type' => $login_type,
+                            'login_type' => $request->login_type,
                             'device_type' => $request->device_type,
                             'devicetoken' => $request->devicetoken,
                             
@@ -115,7 +115,7 @@ class RegisterController extends BaseController
             if($login_type == 'google'){  
                 $update = User::where(["email" => $request->email])->update([
                             'google_id' => $request->google_id,
-                            'login_type' => $login_type,
+                            'login_type' => $request->login_type,
                             'device_type' => $request->device_type,
                             'devicetoken' => $request->devicetoken,
                             
@@ -123,7 +123,7 @@ class RegisterController extends BaseController
             }else{
                 $update = User::where(["email" => $request->email])->update([
                         'apple_id' => $request->google_id,
-                        'login_type' => $login_type,
+                        'login_type' => $request->login_type,
                         'device_type' => $request->device_type,
                         'devicetoken' => $request->devicetoken,
                         
