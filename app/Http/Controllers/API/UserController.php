@@ -7,6 +7,7 @@ use App\Http\Controllers\API\BaseController as BaseController;
 use App\Models\User;
 use App\Models\UserGallary;
 use App\Models\Posts;
+use App\Models\Posts_Gallary;
 use App\Models\User_Follower;
 use App\Models\UserLabels;
 use App\Models\Labels;
@@ -47,11 +48,9 @@ class UserController extends BaseController
                     curl_setopt($ch, CURLOPT_HTTPHEADER, $headers);
                     curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
                     curl_setopt($ch, CURLOPT_POSTFIELDS, json_encode($fields));
-                    $result = curl_exec($ch);
+                    curl_exec($ch);
                     curl_close($ch);
 
-
-                    return $result;
 
 
     }
@@ -98,6 +97,10 @@ class UserController extends BaseController
        $users = user::find($id);
  
         if(isset($users)){
+            $user_posts= Posts::where('user_id',$users->id)->get();
+            $user_posts_ids = Posts::where('user_id',$users->id)->pluck('id');
+            $user_posts_photos = Posts_Gallary::whereIn('post_id',$user_posts_ids)->where('media_type','=','image/jpeg')->take(10)->get();
+            $user_posts_videos = Posts_Gallary::whereIn('post_id',$user_posts_ids)->where('media_type','=','video/quicktime')->take(10)->get();
             $user_photos=UserGallary::where('user_id',$users->id)->where('media_type','=','photo')->take(10);
             $user_videos=UserGallary::where('user_id',$users->id)->where('media_type','=','video')->take(10);
             $user_label=UserLabels::join('labels', 'labels.id', '=', 'user_labels.label_id')->where('user_id',$users->id)->get();
@@ -109,8 +112,8 @@ class UserController extends BaseController
 
 
             $success['user'] = $users;
-            $success['photos'] = $user_photos;
-            $success['videos'] = $user_videos;
+            $success['photos'] = $user_posts_photos;
+            $success['videos'] = $user_posts_videos;
             $success['labels'] = $user_label;
             $success['posts'] = $user_posts;
             $success['ratings'] = $user_rating;
@@ -374,43 +377,7 @@ class UserController extends BaseController
       
         
     }
-/*
-    public function follwersdata(Request $request)
-    {
 
-      $user_id= Auth::user()->id;
-      if(isset($user_id)){
-
-           $followeruser_id  = User_Follower::where('follower_id',$user_id)->where('follow',1)->pluck('user_id');
-
-          if($request->search){
-
-               
-
-                $user_follower = User::whereIn('id',$followeruser_id)->where(DB::raw('lower(name)'), 'like', '%' . strtolower($request->search) . '%')->with('followdata')->whereHas('followdata', function (Builder $query)                  use ($user_id) {
-                                     $query->where('follower_id',$user_id);
-                                     })->paginate(10);
-
-                
-          }else{
-
-                $user_follower = User::whereIn('id',$followeruser_id)->with('followdata')->whereHas('followdata', function (Builder $query) use ($user_id) {
-                                     $query->where('follower_id',$user_id);
-                                     })->paginate(10);
-
-          }
-
-           
-        
-            return $this->sendResponse($user_follower, 'Data found successfully.');
-        } 
-        else{ 
-            return $this->sendError('User Not Exists', ['error'=>'User Not Found']);
-        } 
-
-      
-        
-    }*/
 
 
     public function follwersdata(Request $request)
