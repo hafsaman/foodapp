@@ -40,7 +40,6 @@ class RegisterController extends BaseController
             'c_password' => 'required|same:password',
             'region'=>'required',
             'device_type'=>'required',
-            
             'devicetoken'=>'required'
             
         ]);
@@ -91,11 +90,15 @@ class RegisterController extends BaseController
             if($login_type == 'google'){  
                 $update = User::where(["google_id" => $request->google_id])->update([
                             'login_type' => $login_type,
+                            'device_type' => $request->device_type,
+                            'devicetoken' => $request->devicetoken,
                             
                          ]);  
                 }else{
                     $update = User::where(["apple_id" => $request->apple_id])->update([
                             'login_type' => $login_type,
+                            'device_type' => $request->device_type,
+                            'devicetoken' => $request->devicetoken,
                             
                          ]);
                 }
@@ -113,12 +116,16 @@ class RegisterController extends BaseController
                 $update = User::where(["email" => $request->email])->update([
                             'google_id' => $request->google_id,
                             'login_type' => $login_type,
+                            'device_type' => $request->device_type,
+                            'devicetoken' => $request->devicetoken,
                             
                          ]);  
             }else{
                 $update = User::where(["email" => $request->email])->update([
                         'apple_id' => $request->google_id,
                         'login_type' => $login_type,
+                        'device_type' => $request->device_type,
+                        'devicetoken' => $request->devicetoken,
                         
                      ]);
             }
@@ -155,6 +162,12 @@ class RegisterController extends BaseController
     {
         if(Auth::attempt(['email' => $request->email, 'password' => $request->password])){ 
             $user = Auth::user(); 
+             $update = User::where(["id" => $user->id])->update([
+                            'login_type' => 'normal',
+                            'device_type' => $request->device_type,
+                            'devicetoken' => $request->devicetoken,
+                            
+                         ]);  
             $success['token'] =  $user->createToken('MyApp')-> accessToken; 
             $success['name'] =  $user->name;
             $success['role'] =  $user->role;
