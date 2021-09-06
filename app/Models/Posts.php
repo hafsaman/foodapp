@@ -10,13 +10,13 @@ class Posts extends Model
 {
     use HasFactory;
      protected $table='posts';
-     protected $appends = ['post_gallary'];
+     protected $appends = ['media_path'];
     protected $fillable = [
         'id',  'title',  'media_path','user_id','comment','is_shopping','price','region'
     ];
 
-     public function getPostGallaryAttribute(){
+     public function getMediaPathAttribute(){
 
-        return Posts_Gallary::where('post_id',$this->id)->get();
+        return Posts_Gallary::where('post_id',$this->id)->pluck('media_path','media_type');
     }
 }

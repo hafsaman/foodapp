@@ -36,6 +36,11 @@ class PostsController extends BaseController
                         'data' => array(
                             'title' => $title,
                             'body' => $description
+                        ),
+                         "notification" => array(
+                            'title' => $title,
+                            'body' => $description,
+                            'sound' => "default"
                         )
                        
                     );
