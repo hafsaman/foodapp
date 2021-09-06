@@ -89,12 +89,29 @@ class UserController extends BaseController
 
 
     }
-    
-    public function getprofile(){
 
-  //validator place
-       $id  = Auth::id();
-       $users = user::find($id);
+
+    
+     public function allrecommendations(Request $request){
+          $users  = Auth::user();
+          $recommendation=Ratings::where('user_id',$users->id)->orderby('id','DESC')->paginate($limit);
+
+          $success['recommendation'] = $recommendation;
+          $success['status'] = 200;
+          return $this->sendResponse($success, 'Get User Recommendations successfully.');
+     }
+
+
+    public function getprofile($id = null){
+
+      //validator place
+          if($id){
+            $id  = $id;
+          }else{
+            $id  = Auth::id();
+          }
+       
+          $users = user::find($id);
  
         if(isset($users)){
             $user_posts= Posts::where('user_id',$users->id)->get();
@@ -390,15 +407,11 @@ class UserController extends BaseController
 
           if($request->search){
 
-               
-
                 $user_follower = User::whereIn('id',$followeruser_id)->where(DB::raw('lower(name)'), 'like', '%' . strtolower($request->search) . '%')->with('followdata')->whereHas('followdata', function (Builder $query)                  use ($user_id) {
                                      $query->where('follower_id',$user_id);
                                      })->paginate(10);
-
                 
           }else{
-
                 $user_follower = User::whereIn('id',$followeruser_id)->with('followdata')->whereHas('followdata', function (Builder $query) use ($user_id) {
                                      $query->where('follower_id',$user_id);
                                      })->paginate(10);
@@ -422,8 +435,6 @@ class UserController extends BaseController
         else{ 
             return $this->sendError('User Not Exists', ['error'=>'User Not Found']);
         } 
-
-      
         
     }
 
