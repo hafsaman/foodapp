@@ -107,7 +107,7 @@ class UserController extends BaseController
             $recommendation=Ratings::where('user_id',$users->id)->orderby('id','DESC')->first();
             $shopping = Posts::where('user_id',$users->id)->where('is_shopping','yes')->get();
             $user_posts=Posts::where('user_id',$users->id)->get();
-            $success = array()
+            $success = array();
 
 
             $success['user'] = $users;
