@@ -443,39 +443,7 @@ class UserController extends BaseController
     }
 
 
-     public function follwingdata(Request $request)
-    {
-
-      $user_id= Auth::user()->id;
-      if(isset($user_id)){
-
-           $followinguser_id  = User_Follower::where('user_id',$user_id)->where('follow',1)->pluck('follower_id');
-
-          if($request->search){
-                $user_follower = User::whereIn('id',$followinguser_id)->where(DB::raw('lower(name)'), 'like', '%' . strtolower($request->search) . '%')->with('following_data')
-                                     ->whereHas('following_data', function (Builder $query) use ($user_id) {
-                                     $query->where('user_id',$user_id);
-                                     })
-                                     ->paginate(10);
-          }else{
-
-                $user_follower = User::whereIn('id',$followinguser_id)->with('following_data')
-                                     ->whereHas('following_data', function (Builder $query) use ($user_id) {
-                                     $query->where('user_id',$user_id);
-                                     })
-                                     ->paginate(10);
-
-          }
-            return $this->sendResponse($user_follower, 'Data found  successfully.');
-        } 
-        else{ 
-            return $this->sendError('User Not Exists', ['error'=>'User Not Found']);
-        } 
-
-      
-        
-    }
-
+    
      public function changelanguage(Request $request)
     {
 
