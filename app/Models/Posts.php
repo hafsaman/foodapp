@@ -17,6 +17,6 @@ class Posts extends Model
 
      public function getPostGallaryAttribute(){
 
-        return Posts_Gallary::where('post_id',$this->post_id)->get();
+        return Posts_Gallary::where('post_id',$this->id)->get();
     }
 }
