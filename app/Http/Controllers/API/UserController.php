@@ -93,10 +93,10 @@ class UserController extends BaseController
 
     }
     
-    public function getprofile($id){
+    public function getprofile(){
 
   //validator place
-
+       $id  = Auth::id();
        $users = user::find($id);
  
         if(isset($users)){

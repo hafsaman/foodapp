@@ -37,7 +37,7 @@ Route::get('getpostsall', [PostsController::class, 'getpostsall']);
 Route::middleware('auth:api')->group( function () {
 	
 Route::post('changelanguage', [UserController::class, 'changelanguage']);
-Route::get('getprofile/{id}', [UserController::class, 'getprofile']);
+Route::get('getprofile', [UserController::class, 'getprofile']);
 Route::put('profileedit', [UserController::class, 'profileedit']);
 Route::put('profileabout', [UserController::class, 'profileabout']);
 Route::get('follow/{id}', [UserController::class, 'follow']);
