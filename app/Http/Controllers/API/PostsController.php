@@ -70,6 +70,44 @@ class PostsController extends BaseController
 
                         'to' => $device_id,
                         'data' => array(
+                            'body' => $description
+                        ),
+                        "notification" => array(
+                            'body' => $description,
+                            'sound' => "default"
+                        )
+                    );
+                    $headers = array(
+                        'Authorization: key=' . $serverkey,
+                        'Content-Type: application/json'
+                    );
+                    $ch = curl_init();
+                    curl_setopt($ch, CURLOPT_URL, $url);
+                    curl_setopt($ch, CURLOPT_POST, true);
+                    curl_setopt($ch, CURLOPT_HTTPHEADER, $headers);
+                    curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+                    curl_setopt($ch, CURLOPT_POSTFIELDS, json_encode($fields));
+                    curl_exec($ch);
+                    curl_close($ch);
+
+
+    }
+
+     public function teslike(Request $request){
+     
+     return $this->iosnotificationtest('fgdvfd','dfgdfv','dsdd','vfd');
+    }
+
+    public function iosnotificationtest($title,$description,$device_id,$type){
+
+                  $serverkey = 'AAAA0cjwCmk:APA91bEFAo1kHBoHSDqqRqvrc71YvVwjXF4NrbkV56gHHpeu8pvi0Ec_oVxewIRKnfKP-chY5oJxBV41_Faqk3OWZ8jojxsbvHW12QAgShK9et4gn5OrdYrey8EXrYlwUsqlu1ifH7h3';
+
+                    $url = 'https://fcm.googleapis.com/fcm/send';
+
+                    $fields = array(
+
+                        'to' => "f3-G0EYtlkSdkiR9pCCpuc:APA91bHo_Tho6QFQDUB6LZiLnYGZCD75DOTJx4E0ct9rs5plR3z9wTk_G_KYMkYCL0WJPX84j3AIK8-_OI2lVbG1XyyZz3mnxJchAtjKLBDyJJocFz2v98DuyGG0Ne3vt7-aHwC6u_UH",
+                        'data' => array(
                             'title' => $title,
                             'body' => $description
                         ),
@@ -89,7 +127,7 @@ class PostsController extends BaseController
                     curl_setopt($ch, CURLOPT_HTTPHEADER, $headers);
                     curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
                     curl_setopt($ch, CURLOPT_POSTFIELDS, json_encode($fields));
-                    curl_exec($ch);
+                    return curl_exec($ch);
                     curl_close($ch);
 
 
@@ -280,7 +318,7 @@ class PostsController extends BaseController
 
             
               $user_data=array("id"=>$user->id,"name"=>$user->name,"email"=>$user->email,"avatar"=>$user->avatar,'is_follow'=>null);
-             $comment_data=array("post_id"=>$post->id,"user_id"=>$user->id,"comment"=>$post->comment,"created_at"=>$post->created_at,"name"=>$user->name,"email"=>$user->email,"avatar"=>$user->avatar);
+              $comment_data=array("post_id"=>$post->id,"user_id"=>$user->id,"comment"=>$post->comment,"created_at"=>$post->created_at,"name"=>$user->name,"email"=>$user->email,"avatar"=>$user->avatar);
                // $media_path=explode(",",$post->media_path);
              //   $post->media_path=$media_path;
               $post->comment=$comment_data;
@@ -678,13 +716,7 @@ class PostsController extends BaseController
     }
  
 
-    public function teslike(Request $request){
-      $search=$request->search;
-     $res =   user::where(DB::raw('lower(name)'), 'like', '%' . strtolower($search) . '%')
-   ->get();
    
-     return $res;
-    }
 
     public function discover(Request $request){
      $limit=$request->limit;
