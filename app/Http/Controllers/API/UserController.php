@@ -107,15 +107,17 @@ class UserController extends BaseController
             $recommendation=Ratings::where('user_id',$users->id)->orderby('id','DESC')->first();
             $shopping = Posts::where('user_id',$users->id)->where('is_shopping','yes')->get();
             $user_posts=Posts::where('user_id',$users->id)->get();
-            $success = array();
+            $success = array()
+
 
             $success['user'] = $users;
-            $success['photos'] = $photos;
-            $success['videos'] = $videos;
-            $success['labels'] = $labels;
-            $success['ratings'] = $ratings;
-            $success['shopping'] = $labels;
-            $success['recommendation'] = $ratings;
+            $success['photos'] = $user_photos;
+            $success['videos'] = $user_videos;
+            $success['labels'] = $user_label;
+            $success['posts'] = $user_posts;
+            $success['ratings'] = $user_rating;
+            $success['shopping'] = $shopping;
+            $success['recommendation'] = $recommendation;
             $success['status'] = 200;
             
             return $this->sendResponse($success, 'Get User profile successfully.');
@@ -443,7 +445,7 @@ class UserController extends BaseController
     }
 
 
-    
+
      public function changelanguage(Request $request)
     {
 
