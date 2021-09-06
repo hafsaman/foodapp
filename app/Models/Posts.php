@@ -12,7 +12,7 @@ class Posts extends Model
      protected $table='posts';
      protected $appends = ['media_path'];
     protected $fillable = [
-        'id',  'title',  'media_path','user_id','comment','is_shopping','price','region'
+        'id',  'title',  'media_path','user_id','comment','is_shopping','price','region','seasonal'
     ];
 
      public function getMediaPathAttribute(){
