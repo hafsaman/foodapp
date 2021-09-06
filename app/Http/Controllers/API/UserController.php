@@ -66,11 +66,9 @@ class UserController extends BaseController
 
                         'to' => $device_id,
                         'data' => array(
-                            'title' => $title,
                             'body' => $description
                         ),
                         "notification" => array(
-                            'title' => $title,
                             'body' => $description,
                             'sound' => "default"
                         )
@@ -376,6 +374,44 @@ class UserController extends BaseController
       
         
     }
+/*
+    public function follwersdata(Request $request)
+    {
+
+      $user_id= Auth::user()->id;
+      if(isset($user_id)){
+
+           $followeruser_id  = User_Follower::where('follower_id',$user_id)->where('follow',1)->pluck('user_id');
+
+          if($request->search){
+
+               
+
+                $user_follower = User::whereIn('id',$followeruser_id)->where(DB::raw('lower(name)'), 'like', '%' . strtolower($request->search) . '%')->with('followdata')->whereHas('followdata', function (Builder $query)                  use ($user_id) {
+                                     $query->where('follower_id',$user_id);
+                                     })->paginate(10);
+
+                
+          }else{
+
+                $user_follower = User::whereIn('id',$followeruser_id)->with('followdata')->whereHas('followdata', function (Builder $query) use ($user_id) {
+                                     $query->where('follower_id',$user_id);
+                                     })->paginate(10);
+
+          }
+
+           
+        
+            return $this->sendResponse($user_follower, 'Data found successfully.');
+        } 
+        else{ 
+            return $this->sendError('User Not Exists', ['error'=>'User Not Found']);
+        } 
+
+      
+        
+    }*/
+
 
     public function follwersdata(Request $request)
     {
@@ -400,6 +436,16 @@ class UserController extends BaseController
                                      $query->where('follower_id',$user_id);
                                      })->paginate(10);
 
+          }
+
+          foreach ($user_follower as $user_follow) {
+              $is_followchk = User_Follower::where('user_id',$user_id)->where('follower_id',$user_follow->id)->first();
+              if($is_followchk){
+                  $is_follow = '1';
+              }else{
+                  $is_follow = '0';
+              }
+              $user_follow->is_follow = $is_follow;
           }
 
            
