@@ -17,6 +17,6 @@ class Posts extends Model
 
      public function getMediaPathAttribute(){
 
-        return Posts_Gallary::where('post_id',$this->id)->pluck('media_path','media_type');
+        return Posts_Gallary::where('post_id',$this->id)->select('media_path','media_type')->get();
     }
 }
