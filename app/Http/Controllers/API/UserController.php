@@ -483,6 +483,16 @@ class UserController extends BaseController
                                      ->paginate(10);
 
           }
+
+             foreach ($user_follower as $user_follow) {
+              $is_followchk = User_Follower::where('follower_id',$user_id)->where('user_id',$user_follow->id)->first();
+              if($is_followchk){
+                  $is_follow = '1';
+              }else{
+                  $is_follow = '0';
+              }
+              $user_follow->is_follow = $is_follow;
+          }
             return $this->sendResponse($user_follower, 'Data found  successfully.');
         } 
         else{ 
