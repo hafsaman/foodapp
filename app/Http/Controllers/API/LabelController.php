@@ -32,25 +32,30 @@ class LabelController extends BaseController
         if($validator->fails()){
             return $this->sendError('Validation Error.', $validator->errors());       
         }
-        $input['name'] = $request->name;
-      
-        $input['user_id'] = Auth::id();
-         
-        if($request->has('image')) {
-                 $input_file = $request->image->getClientOriginalName();
+        if($request->label_id){
 
-            $file_name = pathinfo($input_file, PATHINFO_FILENAME);
-            $fileName = $file_name.time().'.'.$request->image->getClientOriginalExtension();
-            $request->image->move(public_path('/assets/label/'), $fileName);
-            $img_path = 'assets/label/'.$fileName;
-                      
+              $labeldata =   new UserLabels;
+              $labeldata->user_id = Auth::id();
+              $labeldata->label_id = $request->label_id;
+              $labeldata->save();
+
+        }else{
+
+            $input['name'] = $request->name;
+            $input['user_id'] = Auth::id();
+             
+            if($request->has('image')) {
+                $input_file = $request->image->getClientOriginalName();
+                $file_name = pathinfo($input_file, PATHINFO_FILENAME);
+                $fileName = $file_name.time().'.'.$request->image->getClientOriginalExtension();
+                $request->image->move(public_path('/assets/label/'), $fileName);
+                $img_path = 'assets/label/'.$fileName;
+                          
+            }
+            $input['image'] = $img_path;
+            $label = Labels::create($input);
+
         }
-        $input['image'] = $img_path;
-        $label = Labels::create($input);
-       
-         
-    
-        
 
       if(isset($label)){
           return $this->sendResponse($label, 'Create Label successfully');
@@ -62,9 +67,9 @@ class LabelController extends BaseController
 
     }
 
-    function editlabel(Request $request,$id)
+    function editlabel(Request $request)
     {
-        $labels=Labels::find($id);
+        $labels=Labels::find($request->label_id);
         if($request->has('name')){
             $input['name'] = $request->name;
         }
@@ -84,7 +89,7 @@ class LabelController extends BaseController
         else{
             $input['image']=$labels->image;
         }
-        $label = Labels::where('id',$id)->update($input);
+        $label = Labels::where('id',$request->label_id)->update($input);
 
       if(isset($label)){
           return $this->sendResponse($label, 'Edit Label successfully');

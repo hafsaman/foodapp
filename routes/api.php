@@ -39,7 +39,7 @@ Route::middleware('auth:api')->group( function () {
 Route::post('changelanguage', [UserController::class, 'changelanguage']);
 Route::get('getprofile/{id?}', [UserController::class, 'getprofile']);
 Route::post('allrecommendations', [UserController::class, 'allrecommendations']);
-Route::put('profileedit', [UserController::class, 'profileedit']);
+Route::post('profileedit', [UserController::class, 'profileedit']);
 Route::put('profileabout', [UserController::class, 'profileabout']);
 Route::get('follow/{id}', [UserController::class, 'follow']);
 Route::get('unfollow/{id}', [UserController::class, 'unfollow']);
@@ -63,6 +63,8 @@ Route::post('deletelabel/{id}', [LabelController::class, 'deletelabel']);
 Route::post('edituserlabel', [LabelController::class, 'edituserlabel']);
 
 Route::post('storeoreditOrBuy', [UserController::class, 'storeoreditOrBuy']);
+Route::get('defaultLabels', [UserController::class, 'defaultLabels']);
+
 
 
 Route::post('addrate', [RatingController::class, 'addrate']);

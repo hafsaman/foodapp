@@ -102,6 +102,14 @@ class UserController extends BaseController
           return $this->sendResponse($success, 'Get User Recommendations successfully.');
      }
 
+      public function defaultLabels(Request $request){
+          
+          $labels=Labels::where('user_id','0')->get();
+          $success['labels'] = $labels;
+          $success['status'] = 200;
+          return $this->sendResponse($success, 'Get User Recommendations successfully.');
+     }
+
      public function storeoreditOrBuy(Request $request){
 
       try{
