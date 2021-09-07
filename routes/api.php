@@ -62,6 +62,9 @@ Route::post('editlabel/{id}', [LabelController::class, 'editlabel']);
 Route::post('deletelabel/{id}', [LabelController::class, 'deletelabel']);
 Route::post('edituserlabel', [LabelController::class, 'edituserlabel']);
 
+Route::post('storeoreditOrBuy', [UserController::class, 'storeoreditOrBuy']);
+
+
 Route::post('addrate', [RatingController::class, 'addrate']);
 Route::get('listrate', [RatingController::class, 'listrate']);
 
