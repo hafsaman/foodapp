@@ -101,10 +101,53 @@ class UserController extends BaseController
           return $this->sendResponse($success, 'Get User Recommendations successfully.');
      }
 
-     public function storeorbuy(){
+     public function storeoreditOrBuy(Request $request){
+
+      try{
+
+          $validator = Validator::make($request->all(), [
+              'at_the_farm' => 'required',
+              'remote_delivery' => 'required',
+              'market' => 'required',
+              'other' => 'required',
+          ]);
+   
+          if($validator->fails()){
+              return $this->sendError('Validation Error.', $validator->errors());       
+          }
+
+            $user_id = Auth::id();
+
+            $update_orcreate =  OrBuy::updateOrCreate([
+
+                  'user_id'   => Auth::user()->id,
+              ],[
+                  'user_id'     => $user_id,
+                  'at_the_farm' => $request->get('at_the_farm'),
+                  'remote_delivery' => $request->get("remote_delivery"),
+                  'market'   => $request->get('market'),
+                  'other'       => $request->get('other'),
+              ]);
+
+              $update_orcreatedata =  OrBuy::where('user_id',$user_id)->first();
+
+          return $this->sendResponse($update_orcreatedata, 'OrBuy Added Successfully.');
+
+       }catch(Exception $e){
+            $result = [
+                'error'=> $e->getMessage(). ' Line No '. $e->getLine() . ' In File'. $e->getFile()
+            ];
+            Log::error($e->getTraceAsString());
+            $result['success'] = false;
+            
+        }
+        return $result;
+
 
      }
 
+
+      
 
     public function getprofile($id = null){
 
@@ -128,6 +171,7 @@ class UserController extends BaseController
             $user_rating=Ratings::where('user_id',$users->id)->avg('rate');
             $recommendation=Ratings::where('user_id',$users->id)->orderby('id','DESC')->first();
             $shopping = Posts::where('user_id',$users->id)->where('is_shopping','yes')->get();
+            $OrBuy =  OrBuy::where('user_id',$user_id)->first();
             $user_posts=Posts::where('user_id',$users->id)->get();
             $success = array();
 
@@ -140,6 +184,7 @@ class UserController extends BaseController
             $success['ratings'] = $user_rating;
             $success['shopping'] = $shopping;
             $success['recommendation'] = $recommendation;
+            $success['orbuy'] = $OrBuy;
             $success['status'] = 200;
             
             return $this->sendResponse($success, 'Get User profile successfully.');

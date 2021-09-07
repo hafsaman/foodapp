@@ -85,10 +85,6 @@ class LabelController extends BaseController
             $input['image']=$labels->image;
         }
         $label = Labels::where('id',$id)->update($input);
-       
-         
-    
-        
 
       if(isset($label)){
           return $this->sendResponse($label, 'Edit Label successfully');
