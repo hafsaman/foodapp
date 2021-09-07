@@ -33,6 +33,7 @@ class LabelController extends BaseController
             return $this->sendError('Validation Error.', $validator->errors());       
         }
         $input['name'] = $request->name;
+        $input['user_id'] = Auth::id();
          
         if($request->has('image')) {
                  $input_file = $request->image->getClientOriginalName();
