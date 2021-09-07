@@ -10,6 +10,6 @@ class Labels extends Model
     use HasFactory;
      protected $table='labels';
     protected $fillable = [
-        'id',  'name','image','status'
+        'id',  'name','image','status','user_id'
     ];
 }
