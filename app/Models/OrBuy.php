@@ -8,4 +8,8 @@ use Illuminate\Database\Eloquent\Model;
 class OrBuy extends Model
 {
     use HasFactory;
+
+     protected $fillable = [
+        'at_the_farm', 'remote_delivery', 'market','user_id','other'
+     ];
 }

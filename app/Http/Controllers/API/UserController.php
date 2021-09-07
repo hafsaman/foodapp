@@ -172,7 +172,7 @@ class UserController extends BaseController
             $user_rating=Ratings::where('user_id',$users->id)->avg('rate');
             $recommendation=Ratings::where('user_id',$users->id)->orderby('id','DESC')->first();
             $shopping = Posts::where('user_id',$users->id)->where('is_shopping','yes')->get();
-            $OrBuy =  OrBuy::where('user_id',$user_id)->first();
+            $OrBuy =  OrBuy::where('user_id',$users->id)->first();
             $user_posts=Posts::where('user_id',$users->id)->get();
             $success = array();
 
@@ -258,7 +258,7 @@ class UserController extends BaseController
 
    public function profileedit( Request $request){
 
-      $id=Auth::user()->id;
+      $id = Auth::user()->id;
 
       $users = user::find($id);
        
@@ -271,7 +271,7 @@ class UserController extends BaseController
         }
 
         if($request->password){
-          $password = bcrypt($request->password);;
+           $password = bcrypt($request->password);;
         }else{
            $password = $users->password;
         }
