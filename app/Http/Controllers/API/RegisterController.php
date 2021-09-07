@@ -122,7 +122,7 @@ class RegisterController extends BaseController
                          ]);  
             }else{
                 $update = User::where(["email" => $request->email])->update([
-                        'apple_id' => $request->google_id,
+                        'apple_id' => $request->apple_id,
                         'login_type' => $request->login_type,
                         'device_type' => $request->device_type,
                         'devicetoken' => $request->devicetoken,
