@@ -33,18 +33,17 @@ class LabelController extends BaseController
             return $this->sendError('Validation Error.', $validator->errors());       
         }
         $input['name'] = $request->name;
-        if($request->default_label){
-            $input['user_id'] = '0';
-        }else{
-            $input['user_id'] = Auth::id();
-        }
-        
+      
+        $input['user_id'] = Auth::id();
+         
         if($request->has('image')) {
-            $input_file = $request->image->getClientOriginalName();
+                 $input_file = $request->image->getClientOriginalName();
+
             $file_name = pathinfo($input_file, PATHINFO_FILENAME);
             $fileName = $file_name.time().'.'.$request->image->getClientOriginalExtension();
             $request->image->move(public_path('/assets/label/'), $fileName);
             $img_path = 'assets/label/'.$fileName;
+                      
         }
         $input['image'] = $img_path;
         $label = Labels::create($input);
