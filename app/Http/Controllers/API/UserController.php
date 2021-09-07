@@ -101,6 +101,10 @@ class UserController extends BaseController
           return $this->sendResponse($success, 'Get User Recommendations successfully.');
      }
 
+     public function storeorbuy(){
+
+     }
+
 
     public function getprofile($id = null){
 
@@ -120,7 +124,7 @@ class UserController extends BaseController
             $user_posts_videos = Posts_Gallary::whereIn('post_id',$user_posts_ids)->where('media_type','=','video/quicktime')->take(10)->get();
             $user_photos=UserGallary::where('user_id',$users->id)->where('media_type','=','photo')->take(10);
             $user_videos=UserGallary::where('user_id',$users->id)->where('media_type','=','video')->take(10);
-            $user_label=UserLabels::join('labels', 'labels.id', '=', 'user_labels.label_id')->where('user_id',$users->id)->get();
+            $user_label=Labels::where('user_id',$users->id)->get();
             $user_rating=Ratings::where('user_id',$users->id)->avg('rate');
             $recommendation=Ratings::where('user_id',$users->id)->orderby('id','DESC')->first();
             $shopping = Posts::where('user_id',$users->id)->where('is_shopping','yes')->get();
