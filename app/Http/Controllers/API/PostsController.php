@@ -638,7 +638,7 @@ class PostsController extends BaseController
             }else{
                 $post_favourite =Postsfavourite::where('user_id',$user_id)->select('posts_favourite.id','posts_favourite.post_id','posts_favourite.user_id','posts_favourite.created_at')->orderby('id','desc')->paginate($limit); 
             }
-            
+
             foreach($post_favourite as $post)
             {
               $post_media=Posts_Gallary::where('post_id',$post->post_id)->select('media_path','media_type')->get();
@@ -767,7 +767,7 @@ class PostsController extends BaseController
     public function discover_seasonal_posts(Request $request){
      $limit=$request->limit;
 
-     if($request->search){
+   
 
      $posts_likes_data =Posts_likes::select('post_id', DB::raw('count(id) as total_likes'))
              ->groupBy('post_id')->with('Posts')
