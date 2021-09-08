@@ -173,7 +173,7 @@ class UserController extends BaseController
             $user_posts= Posts::where('user_id',$users->id)->get();
             $user_posts_ids = Posts::where('user_id',$users->id)->pluck('id');
             $user_posts_photos = Posts_Gallary::whereIn('post_id',$user_posts_ids)->where('media_type','=','image/jpeg')->take(10)->get();
-            $user_posts_videos = Posts_Gallary::whereIn('post_id',$user_posts_ids)->where('media_type','=','video/quicktime')->take(10)->get();
+            $user_posts_videos = Posts_Gallary::whereIn('post_id',$user_posts_ids)->where('media_type','=',['video/quicktime','video/mp4'])->take(10)->get();
             $user_photos=UserGallary::where('user_id',$users->id)->where('media_type','=','photo')->take(10);
             $user_videos=UserGallary::where('user_id',$users->id)->where('media_type','=','video')->take(10);
             $user_label=Labels::where('user_id',$users->id)->get();
