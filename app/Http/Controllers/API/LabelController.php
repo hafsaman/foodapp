@@ -108,9 +108,14 @@ class LabelController extends BaseController
     public function deletelabel($id)
     {
         $label=Labels::find($id);
-        
+        $user_id = Auth::id();
         if(isset($label)){
-            Labels::where('id',$id)->delete();
+            if($label->user_id == '0'){
+                UserLabels::where('label_id',$id)->where('user_id',$user_id)->delete();
+            }else{
+                Labels::where('id',$id)->delete();
+            }
+            
             return $this->sendResponse($label, 'Label deleted successfully.');
         } 
         else{ 
@@ -148,8 +153,6 @@ class LabelController extends BaseController
         $user_label = UserLabels::create($input);
        
          
-    
-        
 
       if(isset($user_label)){
           return $this->sendResponse($user_label, 'Create User Label successfully');
