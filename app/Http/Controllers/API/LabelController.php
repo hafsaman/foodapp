@@ -24,14 +24,7 @@ class LabelController extends BaseController
 {
     function createlabel(Request $request)
     {
-      $validator = Validator::make($request->all(), [
-            'name' => 'required',
-            'image' => 'required',
-        ]);
-    
-        if($validator->fails()){
-            return $this->sendError('Validation Error.', $validator->errors());       
-        }
+     
         if($request->label_id){
 
               $labeldata =   new UserLabels;
@@ -39,7 +32,18 @@ class LabelController extends BaseController
               $labeldata->label_id = $request->label_id;
               $labeldata->save();
 
+              return $this->sendResponse($labeldata, 'Create Label successfully');
+
         }else{
+
+             $validator = Validator::make($request->all(), [
+                'name' => 'required',
+                'image' => 'required',
+                ]);
+            
+                if($validator->fails()){
+                    return $this->sendError('Validation Error.', $validator->errors());       
+                }
 
             $input['name'] = $request->name;
             $input['user_id'] = Auth::id();
