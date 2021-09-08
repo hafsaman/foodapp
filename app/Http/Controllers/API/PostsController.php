@@ -244,7 +244,7 @@ class PostsController extends BaseController
           }
 
       if(isset($user_id)){
-
+/*
         if(isset($request->region) && empty($request->label_id) && empty($request->rating)){
 
           // Region filter
@@ -349,9 +349,11 @@ class PostsController extends BaseController
           
           }else{
 
-            $posts=Posts::where('user_id',$user_id)->orderby('id','desc')->paginate($limit);
+            $posts=Posts::orderby('id','desc')->paginate($limit);
 
-          }
+          }*/
+          $posts=Posts::orderby('id','desc')->paginate($limit);
+
    
             $posts_all=array();
             $user_data=array();
