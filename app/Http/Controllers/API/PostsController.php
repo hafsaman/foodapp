@@ -234,7 +234,8 @@ class PostsController extends BaseController
 
     }
 
-    public function getpostsall(Request $request){
+    //////////////////////////////////////
+      public function getpostsalltest(Request $request){
 
        $limit=$request->limit;
 
@@ -243,13 +244,24 @@ class PostsController extends BaseController
                 $user_id= $user->id;
           }
 
+           $user_ids =  User::with('ratings')
+          ->join('ratings','user.id','=','ratings.user_id')
+          ->select('user.*',DB::raw('avg(ratings.rate) as rating'))
+          ->where('rating',$request->rating)
+          ->get();
+
+
+          return $user_ids;
+
       if(isset($user_id)){
-/*
+
         if(isset($request->region) && empty($request->label_id) && empty($request->rating)){
 
           // Region filter
 
-           $posts = Posts::where('region',$request->region)->where('user_id',$user_id->region)->orderby('id','desc')->paginate($limit);
+           $users_ids =  User::where('region',$request->region)->pluck('id');
+
+           $posts = Posts::where('region',$request->region)->whereIn('user_id',$users_ids)->orderby('id','desc')->paginate($limit);
 
         }elseif(empty($request->region) && isset($request->label_id) && empty($request->rating)){
           
@@ -257,13 +269,13 @@ class PostsController extends BaseController
 
           $labelcheck =   Lable::where('id',$request->label_id)->first();
           if($labelcheck->user_id == '0'){
-            $checklabelexists =  UserLabels::where('label_id',$request->label_id)->where('user_id',$user_id)->first();
+            $users_ids =  UserLabels::where('label_id',$request->label_id)->pluck('id');
           }else{
-            $checklabelexists =  Lable::where('id',$request->label_id)->where('user_id',$user_id)->first();
+            $users_ids =  Lable::where('id',$request->label_id)->pluck('id');
           }
-          if($checklabelexists){
-            $posts = Posts::where('user_id',$user_id)->orderby('id','desc')->paginate($limit);
-          }
+         
+            $posts = Posts::where('user_id',$user_ids)->orderby('id','desc')->paginate($limit);
+          
             
            
         }elseif(empty($request->region) && empty($request->label_id) && isset($request->rating)){
@@ -271,6 +283,7 @@ class PostsController extends BaseController
           // Rating filter
 
           $user_rating = Ratings::where('user_id',$user_id)->avg('rate');
+          User::
 
           if($request->rating == $user_rating){
 
@@ -294,6 +307,238 @@ class PostsController extends BaseController
         }elseif(isset($request->region) && empty($request->label_id) && isset($request->rating)){
 
           // region  rating filter
+         $user_ids =  User::with('ratings')
+          ->join('ratings','user.id','=','ratings.user_id')
+          ->select('user.*',DB::raw('avg(ratings.rate) as rating'))
+          ->where('rating',$request->rating)
+          ->get();
+          
+
+          $user_rating = Ratings::where('user_id',$user_id)->avg('rate');
+
+          if($request->rating == $user_rating){
+
+               $posts = Posts::where('region',$request->region)->where('user_id',$user_id)->orderby('id','desc')->paginate($limit);
+          }
+          
+        }elseif(empty($request->region) && isset($request->label_id) && isset($request->rating)){
+
+            // region  label filter
+
+          $labelcheck =   Lable::where('id',$request->label_id)->first();
+          if($labelcheck->user_id == '0'){
+            $checklabelexists =  UserLabels::where('label_id',$request->label_id)->where('user_id',$user_id)->first();
+          }else{
+            $checklabelexists =  Lable::where('id',$request->label_id)->where('user_id',$user_id)->first();
+          }
+          if($checklabelexists){
+
+            $user_rating = Ratings::where('user_id',$user_id)->avg('rate');
+
+            if($request->rating == $user_rating){
+
+                 $posts = Posts::where('user_id',$user_id)->orderby('id','desc')->paginate($limit);
+            }
+
+          }
+          
+        }elseif(isset($request->region) && isset($request->label_id) && isset($request->rating)){
+
+          $labelcheck =   Lable::where('id',$request->label_id)->first();
+
+          if($labelcheck->user_id == '0'){
+
+            $checklabelexists =  UserLabels::where('label_id',$request->label_id)->where('user_id',$user_id)->first();
+
+          }else{
+
+            $checklabelexists =  Lable::where('id',$request->label_id)->where('user_id',$user_id)->first();
+
+          }
+          if($checklabelexists){
+
+            $user_rating = Ratings::where('user_id',$user_id)->avg('rate');
+
+            if($request->rating == $user_rating){
+
+                $posts = Posts::where('user_id',$user_id)->orderby('id','desc')->paginate($limit);
+            }
+
+            }
+          
+          }else{
+
+            $posts=Posts::orderby('id','desc')->paginate($limit);
+
+          }
+          $posts=Posts::orderby('id','desc')->paginate($limit);
+
+   
+            $posts_all=array();
+            $user_data=array();
+            
+            foreach($posts as $post)
+            {
+              $post_media=Posts_Gallary::where('post_id',$post->id)->select('media_path','media_type')->get();
+              $postlike=Posts_Likes::where('post_id',$post->id)->selectRaw('count(id) as totallike')->first();
+              $nooflike=$postlike->totallike;
+              $postfavourite=Postsfavourite::where('post_id',$post->id)->selectRaw('count(id) as totalfavourite')->first();
+              $nooffavourite=$postfavourite->totalfavourite;
+           
+            $postuserlike=Posts_Likes::where('post_id',$post->id)->where('user_id',$user_id)->selectRaw('count(id) as userlike')->first();
+            
+            if($postuserlike->userlike != 0){ $is_like=1; }
+            else{ $is_like=0;}
+            
+            $postuserfavourite=Postsfavourite::where('post_id',$post->id)->where('user_id',$user_id)->selectRaw('count(id) as userfavourite')->first();
+            
+            if($postuserfavourite->userfavourite != 0){ $is_favourite=1; }
+            else{ $is_favourite=0;}
+
+
+            $comments=Posts_Comments::where('post_id',$post->id)->join('users','users.id','=','posts_comments.user_id')->select('posts_comments.id','posts_comments.post_id','posts_comments.user_id','posts_comments.comment','posts_comments.created_at','users.name','users.email','users.avatar')->get();
+            $user_follower=User_Follower::where('follower_id',$user_id)->where('user_id',$post->user_id)->select('id')->first();
+            if(isset($user_follower)){ $is_follow=1; }
+            else{ $is_follow=0;}
+
+            $user=User::where('id',$post->user_id)->first();
+
+             $user_data=array("id"=>$user->id,"name"=>$user->name,"email"=>$user->email,"avatar"=>$user->avatar,'is_follow'=>$is_follow);
+         
+              $comment_data=array("post_id"=>$post->id,"user_id"=>$user->id,"comment"=>$post->comment,"created_at"=>$post->created_at,"name"=>$user->name,"email"=>$user->email,"avatar"=>$user->avatar);
+               // $media_path=explode(",",$post->media_path);
+             //   $post->media_path=$media_path;
+              $post->comment=$comment_data;
+              $post->no_of_like = $nooflike;
+              $post->no_of_favourite = $nooffavourite;
+              $post->is_like = $is_like;
+              $post->is_favourite = $is_favourite;
+              $post->comments = $comments;
+              $post->user_data = $user_data;
+              $post->media_path=$post_media;
+             // $item['product'] = $product;
+             $posts_all[] = array("id"=>$post->id,"title"=>$post->title,"comment"=>$post->comment,"is_shopping"=>$post->is_shopping,'price'=>$post->price,'region'=>$post->region,'user_id'=>$post->user_id,'media_path'=>$post->media_path,'created_at'=>$post->created_at,'no_of_like'=>$nooflike,'no_of_favourite'=>$nooffavourite,'is_like'=>null,'is_favourite'=>null,'comments'=>$comments,'user_data'=>$user_data);
+     
+
+            }
+                   
+
+            return $this->sendResponse($posts, 'Get All Posts Successfully.');
+          }
+          else {
+         $posts=Posts::orderby('id','desc')->paginate($limit);
+          
+            $posts_all=array();
+            $user_data=array();
+            
+            foreach($posts as $post)
+            {
+              $post_media=Posts_Gallary::where('post_id',$post->id)->select('media_path','media_type')->get();
+              $postlike=Posts_Likes::where('post_id',$post->id)->selectRaw('count(id) as totallike')->first();
+              $nooflike=$postlike->totallike;
+              $postfavourite=Postsfavourite::where('post_id',$post->id)->selectRaw('count(id) as totalfavourite')->first();
+              $nooffavourite=$postfavourite->totalfavourite;
+           
+
+            $comments=Posts_Comments::where('post_id',$post->id)->join('users','users.id','=','posts_comments.user_id')->select('posts_comments.id','posts_comments.post_id','posts_comments.user_id','posts_comments.comment','posts_comments.created_at','users.name','users.email','users.avatar')->get();
+
+            $user=User::where('id',$post->user_id)->first();
+
+            
+              $user_data=array("id"=>$user->id,"name"=>$user->name,"email"=>$user->email,"avatar"=>$user->avatar,'is_follow'=>null);
+              $comment_data=array("post_id"=>$post->id,"user_id"=>$user->id,"comment"=>$post->comment,"created_at"=>$post->created_at,"name"=>$user->name,"email"=>$user->email,"avatar"=>$user->avatar);
+               // $media_path=explode(",",$post->media_path);
+             //   $post->media_path=$media_path;
+              $post->comment=$comment_data;
+              $post->no_of_like = $nooflike;
+              $post->no_of_favourite = $nooffavourite;
+              $post->is_like = null;
+              $post->is_favourite = null;
+              $post->comments = $comments;
+              $post->user_data = $user_data;
+              $post->media_path=$post_media;
+             // $item['product'] = $product;
+            $posts_all[] = array("id"=>$post->id,"title"=>$post->title,"comment"=>$post->comment,"is_shopping"=>$post->is_shopping,'price'=>$post->price,'region'=>$post->region,'user_id'=>$post->user_id,'media_path'=>$post->media_path,'created_at'=>$post->created_at,'no_of_like'=>$nooflike,'no_of_favourite'=>$nooffavourite,'is_like'=>null,'is_favourite'=>null,'comments'=>$comments,'user_data'=>$user_data);
+     
+
+            }
+                   
+
+            return $this->sendResponse($posts, 'Get All Posts Successfully.');
+          }
+
+    }
+    //////////////////////////////////////
+
+    public function getpostsall(Request $request){
+
+       $limit=$request->limit;
+
+         if (auth('api')->check()) { 
+                $user = auth('api')->user();
+                $user_id= $user->id;
+          }
+
+      if(isset($user_id)){
+
+        /*if(isset($request->region) && empty($request->label_id) && empty($request->rating)){
+
+          // Region filter
+
+           $users_ids =  User::where('region',$request->region)->pluck('id');
+
+           $posts = Posts::where('region',$request->region)->whereIn('user_id',$users_ids)->orderby('id','desc')->paginate($limit);
+
+        }elseif(empty($request->region) && isset($request->label_id) && empty($request->rating)){
+          
+          // Label filter
+
+          $labelcheck =   Lable::where('id',$request->label_id)->first();
+          if($labelcheck->user_id == '0'){
+            $users_ids =  UserLabels::where('label_id',$request->label_id)->pluck('id');
+          }else{
+            $users_ids =  Lable::where('id',$request->label_id)->pluck('id');
+          }
+         
+            $posts = Posts::where('user_id',$user_ids)->orderby('id','desc')->paginate($limit);
+          
+            
+           
+        }elseif(empty($request->region) && empty($request->label_id) && isset($request->rating)){
+          
+          // Rating filter
+
+          $user_rating = Ratings::where('user_id',$user_id)->avg('rate');
+          User::
+
+          if($request->rating == $user_rating){
+
+              $posts = Posts::where('user_id',$user_id)->orderby('id','desc')->paginate($limit);
+          }
+
+        }elseif(isset($request->region) && isset($request->label_id) && empty($request->rating)){
+
+          // region  label filter
+          $labelcheck =   Lable::where('id',$request->label_id)->first();
+          if($labelcheck->user_id == '0'){
+            $checklabelexists =  UserLabels::where('label_id',$request->label_id)->where('user_id',$user_id)->first();
+          }else{
+            $checklabelexists =  Lable::where('id',$request->label_id)->where('user_id',$user_id)->first();
+          }
+          if($checklabelexists){
+
+            $posts = Posts::where('region',$request->region)->where('user_id',$user_id)->orderby('id','desc')->paginate($limit);
+          }
+          
+        }elseif(isset($request->region) && empty($request->label_id) && isset($request->rating)){
+
+          // region  rating filter
+         $user_ids =  User::with('ratings')
+          ->join('ratings','user.id','=','ratings.user_id')
+          ->select('user.*',DB::raw('avg(ratings.rate) as rating'))
+          ->where('rating',$request->rating)
+          ->get();
+          
 
           $user_rating = Ratings::where('user_id',$user_id)->avg('rate');
 
