@@ -364,7 +364,7 @@ class PostsController extends BaseController
                  $posts = Posts::whereIn('user_id',$user_id)->orderby('id','desc')->paginate($limit);
             
 
-          }
+          
           
         }elseif(isset($request->region) && isset($request->label_id) && isset($request->rating)){
 
