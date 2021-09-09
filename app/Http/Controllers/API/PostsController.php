@@ -244,12 +244,14 @@ class PostsController extends BaseController
                 $user_id= $user->id;
           }
 
-           
+           $user_ids =  User::join('ratings','users.id','=','ratings.user_id')
+                        ->select('users.*',DB::raw('avg(ratings.rate) as rating'))
+                        ->groupBy('users.id')
+                        ->havingRaw('avg(ratings.rate) = '.$request->rating)
+                        ->pluck('id');
+            return $user_ids;
 
-
-          return $user_ids;
-
-      if(isset($user_id)){
+        if(isset($user_id)){
 
         if(isset($request->region) && empty($request->label_id) && empty($request->rating)){
 
@@ -257,7 +259,7 @@ class PostsController extends BaseController
 
            $users_ids =  User::where('region',$request->region)->pluck('id');
 
-           $posts = Posts::where('region',$request->region)->whereIn('user_id',$users_ids)->orderby('id','desc')->paginate($limit);
+           $posts = Posts::whereIn('user_id',$users_ids)->orderby('id','desc')->paginate($limit);
 
         }elseif(empty($request->region) && isset($request->label_id) && empty($request->rating)){
           
@@ -265,10 +267,12 @@ class PostsController extends BaseController
 
           $labelcheck =   Lable::where('id',$request->label_id)->first();
           if($labelcheck->user_id == '0'){
-            $users_ids =  UserLabels::where('label_id',$request->label_id)->pluck('id');
+            $users_ids =  UserLabels::where('label_id',$request->label_id)->pluck('user_id');
           }else{
-            $users_ids =  Lable::where('id',$request->label_id)->pluck('id');
+            $users_ids =  Lable::where('id',$request->label_id)->pluck('user_id');
           }
+
+          where('region',$request->region)->
          
             $posts = Posts::where('user_id',$user_ids)->orderby('id','desc')->paginate($limit);
           
@@ -291,77 +295,113 @@ class PostsController extends BaseController
         }elseif(isset($request->region) && isset($request->label_id) && empty($request->rating)){
 
           // region  label filter
-          $labelcheck =   Lable::where('id',$request->label_id)->first();
-          if($labelcheck->user_id == '0'){
-            $checklabelexists =  UserLabels::where('label_id',$request->label_id)->where('user_id',$user_id)->first();
-          }else{
-            $checklabelexists =  Lable::where('id',$request->label_id)->where('user_id',$user_id)->first();
-          }
-          if($checklabelexists){
 
-            $posts = Posts::where('region',$request->region)->where('user_id',$user_id)->orderby('id','desc')->paginate($limit);
+          $labelcheck =   Lable::where('id',$request->label_id)->first();
+
+          if($labelcheck->user_id == '0'){
+
+            $user_ids =  User::join('user_labels','users.id','=','user_labels.user_id')
+                        ->select('users.*')
+                        ->where('user_labels.label_id',$request->label_id)
+                        ->where('users.region',$request->region)
+                        ->pluck('id');
+            
+          }else{
+
+             $user_ids =  User::join('labels','users.id','=','labels.user_id')
+                        ->select('users.*')
+                        ->where('labels.id',$request->label_id)
+                        ->where('users.region',$request->region)
+                        ->pluck('id');
           }
+
+
+           $posts = Posts::whereIn('user_id',$user_ids)->orderby('id','desc')->paginate($limit);
+         
           
         }elseif(isset($request->region) && empty($request->label_id) && isset($request->rating)){
 
-          // region  rating filter
-         $user_ids =  User::join('ratings','users.id','=','ratings.user_id')
-                        ->select('users.*',DB::raw('avg(ratings.rate) as rating'))
-                        ->groupBy('users.id')
-                        ->havingRaw('avg(ratings.rate) = '.$request->rating)
-                        ->pluck('id');
+            // region rating filter
 
-          $user_rating = Ratings::where('user_id',$user_ids)->avg('rate');
+           $user_ids =  User::join('ratings','users.id','=','ratings.user_id')
+                          ->select('users.*',DB::raw('avg(ratings.rate) as rating'))
+                          ->groupBy('users.id')
+                          ->havingRaw('avg(ratings.rate) = '.$request->rating)
+                          ->where('users.region',$request->region)
+                          ->pluck('id');
 
-          if($request->rating == $user_rating){
+         
 
-               $posts = Posts::where('region',$request->region)->whereIn('user_id',$user_ids)->orderby('id','desc')->paginate($limit);
-          }
+               $posts = Posts::whereIn('user_id',$user_ids)->orderby('id','desc')->paginate($limit);
+         
           
         }elseif(empty($request->region) && isset($request->label_id) && isset($request->rating)){
 
-            // region  label filter
+            // rating & label filter
 
           $labelcheck =   Lable::where('id',$request->label_id)->first();
           if($labelcheck->user_id == '0'){
-            $checklabelexists =  UserLabels::where('label_id',$request->label_id)->where('user_id',$user_id)->first();
+
+              $user_ids =  UserLabels::where('user_labels.label_id',$request->label_id)
+                          ->join('ratings','user_labels.user_id','=','ratings.user_id')
+                          ->select('user_labels.*',DB::raw('avg(ratings.rate) as rating'))
+                          ->groupBy('user_labels.user_id')
+                          ->havingRaw('avg(ratings.rate) = '.$request->rating)
+                          ->pluck('user_id');
+
+           
           }else{
-            $checklabelexists =  Lable::where('id',$request->label_id)->where('user_id',$user_id)->first();
+              
+              $user_ids =  Labels::where('labels.id',$request->label_id)
+                          ->join('ratings','labels.user_id','=','ratings.user_id')
+                          ->select('labels.*',DB::raw('avg(ratings.rate) as rating'))
+                          ->groupBy('labels.user_id')
+                          ->havingRaw('avg(ratings.rate) = '.$request->rating)
+                          ->pluck('user_id');
           }
-          if($checklabelexists){
+         
 
-            $user_rating = Ratings::where('user_id',$user_id)->avg('rate');
-
-            if($request->rating == $user_rating){
-
-                 $posts = Posts::where('user_id',$user_id)->orderby('id','desc')->paginate($limit);
-            }
+                 $posts = Posts::whereIn('user_id',$user_id)->orderby('id','desc')->paginate($limit);
+            
 
           }
           
         }elseif(isset($request->region) && isset($request->label_id) && isset($request->rating)){
 
+          // rating & label  & region filter
+
           $labelcheck =   Lable::where('id',$request->label_id)->first();
 
           if($labelcheck->user_id == '0'){
 
-            $checklabelexists =  UserLabels::where('label_id',$request->label_id)->where('user_id',$user_id)->first();
+              $user_ids = DB::table('users')
+                          ->join('ratings', 'ratings.user_id', '=', 'users.id')
+                          ->join('user_labels', 'user_labels.user_id', '=', 'users.id')
+                          ->select('users.*','labels.*',DB::raw('avg(ratings.rate) as rating'))
+                          ->groupBy('users.id')
+                          ->havingRaw('avg(ratings.rate) = '.$request->rating)
+                          ->where('users.region',$request->region)
+                           ->where('user_labels.label_id',$request->label_id)
+                          ->pluck('id');
 
+           
           }else{
 
-            $checklabelexists =  Lable::where('id',$request->label_id)->where('user_id',$user_id)->first();
+            $user_ids = DB::table('users')
+                          ->join('ratings', 'ratings.user_id', '=', 'users.id')
+                          ->join('labels', 'labels.user_id', '=', 'users.id')
+                          ->select('users.*','labels.*',DB::raw('avg(ratings.rate) as rating'))
+                          ->groupBy('users.id')
+                          ->havingRaw('avg(ratings.rate) = '.$request->rating)
+                          ->where('users.region',$request->region)
+                           ->where('labels.id',$request->label_id)
+                          ->pluck('id');
 
           }
-          if($checklabelexists){
+      
 
-            $user_rating = Ratings::where('user_id',$user_id)->avg('rate');
-
-            if($request->rating == $user_rating){
-
-                $posts = Posts::where('user_id',$user_id)->orderby('id','desc')->paginate($limit);
-            }
-
-            }
+                $posts = Posts::whereIn('user_id',$user_id)->orderby('id','desc')->paginate($limit);
+            
           
           }else{
 
@@ -866,12 +906,7 @@ class PostsController extends BaseController
      
 
             }
-                   
-
             return $this->sendResponse($posts, 'Get All Posts Successfully.');
-
-          
-    
     }
 
     public function likepost($id){
