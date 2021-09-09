@@ -245,10 +245,10 @@ class PostsController extends BaseController
           }
 
            $user_ids =  User::join('ratings','users.id','=','ratings.user_id')
-          ->select('users.*',DB::raw('avg(ratings.rate) as rating'))
-          ->groupBy('users.id')
-          ->havingRaw('avg(ratings.rate) = $request->rating')
-          ->pluck('id');
+                        ->select('users.*',DB::raw('avg(ratings.rate) as rating'))
+                        ->groupBy('users.id')
+                        ->havingRaw('avg(ratings.rate) = $request->rating')
+                        ->get();
 
 
           return $user_ids;
@@ -822,7 +822,7 @@ class PostsController extends BaseController
               return $this->sendError('Validation Error.', $validator->errors());       
           }
           
-          $posts = Posts::where('id',$request->post_id)->first();
+          $posts = Posts::where('id',$request->post_id)->with('user_data')->first();
 
           return $this->sendResponse($posts, 'Post Found successfully.');
     

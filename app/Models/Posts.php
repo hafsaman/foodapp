@@ -19,4 +19,8 @@ class Posts extends Model
 
         return Posts_Gallary::where('post_id',$this->id)->select('media_path','media_type')->get();
     }
+
+    public function user_data(){
+    	return $this->hasOne('App\Models\User', 'id', 'user_id');
+    }
 }
