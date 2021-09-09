@@ -261,13 +261,13 @@ class PostsController extends BaseController
           // Label filter
 
           $labelcheck =   Labels::where('id',$request->label_id)->first();
+
           if($labelcheck->user_id == '0'){
+
             $users_ids =  UserLabels::where('label_id',$request->label_id)->pluck('user_id');
           }else{
             $users_ids =  Labels::where('id',$request->label_id)->pluck('user_id');
           }
-
-          where('region',$request->region)->
          
             $posts = Posts::where('user_id',$user_ids)->orderby('id','desc')->paginate($limit);
           
