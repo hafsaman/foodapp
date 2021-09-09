@@ -247,7 +247,7 @@ class PostsController extends BaseController
            $user_ids =  User::join('ratings','users.id','=','ratings.user_id')
           ->select('users.*',DB::raw('avg(ratings.rate) as rating'))
           ->groupBy('users.id')
-          ->having('rating, 4.0000')
+          ->havingRaw('avg(ratings.rate) = 4.0000')
           ->get();
 
 
