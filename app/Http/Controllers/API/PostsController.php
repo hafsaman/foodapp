@@ -819,7 +819,7 @@ class PostsController extends BaseController
           if($validator->fails()){
               return $this->sendError('Validation Error.', $validator->errors());       
           }
-          
+          $user_id= Auth::user()->id;
           $posts = Posts::where('id',$request->post_id)->with('user_data')->get();
 
           foreach($posts as $post)
