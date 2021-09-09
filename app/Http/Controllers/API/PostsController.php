@@ -244,10 +244,10 @@ class PostsController extends BaseController
                 $user_id= $user->id;
           }
 
-           $user_ids =  User::join('ratings','users.id','=','ratings.user_id')
-                        ->select('users.*',DB::raw('avg(ratings.rate) as rating'))
-                        ->groupBy('users.id')
-                        ->havingRaw('avg(ratings.rate) = '.$request->rating)
+          $user_ids =  User::join('user_labels','users.id','=','user_labels.user_id')
+                        ->select('users.*')
+                        ->where('user_labels.label_id',$request->label_id)
+                        ->where('users.region',$request->region)
                         ->pluck('id');
             return $user_ids;
 
