@@ -580,7 +580,7 @@ class PostsController extends BaseController
           
           $posts = Posts::where('id',$request->post_id)->first();
 
-          return $this->sendResponse($posts, 'User register successfully.');
+          return $this->sendResponse($posts, 'Post Found successfully.');
     
     }
 
