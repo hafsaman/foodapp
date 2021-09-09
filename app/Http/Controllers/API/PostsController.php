@@ -283,8 +283,7 @@ class PostsController extends BaseController
           // Rating filter
 
           $user_rating = Ratings::where('user_id',$user_id)->avg('rate');
-          User::
-
+       
           if($request->rating == $user_rating){
 
               $posts = Posts::where('user_id',$user_id)->orderby('id','desc')->paginate($limit);
