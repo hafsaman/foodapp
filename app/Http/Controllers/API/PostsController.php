@@ -245,9 +245,9 @@ class PostsController extends BaseController
           }
 
            $user_ids =  User::with('ratings')
-          ->join('ratings','user.id','=','ratings.user_id')
-          ->select('user.*',DB::raw('avg(ratings.rate) as rating'))
-          ->where('rating',$request->rating)
+          ->join('ratings','users.id','=','ratings.user_id')
+          ->select('users.*',DB::raw('avg(ratings.rate) as rating'))
+          ->where('rating','4')
           ->get();
 
 
