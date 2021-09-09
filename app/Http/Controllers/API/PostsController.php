@@ -260,11 +260,11 @@ class PostsController extends BaseController
           
           // Label filter
 
-          $labelcheck =   Lable::where('id',$request->label_id)->first();
+          $labelcheck =   Labels::where('id',$request->label_id)->first();
           if($labelcheck->user_id == '0'){
             $users_ids =  UserLabels::where('label_id',$request->label_id)->pluck('user_id');
           }else{
-            $users_ids =  Lable::where('id',$request->label_id)->pluck('user_id');
+            $users_ids =  Labels::where('id',$request->label_id)->pluck('user_id');
           }
 
           where('region',$request->region)->
