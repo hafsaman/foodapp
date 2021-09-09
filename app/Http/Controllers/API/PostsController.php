@@ -244,12 +244,7 @@ class PostsController extends BaseController
                 $user_id= $user->id;
           }
 
-          $user_ids =  User::join('user_labels','users.id','=','user_labels.user_id')
-                        ->select('users.*')
-                        ->where('user_labels.label_id',$request->label_id)
-                        ->where('users.region',$request->region)
-                        ->pluck('id');
-            return $user_ids;
+    
 
         if(isset($user_id)){
 
@@ -387,7 +382,7 @@ class PostsController extends BaseController
            
           }else{
 
-            $user_ids = DB::table('users')
+              $user_ids = DB::table('users')
                           ->join('ratings', 'ratings.user_id', '=', 'users.id')
                           ->join('labels', 'labels.user_id', '=', 'users.id')
                           ->select('users.*','labels.*',DB::raw('avg(ratings.rate) as rating'))
@@ -408,9 +403,7 @@ class PostsController extends BaseController
             $posts=Posts::orderby('id','desc')->paginate($limit);
 
           }
-          $posts=Posts::orderby('id','desc')->paginate($limit);
 
-   
             $posts_all=array();
             $user_data=array();
             
