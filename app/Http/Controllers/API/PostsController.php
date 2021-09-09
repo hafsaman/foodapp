@@ -568,6 +568,22 @@ class PostsController extends BaseController
 
     }
 
+    public function  getparticularpost(Request $request){
+
+        $validator = Validator::make($request->all(), [
+              'post_id' => 'required',  
+          ]);
+     
+          if($validator->fails()){
+              return $this->sendError('Validation Error.', $validator->errors());       
+          }
+          
+          $posts = Posts::where('id',$request->post_id)->first();
+
+          return $this->sendResponse($posts, 'User register successfully.');
+    
+    }
+
     public function likepost($id){
 
   //validator place

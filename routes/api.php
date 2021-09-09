@@ -55,6 +55,8 @@ Route::get('unfavouritepost/{id}', [PostsController::class, 'unfavouritepost']);
 Route::put('commentpost', [PostsController::class, 'commentpost']);
 Route::get('getpostcomment/{postid}',[PostsController::class,'getcomment']);
 Route::get('getpostfavourite',[PostsController::class,'getfavourite']);
+Route::post('getparticularpost',[PostsController::class,'getparticularpost']);
+
 
 Route::post('createlabel', [LabelController::class, 'createlabel']);
 Route::get('getlabel', [LabelController::class, 'getlabel']);
