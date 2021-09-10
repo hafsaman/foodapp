@@ -341,7 +341,7 @@ class PostsController extends BaseController
                           ->select('user_labels.*',DB::raw('avg(ratings.rate) as rating'))
                           ->groupBy('user_labels.user_id')
                           ->havingRaw('avg(ratings.rate) = '.$request->rating)
-                          ->pluck('user_id');
+                          ->get();
 
            
           }else{
@@ -351,7 +351,7 @@ class PostsController extends BaseController
                           ->select('labels.*',DB::raw('avg(ratings.rate) as rating'))
                           ->groupBy('labels.user_id')
                           ->havingRaw('avg(ratings.rate) = '.$request->rating)
-                          ->pluck('user_id');
+                          ->get();
           }
          
 
