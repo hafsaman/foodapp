@@ -183,7 +183,7 @@ class UserController extends BaseController
             $user_videos=UserGallary::where('user_id',$users->id)->where('media_type','=','video')->take(10);
             $user_label=Labels::where('user_id',$users->id)->get();
             $user_rating=Ratings::where('user_id',$users->id)->avg('rate');
-            $recommendation=Ratings::where('user_id',$users->id)->orderby('id','DESC')->first();
+            $recommendation=Ratings::where('rate_id',$users->id)->orderby('id','DESC')->first();
             $shopping = Posts::where('user_id',$users->id)->where('is_shopping','yes')->get();
             $OrBuy =  OrBuy::where('user_id',$users->id)->first();
             $user_posts=Posts::where('user_id',$users->id)->get();
