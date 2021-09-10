@@ -341,7 +341,7 @@ class PostsController extends BaseController
                           ->where('user_labels.label_id',$request->label_id)
                           ->havingRaw('avg(ratings.rate) = '.$request->rating)
                           // ->groupBy('user_labels.user_id')
-                          // ->get();
+                          ->get();
                           ->toSql();
 
            
@@ -352,8 +352,8 @@ class PostsController extends BaseController
                            ->where('labels.id',$request->label_id)
                           ->havingRaw('avg(ratings.rate) = '.$request->rating)
                           // ->groupBy('labels.user_id')
-                          // ->get();
-                          ->toSql();
+                          ->get();
+                          // ->toSql();
           }
 
           return $user_ids;
