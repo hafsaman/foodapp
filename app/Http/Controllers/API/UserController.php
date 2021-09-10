@@ -100,7 +100,7 @@ class UserController extends BaseController
              $user_id = Auth::id();
           }
           
-          $recommendation=Ratings::where('user_id',$user_id)->orderby('id','DESC')->paginate($request->limit);
+          $recommendation=Ratings::where('rate_id',$user_id)->orderby('id','DESC')->paginate($request->limit);
 
           $success['recommendation'] = $recommendation;
           $success['status'] = 200;
