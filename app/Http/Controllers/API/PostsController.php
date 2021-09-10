@@ -243,9 +243,7 @@ class PostsController extends BaseController
                 $user = auth('api')->user();
                 $user_id= $user->id;
           }
-
-    
-
+          
         if(isset($user_id)){
 
         if(isset($request->region) && empty($request->label_id) && empty($request->rating)){
@@ -268,8 +266,10 @@ class PostsController extends BaseController
           }else{
             $users_ids =  Labels::where('id',$request->label_id)->pluck('user_id');
           }
+
+          return $user_ids;
          
-            $posts = Posts::where('user_id',$user_ids)->orderby('id','desc')->paginate($limit);
+            $posts = Posts::whereIn('user_id',$user_ids)->orderby('id','desc')->paginate($limit);
           
             
            
@@ -327,7 +327,7 @@ class PostsController extends BaseController
 
          
 
-               $posts = Posts::whereIn('user_id',$user_ids)->orderby('id','desc')->paginate($limit);
+            $posts = Posts::whereIn('user_id',$user_ids)->orderby('id','desc')->paginate($limit);
          
           
         }elseif(empty($request->region) && isset($request->label_id) && isset($request->rating)){
