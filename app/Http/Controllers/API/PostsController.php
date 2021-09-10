@@ -374,7 +374,7 @@ class PostsController extends BaseController
                           ->select('users.*','labels.*',DB::raw('avg(ratings.rate) as rating'))
                           ->groupBy('users.id')
                           ->havingRaw('avg(ratings.rate) = '.$request->rating)
-                          ->whereRaw('users.region = "'. $request->region.'"')
+                          ->where('users.region',$request->region)
                            ->where('user_labels.label_id',$request->label_id)
                           ->pluck('id');
 
@@ -387,9 +387,9 @@ class PostsController extends BaseController
                           ->select('users.*','labels.*',DB::raw('avg(ratings.rate) as rating'))
                           ->groupBy('users.id')
                           ->havingRaw('avg(ratings.rate) = '.$request->rating)
-                          ->whereRaw('users.region = "'. $request->region.'"')
+                          ->where('users.region',$request->region)
                            ->where('labels.id',$request->label_id)
-                          ->pluck('id');
+                          ->toSql();
 
           }
       
