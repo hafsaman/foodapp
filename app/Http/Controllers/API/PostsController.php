@@ -259,13 +259,14 @@ class PostsController extends BaseController
           // Label filter
 
           $labelcheck =   Labels::where('id',$request->label_id)->first();
-          return $labelcheck;
 
           if($labelcheck->user_id == '0'){
-
+                  return $labelcheck;
             $users_ids =  UserLabels::where('label_id',$request->label_id)->pluck('user_id');
           }else{
             $users_ids =  Labels::where('id',$request->label_id)->pluck('user_id');
+            return $user_ids;
+         
           }
 
           return $user_ids;
@@ -698,12 +699,15 @@ class PostsController extends BaseController
            
 
             $comments=Posts_Comments::where('post_id',$post->id)->join('users','users.id','=','posts_comments.user_id')->select('posts_comments.id','posts_comments.post_id','posts_comments.user_id','posts_comments.comment','posts_comments.created_at','users.name','users.email','users.avatar')->get();
-
             $user=User::where('id',$post->user_id)->first();
-
+            $user_follower=User_Follower::where('follower_id',$user->id)->where('user_id',$post->user_id)->select('id')->first();
+            if(isset($user_follower)){ $is_follow=1; }
+            else{ $is_follow=0;}
             
-              $user_data=array("id"=>$user->id,"name"=>$user->name,"email"=>$user->email,"avatar"=>$user->avatar,'is_follow'=>null);
-              $comment_data=array("post_id"=>$post->id,"user_id"=>$user->id,"comment"=>$post->comment,"created_at"=>$post->created_at,"name"=>$user->name,"email"=>$user->email,"avatar"=>$user->avatar);
+
+            $user_data=array("id"=>$user->id,"name"=>$user->name,"email"=>$user->email,"avatar"=>$user->avatar,'is_follow'=>$is_follow);
+
+            $comment_data=array("post_id"=>$post->id,"user_id"=>$user->id,"comment"=>$post->comment,"created_at"=>$post->created_at,"name"=>$user->name,"email"=>$user->email,"avatar"=>$user->avatar);
                // $media_path=explode(",",$post->media_path);
              //   $post->media_path=$media_path;
               $post->comment=$comment_data;
