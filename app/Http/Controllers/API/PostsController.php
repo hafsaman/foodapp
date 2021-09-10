@@ -289,7 +289,7 @@ class PostsController extends BaseController
 
           // region  label filter
 
-          $labelcheck =   Lable::where('id',$request->label_id)->first();
+          $labelcheck =   Lables::where('id',$request->label_id)->first();
 
           if($labelcheck->user_id == '0'){
 
@@ -333,7 +333,7 @@ class PostsController extends BaseController
             // rating & label filter
 
           $labelcheck =   Lables::where('id',$request->label_id)->first();
-          
+
           if($labelcheck->user_id == '0'){
 
               $user_ids =  UserLabels::where('user_labels.label_id',$request->label_id)
@@ -364,7 +364,7 @@ class PostsController extends BaseController
 
           // rating & label  & region filter
 
-          $labelcheck =   Lable::where('id',$request->label_id)->first();
+          $labelcheck =   Lables::where('id',$request->label_id)->first();
 
           if($labelcheck->user_id == '0'){
 
