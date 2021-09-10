@@ -342,7 +342,6 @@ class PostsController extends BaseController
                           ->havingRaw('avg(ratings.rate) = '.$request->rating)
                           // ->groupBy('user_labels.user_id')
                           ->get();
-                          ->toSql();
 
            
           }else{
