@@ -353,6 +353,8 @@ class PostsController extends BaseController
                           ->havingRaw('avg(ratings.rate) = '.$request->rating)
                           ->get();
           }
+
+          return $user_ids;
          
 
                  $posts = Posts::whereIn('user_id',$user_id)->orderby('id','desc')->paginate($limit);
