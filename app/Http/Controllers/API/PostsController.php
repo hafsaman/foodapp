@@ -336,21 +336,21 @@ class PostsController extends BaseController
 
           if($labelcheck->user_id == '0'){
 
-              $user_ids =  UserLabels::where('user_labels.label_id',$request->label_id)
-                          ->join('ratings','user_labels.user_id','=','ratings.user_id')
+              $user_ids =  UserLabels::join('ratings','user_labels.user_id','=','ratings.user_id')
                           ->select('user_labels.*',DB::raw('avg(ratings.rate) as rating'))
                           ->groupBy('user_labels.user_id')
                           ->havingRaw('avg(ratings.rate) = '.$request->rating)
+                          ->where('user_labels.label_id',$request->label_id)
                           ->get();
 
            
           }else{
               
-              $user_ids =  Labels::where('labels.id',$request->label_id)
-                          ->join('ratings','labels.user_id','=','ratings.user_id')
+              $user_ids =  Labels::join('ratings','labels.user_id','=','ratings.user_id')
                           ->select('labels.*',DB::raw('avg(ratings.rate) as rating'))
                           ->groupBy('labels.user_id')
                           ->havingRaw('avg(ratings.rate) = '.$request->rating)
+                           ->where('labels.id',$request->label_id)
                           ->get();
           }
 
