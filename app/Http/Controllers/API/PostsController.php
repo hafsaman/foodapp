@@ -261,15 +261,13 @@ class PostsController extends BaseController
           $labelcheck =   Labels::where('id',$request->label_id)->first();
 
           if($labelcheck->user_id == '0'){
-                  return $labelcheck;
-            $users_ids =  UserLabels::where('label_id',$request->label_id)->pluck('user_id');
+            
+            $user_ids =  UserLabels::where('label_id',$request->label_id)->pluck('user_id');
           }else{
-            $users_ids =  Labels::where('id',$request->label_id)->pluck('user_id');
-            return $user_ids;
+            $user_ids =  Labels::where('id',$request->label_id)->pluck('user_id');
+            
          
           }
-
-          return $user_ids;
          
             $posts = Posts::whereIn('user_id',$user_ids)->orderby('id','desc')->paginate($limit);
           
@@ -284,8 +282,6 @@ class PostsController extends BaseController
                         ->groupBy('users.id')
                         ->havingRaw('avg(ratings.rate) = '.$request->rating)
                         ->pluck('id');
-
-          $user_rating = Ratings::where('user_id',$user_id)->avg('rate');
        
           $posts = Posts::whereIn('user_id',$user_ids)->orderby('id','desc')->paginate($limit);
           
