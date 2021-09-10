@@ -94,8 +94,13 @@ class UserController extends BaseController
 
     
      public function allrecommendations(Request $request){
-          $users  = Auth::user();
-          $recommendation=Ratings::where('user_id',$users->id)->orderby('id','DESC')->paginate($request->limit);
+          if($request->user_id){
+              $user_id = $request->user_id;
+          }else{
+             $user_id = Auth::id();
+          }
+          
+          $recommendation=Ratings::where('user_id',$user_id)->orderby('id','DESC')->paginate($request->limit);
 
           $success['recommendation'] = $recommendation;
           $success['status'] = 200;
