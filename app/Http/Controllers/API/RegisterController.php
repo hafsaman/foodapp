@@ -59,6 +59,7 @@ class RegisterController extends BaseController
         $user = User::create($input);
         $success['token'] =  $user->createToken('MyApp')->accessToken;
         $success['name'] =  $user->name;
+        $success['id'] =  $user->id;
         $success['region'] =  $user->region;
    
         return $this->sendResponse($success, 'User register successfully.');
@@ -104,6 +105,7 @@ class RegisterController extends BaseController
                 }
             $success['token'] =  $mainUserchk->createToken('MyApp')->accessToken;
             $success['name'] =  $mainUserchk->name;   
+            $success['id'] =  $mainUserchk->id;
             $success['region'] =  ($mainUserchk->region != '') ? $mainUserchk->region : '';    
             return $this->sendResponse($success, 'User Login successfully.');
             
@@ -131,7 +133,8 @@ class RegisterController extends BaseController
             }
 
             $success['token'] =  $emailchk_alreadyexist->createToken('MyApp')->accessToken;
-            $success['name'] =  $emailchk_alreadyexist->name;  
+            $success['name'] =  $emailchk_alreadyexist->name; 
+            $success['id'] =  $emailchk_alreadyexist->id; 
              $success['region'] =  ($emailchk_alreadyexist->region != '') ? $emailchk_alreadyexist->region : '';  
 
             return $this->sendResponse($success, 'User Login successfully.');
@@ -143,6 +146,7 @@ class RegisterController extends BaseController
                 $user = User::create($input);
                 $success['token'] =  $user->createToken('MyApp')->accessToken;
                 $success['name'] =  $user->name;
+                  $success['id'] =  $user->id;
                 $success['region'] =  ($user->region != '') ? $user->region : '';  
            
                 return $this->sendResponse($success, 'User register successfully.');
@@ -171,6 +175,7 @@ class RegisterController extends BaseController
             $success['token'] =  $user->createToken('MyApp')-> accessToken; 
             $success['name'] =  $user->name;
             $success['role'] =  $user->role;
+            $success['id'] =  $user->id;
             return $this->sendResponse($success, 'User login successfully.');
         } 
         else{ 
