@@ -348,9 +348,9 @@ class PostsController extends BaseController
               
               $user_ids =  Labels::join('ratings','labels.user_id','=','ratings.user_id')
                           ->select('labels.*',DB::raw('avg(ratings.rate) as rating'))
-                           ->where('labels.label_id',$request->label_id)
+                           ->where('labels.id',$request->label_id)
                           ->havingRaw('avg(ratings.rate) = '.$request->rating)
-                          ->groupBy('user_labels.user_id')
+                          ->groupBy('labels.user_id')
                           ->get();
           }
 
