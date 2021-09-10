@@ -259,6 +259,7 @@ class PostsController extends BaseController
           // Label filter
 
           $labelcheck =   Labels::where('id',$request->label_id)->first();
+          return $labelcheck;
 
           if($labelcheck->user_id == '0'){
 
