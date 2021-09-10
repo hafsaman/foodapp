@@ -343,7 +343,7 @@ class PostsController extends BaseController
                           ->havingRaw('avg(ratings.rate) = '.$request->rating)
                           // ->groupBy('user_labels.user_id')
                           ->get();
-            } catch (/Throwable $th) {
+            } catch (\Throwable $th) {
               return $th->getMessage();
               
             }
@@ -358,7 +358,7 @@ class PostsController extends BaseController
                           ->havingRaw('avg(ratings.rate) = '.$request->rating)
                           // ->groupBy('labels.user_id')
                           ->get();
-              } catch (/Throwable $e) {
+              } catch (\Throwable $e) {
                 return $th->getMessage();
               }
                           // ->toSql();
