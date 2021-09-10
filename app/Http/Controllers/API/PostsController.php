@@ -335,23 +335,32 @@ class PostsController extends BaseController
           $labelcheck =   Labels::where('id',$request->label_id)->first();
 
           if($labelcheck->user_id == '0'){
-
+            try {
+              
               return $user_ids =  UserLabels::join('ratings','user_labels.user_id','=','ratings.user_id')
                           ->select('user_labels.*',DB::raw('(Select avg(ratings.rate) from ratings where user_labels.user_id = ratings.user_id ) as rating'))                     
                           ->where('user_labels.label_id',$request->label_id)
                           ->havingRaw('avg(ratings.rate) = '.$request->rating)
                           // ->groupBy('user_labels.user_id')
                           ->get();
+            } catch (/Throwable $th) {
+              return $th->getMessage();
+              
+            }
 
            
           }else{
-              
+              try {
+                
               return $user_ids =  Labels::join('ratings','labels.user_id','=','ratings.user_id')
                           ->select('labels.*',DB::raw('( Select avg(ratings.rate) from ratings where labels.user_id = ratings.user_id ) as rating'))
                            ->where('labels.id',$request->label_id)
                           ->havingRaw('avg(ratings.rate) = '.$request->rating)
                           // ->groupBy('labels.user_id')
                           ->get();
+              } catch (/Throwable $e) {
+                return $th->getMessage();
+              }
                           // ->toSql();
           }
 
