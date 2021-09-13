@@ -235,7 +235,7 @@ class PostsController extends BaseController
     }
 
     //////////////////////////////////////
-      public function getpostsalltest(Request $request){
+      public function getpostsearch(Request $request){
 
        $limit=$request->limit;
 
@@ -406,56 +406,7 @@ class PostsController extends BaseController
 
                $posts = Posts::whereIn('user_id',$user_ids)->orderby('id','desc')->paginate($limit);
            }
-
-
-            $posts_all=array();
-            $user_data=array();
-            
-            foreach($posts as $post)
-            {
-              $post_media=Posts_Gallary::where('post_id',$post->id)->select('media_path','media_type')->get();
-              $postlike=Posts_Likes::where('post_id',$post->id)->selectRaw('count(id) as totallike')->first();
-              $nooflike=$postlike->totallike;
-              $postfavourite=Postsfavourite::where('post_id',$post->id)->selectRaw('count(id) as totalfavourite')->first();
-              $nooffavourite=$postfavourite->totalfavourite;
-           
-            $postuserlike=Posts_Likes::where('post_id',$post->id)->where('user_id',$user_id)->selectRaw('count(id) as userlike')->first();
-            
-            if($postuserlike->userlike != 0){ $is_like=1; }
-            else{ $is_like=0;}
-            
-            $postuserfavourite=Postsfavourite::where('post_id',$post->id)->where('user_id',$user_id)->selectRaw('count(id) as userfavourite')->first();
-            
-            if($postuserfavourite->userfavourite != 0){ $is_favourite=1; }
-            else{ $is_favourite=0;}
-
-
-            $comments=Posts_Comments::where('post_id',$post->id)->join('users','users.id','=','posts_comments.user_id')->select('posts_comments.id','posts_comments.post_id','posts_comments.user_id','posts_comments.comment','posts_comments.created_at','users.name','users.email','users.avatar')->get();
-            $user_follower=User_Follower::where('follower_id',$user_id)->where('user_id',$post->user_id)->select('id')->first();
-            if(isset($user_follower)){ $is_follow=1; }
-            else{ $is_follow=0;}
-
-            $user=User::where('id',$post->user_id)->first();
-
-             $user_data=array("id"=>$user->id,"name"=>$user->name,"email"=>$user->email,"avatar"=>$user->avatar,'is_follow'=>$is_follow);
-         
-              $comment_data=array("post_id"=>$post->id,"user_id"=>$user->id,"comment"=>$post->comment,"created_at"=>$post->created_at,"name"=>$user->name,"email"=>$user->email,"avatar"=>$user->avatar);
-               // $media_path=explode(",",$post->media_path);
-             //   $post->media_path=$media_path;
-              $post->comment=$comment_data;
-              $post->no_of_like = $nooflike;
-              $post->no_of_favourite = $nooffavourite;
-              $post->is_like = $is_like;
-              $post->is_favourite = $is_favourite;
-              $post->comments = $comments;
-              $post->user_data = $user_data;
-              $post->media_path=$post_media;
-             // $item['product'] = $product;
-             $posts_all[] = array("id"=>$post->id,"title"=>$post->title,"comment"=>$post->comment,"is_shopping"=>$post->is_shopping,'price'=>$post->price,'region'=>$post->region,'user_id'=>$post->user_id,'media_path'=>$post->media_path,'created_at'=>$post->created_at,'no_of_like'=>$nooflike,'no_of_favourite'=>$nooffavourite,'is_like'=>null,'is_favourite'=>null,'comments'=>$comments,'user_data'=>$user_data);
-     
-
-            }
-                   
+   
 
             return $this->sendResponse($posts, 'Get All Posts Successfully.');
           
