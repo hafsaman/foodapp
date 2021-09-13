@@ -28,7 +28,7 @@ Route::post('teslike', [PostsController::class, 'teslike']);
 
 
 Route::get('getpostsall', [PostsController::class, 'getpostsall']);
-Route::post('getpostsalltest', [PostsController::class, 'getpostsalltest']);
+Route::post('getpostsearch', [PostsController::class, 'getpostsearch']);
 
      
 /*Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
