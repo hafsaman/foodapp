@@ -239,12 +239,6 @@ class PostsController extends BaseController
 
        $limit=$request->limit;
 
-         if (auth('api')->check()) { 
-                $user = auth('api')->user();
-                $user_id= $user->id;
-          }
-          
-        if(isset($user_id)){
 
         if(isset($request->region) && empty($request->label_id) && empty($request->rating)){
 
@@ -252,7 +246,6 @@ class PostsController extends BaseController
 
            $users_ids =  User::where('region',$request->region)->pluck('id');
 
-           $posts = Posts::whereIn('user_id',$users_ids)->orderby('id','desc')->paginate($limit);
 
         }elseif(empty($request->region) && isset($request->label_id) && empty($request->rating)){
           
@@ -268,10 +261,7 @@ class PostsController extends BaseController
             
          
           }
-         
-            $posts = Posts::whereIn('user_id',$user_ids)->orderby('id','desc')->paginate($limit);
-          
-            
+
            
         }elseif(empty($request->region) && empty($request->label_id) && isset($request->rating)){
           
@@ -283,8 +273,7 @@ class PostsController extends BaseController
                         ->havingRaw('avg(ratings.rate) = '.$request->rating)
                         ->pluck('id');
        
-          $posts = Posts::whereIn('user_id',$user_ids)->orderby('id','desc')->paginate($limit);
-          
+         
         }elseif(isset($request->region) && isset($request->label_id) && empty($request->rating)){
 
           // region  label filter
@@ -307,10 +296,6 @@ class PostsController extends BaseController
                         ->where('users.region',$request->region)
                         ->pluck('id');
           }
-
-
-           $posts = Posts::whereIn('user_id',$user_ids)->orderby('id','desc')->paginate($limit);
-         
           
         }elseif(isset($request->region) && empty($request->label_id) && isset($request->rating)){
 
@@ -323,10 +308,6 @@ class PostsController extends BaseController
                           ->where('users.region',$request->region)
                           ->pluck('id');
 
-         
-
-            $posts = Posts::whereIn('user_id',$user_ids)->orderby('id','desc')->paginate($limit);
-         
           
         }elseif(empty($request->region) && isset($request->label_id) && isset($request->rating)){
 
@@ -335,44 +316,40 @@ class PostsController extends BaseController
           $labelcheck =   Labels::where('id',$request->label_id)->first();
 
           if($labelcheck->user_id == '0'){
-            try {
-              
-              return $user_ids =  UserLabels::join('ratings','user_labels.user_id','=','ratings.user_id')
-                          ->select('user_labels.*',DB::raw('(Select avg(ratings.rate) from ratings where user_labels.user_id = ratings.user_id ) as rating'))                     
-                          ->where('user_labels.label_id',$request->label_id)
+
+              $user_ids = UserLabels::where('label_id',$request->label_id)->pluck('user_id');
+              /*$user_ids =  UserLabels::where('user_labels.label_id',$request->label_id)
+                          ->join('ratings','user_labels.user_id','=','ratings.user_id')
+                          ->select('user_labels.*',DB::raw('avg(ratings.rate) as rating'))
                           ->havingRaw('avg(ratings.rate) = '.$request->rating)
-                          // ->groupBy('user_labels.user_id')
-                          ->get();
-            } catch (\Throwable $th) {
-              return $th->getMessage();
-              
-            }
+                          ->get();*/
 
            
           }else{
-              try {
-                
-              return $user_ids =  Labels::join('ratings','labels.user_id','=','ratings.user_id')
-                          ->select('labels.*',DB::raw('( Select avg(ratings.rate) from ratings where labels.user_id = ratings.user_id ) as rating'))
+              $user_id_chk = Labels::where('id',$request->label_id)->pluck('user_id');
+              $user_ids = Ratings::whereIn('user_id',$user_id_chk)
+
+                     ->select('ratings.*',DB::raw('avg(ratings.rate) as rating'))
+                     ->havingRaw('avg(ratings.rate) = '.$request->rating)
+                     ->groupBy('ratings.user_id')
+                     ->pluck('ratings.user_id');
+
+              /*//$user_ids =  Labels::join('ratings','labels.user_id','=','ratings.user_id')
+                          ->select('labels.*',DB::raw('avg(ratings.rate) as rating'))
                            ->where('labels.id',$request->label_id)
                           ->havingRaw('avg(ratings.rate) = '.$request->rating)
-                          // ->groupBy('labels.user_id')
-                          ->get();
-              } catch (\Throwable $e) {
-                return $th->getMessage();
-              }
-                          // ->toSql();
+                          ->groupBy('labels.user_id')
+                          ->pluck('user_labels.user_id');*/
+
+              return $user_ids;
+
           }
-
-          return $user_ids;
-         
-
-                 $posts = Posts::whereIn('user_id',$user_id)->orderby('id','desc')->paginate($limit);
-            
 
           
           
         }elseif(isset($request->region) && isset($request->label_id) && isset($request->rating)){
+
+         
 
           // rating & label  & region filter
 
@@ -380,40 +357,56 @@ class PostsController extends BaseController
 
           if($labelcheck->user_id == '0'){
 
-              $user_ids = DB::table('users')
-                          ->join('ratings', 'ratings.user_id', '=', 'users.id')
-                          ->join('user_labels', 'user_labels.user_id', '=', 'users.id')
-                          ->select('users.*','labels.*',DB::raw('avg(ratings.rate) as rating'))
+            $user_id_chk =  User::join('ratings','users.id','=','ratings.user_id')
+                          ->select('users.*',DB::raw('avg(ratings.rate) as rating'))
                           ->groupBy('users.id')
                           ->havingRaw('avg(ratings.rate) = '.$request->rating)
                           ->where('users.region',$request->region)
-                           ->where('user_labels.label_id',$request->label_id)
-                          ->pluck('users.id');
+                          ->pluck('id');
+            if(count($user_id_chk) > 0){
 
+              $user_ids = UserLabels::whereIn('user_id',$user_id_chk)->where('label_id',$request->label_id)->pluck('user_id');
+
+            }else{
+
+              $user_ids = array();
+            }
            
           }else{
 
-              $user_ids = DB::table('users')
-                          ->join('ratings', 'ratings.user_id', '=', 'users.id')
-                          ->join('labels', 'labels.user_id', '=', 'users.id')
-                          ->select('users.*','labels.*',DB::raw('avg(ratings.rate) as rating'))
-                          ->where('users.region',$request->region)
-                          ->where('labels.id',$request->label_id)
+              $user_id_chk =  User::join('ratings','users.id','=','ratings.user_id')
+                          ->select('users.*',DB::raw('avg(ratings.rate) as rating'))
                           ->groupBy('users.id')
                           ->havingRaw('avg(ratings.rate) = '.$request->rating)
-                          ->pluck('users.id');
+                          ->where('users.region',$request->region)
+                          ->pluck('id');
 
+              if(count($user_id_chk) > 0){
+
+                $user_ids = Labels::whereIn('user_id',$user_id_chk)->where('id',$request->label_id)->pluck('user_id');
+
+              }else{
+
+                $user_ids = array();
+
+              }
           }
-      
-
-                $posts = Posts::whereIn('user_id',$user_id)->orderby('id','desc')->paginate($limit);
             
-          
           }else{
 
-            $posts=Posts::orderby('id','desc')->paginate($limit);
+            $user_ids =User::pluck('id');
 
           }
+
+          if($request->search){
+
+              $posts = Posts::whereIn('user_id',$user_ids)->where(DB::raw('lower(title)'), 'like', '%' . strtolower($request->search) . '%')->orderby('id','desc')->paginate($limit);
+
+           }else{
+
+               $posts = Posts::whereIn('user_id',$user_ids)->orderby('id','desc')->paginate($limit);
+           }
+
 
             $posts_all=array();
             $user_data=array();
@@ -465,49 +458,7 @@ class PostsController extends BaseController
                    
 
             return $this->sendResponse($posts, 'Get All Posts Successfully.');
-          }
-          else {
-         $posts=Posts::orderby('id','desc')->paginate($limit);
           
-            $posts_all=array();
-            $user_data=array();
-            
-            foreach($posts as $post)
-            {
-              $post_media=Posts_Gallary::where('post_id',$post->id)->select('media_path','media_type')->get();
-              $postlike=Posts_Likes::where('post_id',$post->id)->selectRaw('count(id) as totallike')->first();
-              $nooflike=$postlike->totallike;
-              $postfavourite=Postsfavourite::where('post_id',$post->id)->selectRaw('count(id) as totalfavourite')->first();
-              $nooffavourite=$postfavourite->totalfavourite;
-           
-
-            $comments=Posts_Comments::where('post_id',$post->id)->join('users','users.id','=','posts_comments.user_id')->select('posts_comments.id','posts_comments.post_id','posts_comments.user_id','posts_comments.comment','posts_comments.created_at','users.name','users.email','users.avatar')->get();
-
-            $user=User::where('id',$post->user_id)->first();
-
-            
-              $user_data=array("id"=>$user->id,"name"=>$user->name,"email"=>$user->email,"avatar"=>$user->avatar,'is_follow'=>null);
-              $comment_data=array("post_id"=>$post->id,"user_id"=>$user->id,"comment"=>$post->comment,"created_at"=>$post->created_at,"name"=>$user->name,"email"=>$user->email,"avatar"=>$user->avatar);
-               // $media_path=explode(",",$post->media_path);
-             //   $post->media_path=$media_path;
-              $post->comment=$comment_data;
-              $post->no_of_like = $nooflike;
-              $post->no_of_favourite = $nooffavourite;
-              $post->is_like = null;
-              $post->is_favourite = null;
-              $post->comments = $comments;
-              $post->user_data = $user_data;
-              $post->media_path=$post_media;
-             // $item['product'] = $product;
-            $posts_all[] = array("id"=>$post->id,"title"=>$post->title,"comment"=>$post->comment,"is_shopping"=>$post->is_shopping,'price'=>$post->price,'region'=>$post->region,'user_id'=>$post->user_id,'media_path'=>$post->media_path,'created_at'=>$post->created_at,'no_of_like'=>$nooflike,'no_of_favourite'=>$nooffavourite,'is_like'=>null,'is_favourite'=>null,'comments'=>$comments,'user_data'=>$user_data);
-     
-
-            }
-                   
-
-            return $this->sendResponse($posts, 'Get All Posts Successfully.');
-          }
-
     }
     //////////////////////////////////////
 
