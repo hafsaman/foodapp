@@ -234,7 +234,7 @@ class PostsController extends BaseController
 
     }
 
-    //////////////////////////////////////
+
       public function getpostsearch(Request $request){
 
        $limit=$request->limit;
@@ -317,32 +317,22 @@ class PostsController extends BaseController
 
           if($labelcheck->user_id == '0'){
 
-              $user_ids = UserLabels::where('label_id',$request->label_id)->pluck('user_id');
-              /*$user_ids =  UserLabels::where('user_labels.label_id',$request->label_id)
-                          ->join('ratings','user_labels.user_id','=','ratings.user_id')
-                          ->select('user_labels.*',DB::raw('avg(ratings.rate) as rating'))
-                          ->havingRaw('avg(ratings.rate) = '.$request->rating)
-                          ->get();*/
+            $user_id_chk = Ratings::select('ratings.*',DB::raw('avg(ratings.rate) as rating'))
+                        ->groupBy('ratings.id')
+                        ->havingRaw('avg(ratings.rate) = '.$request->rating)
+                         ->pluck('ratings.user_id');
+
+              $user_ids = UserLabels::where('id',$request->label_id)->whereIn('user_id',$user_id_chk)->pluck('user_id');
 
            
           }else{
-              $user_id_chk = Labels::where('id',$request->label_id)->pluck('user_id');
-              $user_ids = Ratings::whereIn('user_id',$user_id_chk)
+              
+              $user_id_chk = Ratings::select('ratings.*',DB::raw('avg(ratings.rate) as rating'))
+                        ->groupBy('ratings.id')
+                        ->havingRaw('avg(ratings.rate) = '.$request->rating)
+                         ->pluck('ratings.user_id');
 
-                     ->select('ratings.*',DB::raw('avg(ratings.rate) as rating'))
-                     ->havingRaw('avg(ratings.rate) = '.$request->rating)
-                     ->groupBy('ratings.user_id')
-                     ->pluck('ratings.user_id');
-
-              /*//$user_ids =  Labels::join('ratings','labels.user_id','=','ratings.user_id')
-                          ->select('labels.*',DB::raw('avg(ratings.rate) as rating'))
-                           ->where('labels.id',$request->label_id)
-                          ->havingRaw('avg(ratings.rate) = '.$request->rating)
-                          ->groupBy('labels.user_id')
-                          ->pluck('user_labels.user_id');*/
-
-              return $user_ids;
-
+              $user_ids = Labels::where('id',$request->label_id)->whereIn('user_id',$user_id_chk)->pluck('user_id');
           }
 
           
@@ -411,7 +401,7 @@ class PostsController extends BaseController
             return $this->sendResponse($posts, 'Get All Posts Successfully.');
           
     }
-    //////////////////////////////////////
+   
 
     public function getpostsall(Request $request){
 
