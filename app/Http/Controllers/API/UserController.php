@@ -181,7 +181,11 @@ class UserController extends BaseController
             $user_posts_videos = Posts_Gallary::whereIn('post_id',$user_posts_ids)->whereIn('media_type',['video/quicktime','video/mp4'])->take(10)->get();
             $user_photos=UserGallary::where('user_id',$users->id)->where('media_type','=','photo')->take(10);
             $user_videos=UserGallary::where('user_id',$users->id)->where('media_type','=','video')->take(10);
-            $user_label=Labels::where('user_id',$users->id)->get();
+            $user_label_defaultadded = UserLabels::where('user_id',$users->id)->pluck('label_id');
+            $user_label=Labels::where('user_id',$users->id)->get()->toArray();
+            $user_labeldefault=Labels::whereIn('id',$user_label_defaultadded)->get()->toArray();
+            $labels = array_merge($user_label,$user_labeldefault);
+            
             $user_rating=Ratings::where('user_id',$users->id)->avg('rate');
             $recommendation=Ratings::where('rate_id',$users->id)->orderby('id','DESC')->first();
             $shopping = Posts::where('user_id',$users->id)->where('is_shopping','yes')->get();
@@ -193,7 +197,7 @@ class UserController extends BaseController
             $success['user'] = $users;
             $success['photos'] = $user_posts_photos;
             $success['videos'] = $user_posts_videos;
-            $success['labels'] = $user_label;
+            $success['labels'] = $labels;
             $success['posts'] = $user_posts;
             $success['ratings'] = $user_rating;
             $success['shopping'] = $shopping;
