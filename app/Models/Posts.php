@@ -5,6 +5,7 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use App\Models\Posts_Gallary;
+use App\Models\Region;
 use Auth;
 
 class Posts extends Model
