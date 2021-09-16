@@ -26,7 +26,7 @@ class Posts extends Model
     	return $this->hasOne('App\Models\User', 'id', 'user_id');
     }
 
-     public function getRegionDataAttruibute(){
+     public function getRegionDataAttribute(){
         return Region::where('region',$this->region)->first();
     }
 
