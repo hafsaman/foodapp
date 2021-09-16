@@ -15,7 +15,224 @@ class RegionSeeder extends Seeder
      */
     public function run()
     {
-         DB::table('region')->insert([
+                     DB::table('region')->insert([
+         'region_id'=>'01',
+            'region' => 'Ain',
+            'status' => 1,
+            'latitude' => '24.222651',
+            'longitude' => '55.765099',
+         ]);
+            DB::table('region')->insert([
+         'region_id'=>'02',
+            'region' => 'Aisne',
+            'status' => 1,
+            'latitude' => '49.410469',
+            'longitude' => '3.516930',
+         ]);
+            DB::table('region')->insert([
+         'region_id'=>'03',
+            'region' => 'Allier',
+            'status' => 1,
+            'latitude' => '46.117229',
+            'longitude' => '3.402640',
+         ]);
+            DB::table('region')->insert([
+         'region_id'=>'04',
+            'region' => 'Alpes-de-Haute-Provence',
+            'status' => 1,
+            'latitude' => '44.164188',
+            'longitude' => '6.232930',
+         ]);
+            DB::table('region')->insert([
+         'region_id'=>'05',
+            'region' => 'utes-AlpesHa',
+            'status' => 1,
+            'latitude' => '53.379920',
+            'longitude' => '49.087780',
+         ]);
+            DB::table('region')->insert([
+         'region_id'=>'06',
+            'region' => 'Alpes Maritimes',
+            'status' => 1,
+            'latitude' => '43.937750',
+            'longitude' => '7.116700',
+         ]);
+            DB::table('region')->insert([
+         'region_id'=>'07',
+            'region' => 'Ardèche',
+            'status' => 1,
+            'latitude' => '44.821621',
+            'longitude' => '4.429290',
+         ]);
+            DB::table('region')->insert([
+         'region_id'=>'08',
+            'region' => 'Ardennes',
+            'status' => 1,
+            'latitude' => '49.762463',
+            'longitude' => '4.628505',
+         ]);
+            DB::table('region')->insert([
+         'region_id'=>'09',
+            'region' => 'Ariège',
+            'status' => 1,
+            'latitude' => '42.845100',
+            'longitude' => '1.607850',
+         ]);
+            DB::table('region')->insert([
+         'region_id'=>'10',
+            'region' => 'Aube',
+            'status' => 1,
+            'latitude' => '48.738708',
+            'longitude' => '0.545300',
+         ]);
+            DB::table('region')->insert([
+         'region_id'=>'11',
+            'region' => 'Aude',
+            'status' => 1,
+            'latitude' => '43.243641',
+            'longitude' => '2.999460',
+         ]);
+            DB::table('region')->insert([
+         'region_id'=>'12',
+            'region' => 'Aveyron',
+            'status' => 1,
+            'latitude' => '44.325790',
+            'longitude' => '3.059170',
+         ]);
+            DB::table('region')->insert([
+         'region_id'=>'13',
+            'region' => 'Bouches-du-Rhône',
+            'status' => 1,
+            'latitude' => '43.388149',
+            'longitude' => '4.803220',
+         ]);
+            DB::table('region')->insert([
+         'region_id'=>'14',
+            'region' => 'Calvados',
+            'status' => 1,
+            'latitude' => '48.839970',
+            'longitude' => '-1.048000',
+         ]);
+            DB::table('region')->insert([
+         'region_id'=>'15',
+            'region' => 'Cantal',
+            'status' => 1,
+            'latitude' => '49.434601',
+            'longitude' => '-101.923729',
+         ]);
+            DB::table('region')->insert([
+         'region_id'=>'16',
+            'region' => 'Charente',
+            'status' => 1,
+            'latitude' => '45.942059',
+            'longitude' => '-0.889310',
+         ]);
+            DB::table('region')->insert([
+         'region_id'=>'17',
+            'region' => 'Charente-Maritime',
+            'status' => 1,
+            'latitude' => '45.730389',
+            'longitude' => '-0.779820',
+         ]);
+            DB::table('region')->insert([
+         'region_id'=>'18',
+            'region' => 'Cher',
+            'status' => 1,
+            'latitude' => '47.275471',
+            'longitude' => '1.554970',
+         ]);
+            DB::table('region')->insert([
+         'region_id'=>'19',
+            'region' => 'Corrèze',
+            'status' => 1,
+            'latitude' => '45.277660',
+            'longitude' => '11.693410',
+         ]);
+            DB::table('region')->insert([
+         'region_id'=>'2A',
+            'region' => 'Corse-du-Sud',
+            'status' => 1,
+            'latitude' => '41.872959',
+            'longitude' => '8.973890',
+         ]);
+            DB::table('region',)->insert([
+         'region_id'=>'2B',
+            'region' => 'Haute Corse',
+            'status' => 1,
+            'latitude' => '42.394750',
+            'longitude' => '9.206280',
+         ]);
+            DB::table('region')->insert([
+         'region_id'=>'21',
+            'region' => 'Côte-d’Or',
+            'status' => 1,
+            'latitude' => '38.393770',
+            'longitude' => '-121.344730',
+         ]);
+            DB::table('region')->insert([
+         'region_id'=>'22',
+            'region' => 'Côtes d Armor',
+            'status' => 1,
+            'latitude' => '48.441020',
+            'longitude' => '-2.863820',
+         ]);
+            DB::table('region')->insert([
+         'region_id'=>'23',
+            'region' => 'Creuse',
+            'status' => 1,
+            'latitude' => '49.839169',
+            'longitude' => '2.163360',
+         ]);
+            DB::table('region')->insert([
+         'region_id'=>'24',
+            'region' => 'Dordogne',
+            'status' => 1,
+            'latitude' => '45.081871',
+            'longitude' => '1.908520',
+         ]);
+            DB::table('region')->insert([
+         'region_id'=>'25',
+            'region' => 'Doubs',
+            'status' => 1,
+            'latitude' => '46.927921',
+            'longitude' => '6.351110',
+         ]);
+            DB::table('region')->insert([
+         'region_id'=>'26',
+            'region' => 'Drôme',
+            'status' => 1,
+            'latitude' => '44.771690',
+            'longitude' => '4.842170',
+         ]);
+            DB::table('region')->insert([
+         'region_id'=>'27',
+            'region' => 'Eure',
+            'status' => 1,
+            'latitude' => '36.426529',
+            'longitude' => '-76.846222',
+         ]);
+            DB::table('region')->insert([
+         'region_id'=>'28',
+            'region' => 'Eure-et-Loir',
+            'status' => 1,
+            'latitude' => '48.447399',
+            'longitude' => '1.374960',
+         ]);
+            DB::table('region')->insert([
+         'region_id'=>'29',
+            'region' => 'Finistère',
+            'status' => 1,
+            'latitude' => '48.232761',
+            'longitude' => '-4.264130',
+         ]);
+            DB::table('region')->insert([
+         'region_id'=>'30',
+            'region' => 'Gard',
+            'status' => 1,
+            'latitude' => '43.973591',
+            'longitude' => '4.688930',
+         ]);
+            DB::table('region')->insert([
          'region_id'=>'31',
             'region' => 'Haute Garonne',
             'status' => 1,
@@ -471,13 +688,13 @@ class RegionSeeder extends Seeder
             'longitude' => '2.131180',
          ]);
             DB::table('region')->insert([
-           'region_id'=>'971',
+         'region_id'=>'971',
             'region' => 'Guadeloupe',
             'status' => 1,
             'latitude' => '16.264999',
             'longitude' => '-61.550999',
          ]);
-         DB::table('region')->insert([
+            DB::table('region')->insert([
          'region_id'=>'972',
             'region' => 'Martinique',
             'status' => 1,
@@ -505,6 +722,7 @@ class RegionSeeder extends Seeder
             'latitude' => '-12.827500',
             'longitude' => '45.166245',
          ]);
+          
 
     }
 }
