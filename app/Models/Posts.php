@@ -30,5 +30,5 @@ class Posts extends Model
         return Region::where('region',$this->region)->first();
     }
 
-    
+     
 }
