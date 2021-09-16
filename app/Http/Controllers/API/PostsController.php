@@ -244,7 +244,7 @@ class PostsController extends BaseController
 
           // Region filter
 
-           $users_ids =  User::where('region',$request->region)->pluck('id');
+           $user_ids =  User::where('region',$request->region)->pluck('id');
 
 
         }elseif(empty($request->region) && isset($request->label_id) && empty($request->rating)){
@@ -396,8 +396,7 @@ class PostsController extends BaseController
 
                $posts = Posts::whereIn('user_id',$user_ids)->orderby('id','desc')->paginate($limit);
            }
-   
-
+           
             return $this->sendResponse($posts, 'Get All Posts Successfully.');
           
     }
@@ -1101,36 +1100,41 @@ class PostsController extends BaseController
      $limit=$request->limit;
        if($request->search){
           $seasonal_data =Posts::where('seasonal','1')->where(DB::raw('lower(title)'), 'like', '%' . strtolower($request->search) . '%')->paginate($limit);
-
        }else{
-
-          $seasonal_data =Posts::where('seasonal','1')->paginate($limit);
-        }
+        $seasonal_data =Posts::where('seasonal','1')->paginate($limit);
+      }
      
-        if($seasonal_data){
-            return $this->sendResponse($seasonal_data, 'Seasonl Data found successfully.');
-        }
-        else{
-            return $this->sendResponse('No such data found');
-        }
+      if($seasonal_data){
+          return $this->sendResponse($seasonal_data, 'Seasonl Data found successfully.');
+      }
+      else{
+          return $this->sendResponse('No such data found');
+      }
     } 
 
     public function discover_seasonal_posts(Request $request){
-     $limit=$request->limit;
 
-   
+       $limit=$request->limit;
 
-     $posts_likes_data =Posts_likes::select('post_id', DB::raw('count(id) as total_likes'))
-             ->groupBy('post_id')->with('Posts')
-             ->orderBy('total_likes')
-             ->paginate($limit);
-      $seasonal_data =Posts::where('seasonal','1')->paginate($limit);
+       $posts_likes_data =Posts_likes::select('post_id', DB::raw('count(id) as total_likes'))
+               ->groupBy('post_id')->with('Posts')
+               ->orderBy('total_likes')
+               ->paginate($limit);
+        $seasonal_data =Posts::where('seasonal','1')->paginate($limit);
 
-      $data = array();
-      $data['posts_likes_data'] = $posts_likes_data;
-      $data['seasonal_data'] = $seasonal_data;
+        $data = array();
+        $data['posts_likes_data'] = $posts_likes_data;
+        $data['seasonal_data'] = $seasonal_data;
 
-         return $this->sendResponse($data, 'Data found successfully.');
+        return $this->sendResponse($data, 'Data found successfully.');
+       
+    } 
+
+    public function getallLabeks(Request $request){
+
+         $limit=$request->limit;
+         $all_labels =Labels::paginate($limit);
+         return $this->sendResponse($all_labels, 'Data found successfully.');
        
     } 
         
