@@ -1072,9 +1072,7 @@ class PostsController extends BaseController
 
     public function discover(Request $request){
      $limit=$request->limit;
-     return $request;
      if($request->search){
-      return "123";
        $post_ids = Posts::where(DB::raw('lower(title)'), 'like', '%' . strtolower($request->search) . '%')->pluck('id');
 
        $posts_likes_data =Posts_likes::select('post_id', DB::raw('count(id) as total_likes'))
@@ -1082,8 +1080,6 @@ class PostsController extends BaseController
                          ->groupBy('post_id')->with('Posts')
                          ->orderBy('total_likes')
                          ->paginate($limit);
-
-        return $post_ids.'---'.$posts_likes_data;
 
      }else{
 
