@@ -56,7 +56,7 @@ Route::get('favouritepost/{id}', [PostsController::class, 'favouritepost']);
 Route::get('unfavouritepost/{id}', [PostsController::class, 'unfavouritepost']);
 Route::put('commentpost', [PostsController::class, 'commentpost']);
 Route::get('getpostcomment/{postid}',[PostsController::class,'getcomment']);
-Route::get('getpostfavourite',[PostsController::class,'getfavourite']);
+Route::post('getpostfavourite',[PostsController::class,'getfavourite']);
 Route::post('getparticularpost',[PostsController::class,'getparticularpost']);
 
 
