@@ -27,7 +27,7 @@ class Posts extends Model
     }
 
      public function getRegionDataAttruibute(){
-        return $this->hasOne('App\Models\Region', 'region', 'region');
+        return Region::where('region',$this->region)->first();
     }
 
     
