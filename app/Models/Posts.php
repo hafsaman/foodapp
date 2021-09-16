@@ -5,12 +5,13 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use App\Models\Posts_Gallary;
+use Auth;
 
 class Posts extends Model
 {
     use HasFactory;
      protected $table='posts';
-     protected $appends = ['media_path'];
+     protected $appends = ['media_path','region_data'];
     protected $fillable = [
         'id',  'title',  'media_path','user_id','comment','is_shopping','price','region','seasonal'
     ];
@@ -23,4 +24,10 @@ class Posts extends Model
     public function user_data(){
     	return $this->hasOne('App\Models\User', 'id', 'user_id');
     }
+
+     public function getRegionDataAttruibute(){
+        return $this->hasOne('App\Models\Region', 'id', 'region');
+    }
+
+    
 }
