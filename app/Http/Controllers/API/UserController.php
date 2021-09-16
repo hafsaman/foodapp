@@ -240,10 +240,10 @@ class UserController extends BaseController
         if(isset($users)){
      
             $user_posts_ids = Posts::where('user_id',$users->id)->pluck('id');
-            $user_posts_videos = Posts_Gallary::whereIn('post_id',$user_posts_ids)->whereIn('media_type',['video/quicktime','video/mp4'])->take($request->limit)->get();
+            $user_posts_videos = Posts_Gallary::whereIn('post_id',$user_posts_ids)->whereIn('media_type',['video/quicktime','video/mp4'])->paginate($request->limit);
 
             $success[] = [
-              'user_videos' => $user_videos,
+              'user_videos' => $user_posts_videos,
               'status'=>200,
             ];
             return $this->sendResponse($success, 'Get User profile successfully.');
@@ -260,7 +260,7 @@ class UserController extends BaseController
         if(isset($users)){
 
             $user_posts_ids = Posts::where('user_id',$users->id)->pluck('id');
-            $user_posts_photos = Posts_Gallary::whereIn('post_id',$user_posts_ids)->where('media_type','=','image/jpeg')->take($request->limit)->get();
+            $user_posts_photos = Posts_Gallary::whereIn('post_id',$user_posts_ids)->where('media_type','=','image/jpeg')->paginate($request->limit);
      
             $success[] = [
               'user_photos' => $user_posts_photos,
