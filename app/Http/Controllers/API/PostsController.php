@@ -396,7 +396,7 @@ class PostsController extends BaseController
 
                $posts = Posts::whereIn('user_id',$user_ids)->orderby('id','desc')->paginate($limit);
            }
-           
+
             return $this->sendResponse($posts, 'Get All Posts Successfully.');
           
     }
@@ -971,7 +971,7 @@ class PostsController extends BaseController
 
     }
 
-
+ 
 
      public function getfavourite(Request $request){
 
@@ -1130,7 +1130,7 @@ class PostsController extends BaseController
        
     } 
 
-    public function getallLabeks(Request $request){
+    public function getallLabels(Request $request){
 
          $limit=$request->limit;
          $all_labels =Labels::paginate($limit);

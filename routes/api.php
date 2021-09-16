@@ -89,7 +89,7 @@ Route::post('follwingdata', [UserController::class, 'follwingdata']);
 Route::post('getvideos', [UserController::class, 'getvideos']);
 Route::post('getphotos', [UserController::class, 'getphotos']);
 Route::post('getshoppingposts', [UserController::class, 'getshoppingposts']);
-Route::get('getallLabeks', [PostsController::class, 'getallLabeks']);
+Route::post('getallLabels', [PostsController::class, 'getallLabels']);
 
 
 });
