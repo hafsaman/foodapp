@@ -49,6 +49,8 @@ Route::get('getfollwer', [UserController::class, 'getfollwer']);
 
 
 Route::post('createpost', [PostsController::class, 'createpost']);
+Route::post('editpost', [PostsController::class, 'editpost']);
+Route::post('deletepostgallary', [PostsController::class, 'deletepostgallary']);
 Route::get('getposts', [PostsController::class, 'getposts']);
 Route::get('likepost/{id}', [PostsController::class, 'likepost']);
 Route::get('unlikepost/{id}', [PostsController::class, 'unlikepost']);

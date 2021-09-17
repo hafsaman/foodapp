@@ -196,14 +196,7 @@ class PostsController extends BaseController
         $input['user_id'] = Auth::user()->id;
         $posts = Posts::create($input);
         
-       /* if($request->has('postmedia')) {
-           return response()->json(count($request->postmedia), 200);
-           /* $fileName = time().'.'.$request->postmedia->extension();
-            $request->postmedia->move(public_path('/assets/posts/'), $fileName);
-            $img_path = 'assets/posts/'.$fileName;
-           
-          
-        } */
+     
         if($request->has('postmedia')) {
             foreach($request->file('postmedia') as $mediaFiles) {
                  $input_file = $mediaFiles->getClientOriginalName();
@@ -220,12 +213,73 @@ class PostsController extends BaseController
 
           }
         }
-         
-    
-        
 
       if(isset($posts)){
           return $this->sendResponse($posts, 'Create Post successfully');
+        } 
+        else{ 
+            return $this->sendError('User Not Exists.', ['error'=>'User Not Found']);
+        } 
+
+    }
+
+    public function editpost(Request $request)
+    {
+        $validator = Validator::make($request->all(), [
+            'post_id' => 'required',         
+        ]);
+    
+        if($validator->fails()){
+            return $this->sendError('Validation Error.', $validator->errors());       
+        }
+
+        $post = Posts::where('id',$request->post_id)->first();
+
+        if($request->title){
+         $title = $request->title;
+        }else{
+         $title = $post->title;
+        }
+
+        if($request->comment){
+         $comment = $request->comment;
+        }else{
+          $comment = $post->comment;
+        }
+
+        if($request->price){
+         $price = $request->price;
+        }else{
+          $price = $post->price;
+        }
+
+       
+        $input['title'] = $request->title;
+        $input['comment'] = $request->comment;
+        $input['price'] = $request->price;
+        $posts = Posts::update($input);
+        
+       
+        if($request->has('postmedia')) {
+            foreach($request->file('postmedia') as $mediaFiles) {
+              $input_file = $mediaFiles->getClientOriginalName();
+              $file_name = pathinfo($input_file, PATHINFO_FILENAME);
+              $fileName = $file_name.time().'.'.$mediaFiles->getClientOriginalExtension();
+              $mediaFiles->move(public_path('/assets/posts/'), $fileName);
+              $img_path = 'assets/posts/'.$fileName;
+              $data['post_id']=$posts->id;
+              $data['media_path']=$img_path;
+              $mediatype=mime_content_type($img_path);//$mediaFiles->getMimeType();
+              $data['media_type']=$mediatype;
+              Posts_Gallary::create($data);
+
+          }
+        }
+
+        $postdata = Posts::where('id',$request->post_id)->first();
+
+        if(isset($postdata)){
+          return $this->sendResponse($postdata, 'Edit Post successfully');
         //return $this->sendResponse($success, 'Posts created successfully.');
         } 
         else{ 
@@ -233,6 +287,29 @@ class PostsController extends BaseController
         } 
 
     }
+
+    public function deletepostgallary(Request $request)
+    {
+        $validator = Validator::make($request->all(), [
+            'id' => 'required',         
+        ]);
+    
+        if($validator->fails()){
+            return $this->sendError('Validation Error.', $validator->errors());       
+        }
+
+        $posts = Posts_Gallary::where('id',$request->id)->delete();
+
+        if(isset($posts)){
+          return $this->sendResponse($posts, 'Deleted successfully');
+        //return $this->sendResponse($success, 'Posts created successfully.');
+        } 
+        else{ 
+            return $this->sendError('User Not Exists.', ['error'=>'User Not Found']);
+        } 
+
+    }
+
 
 
       public function getpostsearch(Request $request){

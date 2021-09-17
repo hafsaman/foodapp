@@ -214,12 +214,17 @@ class UserController extends BaseController
     }
 
     public function getshoppingposts(Request $request){
-
-       $users = Auth::user();
+      $users = Auth::user();
+      if($request->user_id){
+        $user_id = $request->user_id;
+      }else{
+        $user_id = $users->id;
+      }
+       
 
         if(isset($users)){
      
-            $shopping = Posts::where('user_id',$users->id)->where('is_shopping','yes')->paginate($request->limit);
+            $shopping = Posts::where('user_id',$user_id)->where('is_shopping','yes')->paginate($request->limit);
             
             $success[] = [
               'shopping' => $shopping,
