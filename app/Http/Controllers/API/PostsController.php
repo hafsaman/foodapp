@@ -93,7 +93,6 @@ class PostsController extends BaseController
                     curl_exec($ch);
                     curl_close($ch);
 
-
     }
 
      public function teslike(Request $request){
@@ -487,6 +486,10 @@ class PostsController extends BaseController
             $data['label']  = Labels::where('id',$request->label_id)->first();
             
            }
+           if(!isset($request->region) && !isset($request->label_id) && !isset($request->rating){
+             $data = obj()$data;
+           }
+
 
            
            $result['filters'] = $data; 
