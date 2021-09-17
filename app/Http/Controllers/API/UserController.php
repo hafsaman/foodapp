@@ -240,11 +240,16 @@ class UserController extends BaseController
 
      public function getvideos(Request $request){
 
-       $users = Auth::user();
+           $users = Auth::user();
+            if($request->user_id){
+              $user_id = $request->user_id;
+            }else{
+              $user_id = $users->id;
+            }
 
         if(isset($users)){
      
-            $user_posts_ids = Posts::where('user_id',$users->id)->pluck('id');
+            $user_posts_ids = Posts::where('user_id',$user_id)->pluck('id');
             $user_posts_videos = Posts_Gallary::whereIn('post_id',$user_posts_ids)->whereIn('media_type',['video/quicktime','video/mp4'])->paginate($request->limit);
 
             $success[] = [
@@ -260,11 +265,16 @@ class UserController extends BaseController
 
     public function getphotos(Request $request){
 
-       $users = Auth::user();
+           $users = Auth::user();
+          if($request->user_id){
+            $user_id = $request->user_id;
+          }else{
+            $user_id = $users->id;
+          }
 
         if(isset($users)){
 
-            $user_posts_ids = Posts::where('user_id',$users->id)->pluck('id');
+            $user_posts_ids = Posts::where('user_id',$user_id)->pluck('id');
             $user_posts_photos = Posts_Gallary::whereIn('post_id',$user_posts_ids)->where('media_type','=','image/jpeg')->paginate($request->limit);
      
             $success[] = [
@@ -569,9 +579,8 @@ class UserController extends BaseController
             'language' =>  $request->language,
         ]);
         $user=Auth::user();
-      if(isset($language_update)){
-          return $this->sendResponse($user, 'Added Language successfully');
-        //return $this->sendResponse($success, 'Posts created successfully.');
+        if(isset($language_update)){
+            return $this->sendResponse($user, 'Added Language successfully');
         } 
         else{ 
             return $this->sendError('User Not Exists.', ['error'=>'User Not Found']);
