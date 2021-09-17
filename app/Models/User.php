@@ -7,6 +7,8 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Laravel\Passport\HasApiTokens;
+use App\Models\Ratings;
+use App\Models\Region;
 
 class User extends Authenticatable
 {
@@ -17,7 +19,7 @@ class User extends Authenticatable
      *
      * @var array
      */
-
+    protected $appends = ['ratings','region_data'];
     protected $fillable = [
         'name',
         'email',
@@ -59,6 +61,14 @@ class User extends Authenticatable
         public function following_data()
         {
             return $this->hasMany('App\Models\User_Follower', 'follower_id', 'id');
+        }
+
+        public function getRatingsAttribute()
+        {
+            return Ratings::where('user_id',$this->id)->avg('rate');
+        }
+        public function getRegionDataAttribute(){
+            return Region::where('region',$this->region)->first();
         }
 
       
