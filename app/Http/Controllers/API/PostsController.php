@@ -475,9 +475,21 @@ class PostsController extends BaseController
 
                $posts = Posts::whereIn('user_id',$user_ids)->orderby('id','desc')->paginate($limit);
            }
-
+           $data = array();
            $result = array();
-           $result['filters'] = $request; 
+           if($request->region){
+            $data['region']  = $request->region;
+           }
+           if($request->rating){
+            $data['rating']  = $request->rating;
+           }
+           if($request->label_id){
+            $data['label']  = Labels::where('id',$request->label_id)->first();
+            
+           }
+
+           
+           $result['filters'] = $data; 
            $result['posts'] = $posts; 
 
             return $this->sendResponse($result, 'Get All Posts Successfully.');
