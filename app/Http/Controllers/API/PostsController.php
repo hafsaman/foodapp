@@ -487,12 +487,14 @@ class PostsController extends BaseController
             
            }
            if(!isset($request->region) && !isset($request->label_id) && !isset($request->rating)){
-             $data = obj()$data;
+              $result['filters'] = (object)$data;
+           }else{
+            $result['filters'] = $data;
            }
 
 
            
-           $result['filters'] = $data; 
+            
            $result['posts'] = $posts; 
 
             return $this->sendResponse($result, 'Get All Posts Successfully.');
