@@ -312,6 +312,8 @@ class PostsController extends BaseController
 
 
 
+
+
       public function getpostsearch(Request $request){
 
        $limit=$request->limit;
@@ -474,7 +476,11 @@ class PostsController extends BaseController
                $posts = Posts::whereIn('user_id',$user_ids)->orderby('id','desc')->paginate($limit);
            }
 
-            return $this->sendResponse($posts, 'Get All Posts Successfully.');
+           $result = array();
+           $result['filters'] = $request; 
+           $result['posts'] = $posts; 
+
+            return $this->sendResponse($result, 'Get All Posts Successfully.');
           
     }
    
@@ -657,7 +663,6 @@ class PostsController extends BaseController
      
 
             }
-                   
 
             return $this->sendResponse($posts, 'Get All Posts Successfully.');
           }
