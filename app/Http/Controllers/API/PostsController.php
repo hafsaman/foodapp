@@ -253,11 +253,12 @@ class PostsController extends BaseController
           $price = $post->price;
         }
 
-       
-        $input['title'] = $request->title;
-        $input['comment'] = $request->comment;
-        $input['price'] = $request->price;
-        $posts = Posts::update($input);
+        $posts = Posts::where('id',$request->post_id)->update([
+            'title' => $title,
+            'comment' => $comment,
+            'price' => $price,
+
+        ]);
         
        
         if($request->has('postmedia')) {
@@ -272,7 +273,6 @@ class PostsController extends BaseController
               $mediatype=mime_content_type($img_path);//$mediaFiles->getMimeType();
               $data['media_type']=$mediatype;
               Posts_Gallary::create($data);
-
           }
         }
 
