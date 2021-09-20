@@ -27,11 +27,19 @@ class UserController extends BaseController
 
       public function logout(Request $request)
         {
-            $user = Auth::user();
-            $user->token()->revoke();
-            $success['user'] = $user;
-            $success['status'] = 200;
-            return $this->sendResponse($success, 'Successfully logged out');
+
+              if (Auth::check()) {
+                  $user = Auth::user();
+                  $user->token()->revoke();
+                  $success['user'] = $user;
+                  $success['status'] = 200;
+                  return $this->sendResponse($success, 'Successfully logged out');
+                } 
+              else{ 
+                  return $this->sendError('Unauthorised.', ['error'=>'Unauthorised'] );
+              } 
+
+           
            
         }
 
