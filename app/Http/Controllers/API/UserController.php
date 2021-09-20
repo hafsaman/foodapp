@@ -29,7 +29,7 @@ class UserController extends BaseController
         {
             $user = Auth::user();
             $user->token()->revoke();
-            $success['user'] = $labels;
+            $success['user'] = $user;
             $success['status'] = 200;
             return $this->sendResponse($success, 'Successfully logged out');
            
