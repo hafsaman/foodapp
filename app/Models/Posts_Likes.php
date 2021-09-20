@@ -18,4 +18,9 @@ class Posts_Likes extends Model
     {
         return $this->hasOne('App\Models\Posts', 'id', 'post_id');
     }
+
+     public function User()
+    {
+        return $this->hasOne('App\Models\User', 'id', 'user_id');
+    }
 }
