@@ -336,8 +336,7 @@ class PostsController extends BaseController
             $user_ids =  UserLabels::where('label_id',$request->label_id)->pluck('user_id');
           }else{
             $user_ids =  Labels::where('id',$request->label_id)->pluck('user_id');
-            
-         
+                   
           }
 
            
@@ -1236,6 +1235,16 @@ class PostsController extends BaseController
          return $this->sendResponse($all_labels, 'Data found successfully.');
        
     } 
+
+    public function getallpostlikes(Request $request){
+      
+         $limit=$request->limit;
+         $posts_likes_data =Posts_likes::where('post_id',$request->post_id)->with('Posts')->paginate($limit);
+         return $this->sendResponse($posts_likes_data, 'Data found successfully.');
+       
+    } 
+
+    
         
 
     

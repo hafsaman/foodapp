@@ -24,6 +24,17 @@ use Validator;
 class UserController extends BaseController
 {
 
+
+      public function logout(Request $request)
+        {
+            $user = Auth::user();
+            $user->token()->revoke();
+            $success['user'] = $labels;
+            $success['status'] = 200;
+            return $this->sendResponse($success, 'Successfully logged out');
+           
+        }
+
   public function androidnotification($title,$description,$device_id,$type){
 
                   $serverkey = 'AAAA0cjwCmk:APA91bEFAo1kHBoHSDqqRqvrc71YvVwjXF4NrbkV56gHHpeu8pvi0Ec_oVxewIRKnfKP-chY5oJxBV41_Faqk3OWZ8jojxsbvHW12QAgShK9et4gn5OrdYrey8EXrYlwUsqlu1ifH7h3';

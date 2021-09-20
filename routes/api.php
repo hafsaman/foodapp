@@ -93,5 +93,9 @@ Route::post('getphotos', [UserController::class, 'getphotos']);
 Route::post('getshoppingposts', [UserController::class, 'getshoppingposts']);
 Route::post('getallLabels', [PostsController::class, 'getallLabels']);
 
+Route::get('logoutuser', [UserController::class, 'logout']);
+Route::post('getallpostlikes', [PostsController::class, 'getallpostlikes']);
+
+
 
 });
