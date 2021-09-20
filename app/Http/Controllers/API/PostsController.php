@@ -1237,9 +1237,9 @@ class PostsController extends BaseController
     } 
 
     public function getallpostlikes(Request $request){
-      
+
          $limit=$request->limit;
-         $posts_likes_data =Posts_likes::where('post_id',$request->post_id)->with('Posts')->paginate($limit);
+         $posts_likes_data =Posts_likes::where('post_id',$request->post_id)->with('Posts')->with('User')->paginate($limit);
          return $this->sendResponse($posts_likes_data, 'Data found successfully.');
        
     } 
