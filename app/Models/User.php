@@ -28,6 +28,10 @@ class User extends Authenticatable
         'about',
         'status',
         'region',
+        'latitude',
+        'longitude',
+        'fb_link',
+        'address',
         'phoneno',
         'login_type',
         'device_type','devicetoken','social_id','google_id','apple_id','set_notifications_send'
