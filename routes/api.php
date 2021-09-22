@@ -22,6 +22,7 @@ use App\Http\Controllers\API\RatingController;
   
 Route::post('register', [RegisterController::class, 'register']);
 Route::post('login', [RegisterController::class, 'login']);
+Route::post('forgotPassword', [RegisterController::class, 'forgotPassword']);
 Route::post('sociallogin', [RegisterController::class, 'sociallogin']);
 Route::get('getregion', [RegisterController::class, 'region']);
 Route::post('teslike', [PostsController::class, 'teslike']);
@@ -60,6 +61,8 @@ Route::put('commentpost', [PostsController::class, 'commentpost']);
 Route::get('getpostcomment/{postid}',[PostsController::class,'getcomment']);
 Route::post('getpostfavourite',[PostsController::class,'getfavourite']);
 Route::post('getparticularpost',[PostsController::class,'getparticularpost']);
+Route::post('deletepost',[PostsController::class,'deletepost']);
+
 
 
 Route::post('createlabel', [LabelController::class, 'createlabel']);

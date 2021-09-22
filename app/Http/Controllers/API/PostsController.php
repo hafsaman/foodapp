@@ -1260,6 +1260,21 @@ class PostsController extends BaseController
        
     } 
 
+     public function deletepost(Request $request){
+          Posts::where('id',$request->post_id)->delete();
+          Posts_Gallary::where('post_id',$request->post_id)->delete();
+          Posts_Likes::where('post_id',$request->post_id)->delete();
+          Posts_Comments::where('post_id',$request->post_id)->delete();
+          Postsfavourite::where('post_id',$request->post_id)->delete();
+          $success = [
+            
+            'status'=>200,
+          ];
+         return $this->sendResponse($success, 'Data Deleted successfully.');
+       
+    } 
+
+
     
         
 
