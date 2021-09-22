@@ -910,28 +910,30 @@ class PostsController extends BaseController
   //validator place
 
        $posts = Posts::find($id);
- 
+       $user_id = Auth::id();
             //if(isset($posts)){
             $input['post_id'] = $posts->id;
        		 	$input['user_id'] = Auth::user()->id;
        		 	$input['like'] = 1;
             Posts_Likes::create($input);
-            $inputnot['user_id']=$posts->user_id;
-            $inputnot['description']= "Liked Your Post";
-            $inputnot['postlikeby_userid']= Auth::user()->id;
-            $inputnot['post_id']=$posts->id;
-            $inputnot['status']='unread';
-            UserNotification::create($inputnot);
-            $user = User::find($posts->user_id);
-            $title ="Like Post";
-            $description = Auth::user()->name." Liked Your Post";
-            $type = array();
-            if($user->device_type == 'ios'){
-                 $this->iosnotification($title,$description,$user->devicetoken,$type);
-            }else{
-                 $this->androidnotification($title,$description,$user->devicetoken,$type);
+            if($user_id != $posts->user_id){
+
+                $inputnot['user_id']=$posts->user_id;
+                $inputnot['description']= "Liked Your Post";
+                $inputnot['postlikeby_userid']= Auth::user()->id;
+                $inputnot['post_id']=$posts->id;
+                $inputnot['status']='unread';
+                UserNotification::create($inputnot);
+                $user = User::find($posts->user_id);
+                $title ="Like Post";
+                $description = Auth::user()->name." Liked Your Post";
+                $type = array();
+                if($user->device_type == 'ios'){
+                     $this->iosnotification($title,$description,$user->devicetoken,$type);
+                }else{
+                     $this->androidnotification($title,$description,$user->devicetoken,$type);
+                }
             }
-            
         
           $success[] = [
             
@@ -1027,21 +1029,26 @@ class PostsController extends BaseController
    		 	  $input['user_id'] = Auth::user()->id;
           $Post_comment=Posts_Comments::create($input);
           $post_comment1 =Posts_Comments::where('posts_comments.id',$Post_comment->id)->join('users','users.id','=','posts_comments.user_id')->select('posts_comments.id','posts_comments.post_id','posts_comments.user_id','posts_comments.comment','posts_comments.created_at','users.name','users.email','users.avatar')->first();
-            $inputnot['user_id']=$postsdata->user_id;
-            $inputnot['description']= Auth::user()->name." Commented on Your Post";
-            $inputnot['postlikeby_userid']= Auth::user()->id;
-            $inputnot['post_id']=$request->postid;
-            $inputnot['status']='unread';
-            UserNotification::create($inputnot);
-            $user = User::find($postsdata->user_id);
-            $title ="Like Post";
-            $description = Auth::user()->name." Commented On Your Post";
-            $type = array();
-            if($user->device_type == 'ios'){
-                  $this->iosnotification($title,$description,$user->devicetoken,$type);
-            }else{
-                 $this->androidnotification($title,$description,$user->devicetoken,$type);
+
+            if(Auth::user()->id != $postsdata->user_id){
+              
+                  $inputnot['user_id']=$postsdata->user_id;
+                  $inputnot['description']= Auth::user()->name." Commented on Your Post";
+                  $inputnot['postlikeby_userid']= Auth::user()->id;
+                  $inputnot['post_id']=$request->postid;
+                  $inputnot['status']='unread';
+                  UserNotification::create($inputnot);
+                  $user = User::find($postsdata->user_id);
+                  $title ="Like Post";
+                  $description = Auth::user()->name." Commented On Your Post";
+                  $type = array();
+                  if($user->device_type == 'ios'){
+                        $this->iosnotification($title,$description,$user->devicetoken,$type);
+                  }else{
+                       $this->androidnotification($title,$description,$user->devicetoken,$type);
+                  }
             }
+        
         
             return $this->sendResponse($post_comment1, 'Post Comment Added successfully.');
         } 
@@ -1237,9 +1244,18 @@ class PostsController extends BaseController
     } 
 
     public function getallpostlikes(Request $request){
-
+        $user_id = Auth::id();
          $limit=$request->limit;
          $posts_likes_data =Posts_likes::where('post_id',$request->post_id)->with('Posts')->with('User')->paginate($limit);
+         foreach ($posts_likes_data as $user_follow) {
+              $is_followchk = User_Follower::where('follower_id',$user_follow->user_id)->where('user_id',$user_id)->first();
+              if($is_followchk){
+                  $is_follow = '1';
+              }else{
+                  $is_follow = '0';
+              }
+              $user_follow->is_follow = $is_follow;
+          }
          return $this->sendResponse($posts_likes_data, 'Data found successfully.');
        
     } 
