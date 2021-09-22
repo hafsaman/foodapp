@@ -43,6 +43,8 @@ class UserController extends BaseController
            
         }
 
+         
+
   public function androidnotification($title,$description,$device_id,$type){
 
                   $serverkey = 'AAAA0cjwCmk:APA91bEFAo1kHBoHSDqqRqvrc71YvVwjXF4NrbkV56gHHpeu8pvi0Ec_oVxewIRKnfKP-chY5oJxBV41_Faqk3OWZ8jojxsbvHW12QAgShK9et4gn5OrdYrey8EXrYlwUsqlu1ifH7h3';
@@ -233,14 +235,13 @@ class UserController extends BaseController
     }
 
     public function getshoppingposts(Request $request){
-      $users = Auth::user();
-      if($request->user_id){
-        $user_id = $request->user_id;
-      }else{
-        $user_id = $users->id;
-      }
+        $users = Auth::user();
+        if($request->user_id){
+          $user_id = $request->user_id;
+        }else{
+          $user_id = $users->id;
+        }
        
-
         if(isset($users)){
      
             $shopping = Posts::where('user_id',$user_id)->where('is_shopping','yes')->paginate($request->limit);
@@ -340,6 +341,30 @@ class UserController extends BaseController
            $region = $users->region;
         }
 
+         if($request->latitude){
+          $latitude = $request->latitude;
+        }else{
+           $latitude = $users->latitude;
+        }
+
+        if($request->longitude){
+          $longitude = $request->longitude;
+        }else{
+           $longitude = $users->longitude;
+        }
+
+         if($request->fb_link){
+          $fb_link = $request->fb_link;
+        }else{
+           $fb_link = $users->fb_link;
+        }
+
+        if($request->address){
+          $address = $request->address;
+        }else{
+           $address = $users->address;
+        }
+
           if($request->has('avatar')) {
             $fileName = time().'.'.$request->avatar->extension();
             $request->avatar->move(public_path('/assets/users/'), $fileName);
@@ -354,6 +379,10 @@ class UserController extends BaseController
           $users->phoneno=$phoneno;
           $users->region=$region;
           $users->avatar = $img_path;
+          $users->latitude=$latitude;
+          $users->longitude = $longitude;
+          $users->fb_link=$fb_link;
+          $users->address = $address;
           $users->save();
 
           $success[] = [
@@ -486,7 +515,7 @@ class UserController extends BaseController
             foreach($user_follower as $user)
             {
               $posts=Posts::where('user_id',$user->follower_id)->get();
-           }
+            }
             return $this->sendResponse($posts, 'UnFollow successfully.');
         } 
         else{ 
