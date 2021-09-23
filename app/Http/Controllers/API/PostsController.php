@@ -190,6 +190,7 @@ class PostsController extends BaseController
         $input['title'] = $request->title;
         $input['comment'] = $request->comment;
         $input['is_shopping'] =$request->shopping;
+        $input['unit'] = $request->unit;
         $input['price'] = $request->price;
         $input['region']=$request->region;
         $input['user_id'] = Auth::user()->id;
@@ -252,10 +253,17 @@ class PostsController extends BaseController
           $price = $post->price;
         }
 
+        if($request->unit){
+         $unit = $request->unit;
+        }else{
+          $unit = $post->unit;
+        }
+
         $posts = Posts::where('id',$request->post_id)->update([
             'title' => $title,
             'comment' => $comment,
             'price' => $price,
+            'unit' => $unit,
 
         ]);
         
@@ -1121,7 +1129,6 @@ class PostsController extends BaseController
                  // $media_path=explode(",",$post->media_path);
                //   $post->media_path=$media_path;
                 $post->comment=$comment_data;
-
                 $post->no_of_like = $nooflike;
                 $post->no_of_favourite = $nooffavourite;
                 $post->is_like = $is_like;
@@ -1267,7 +1274,6 @@ class PostsController extends BaseController
           Posts_Comments::where('post_id',$request->post_id)->delete();
           Postsfavourite::where('post_id',$request->post_id)->delete();
           $success = [
-            
             'status'=>200,
           ];
          return $this->sendResponse($success, 'Data Deleted successfully.');
