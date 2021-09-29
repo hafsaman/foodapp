@@ -7,6 +7,8 @@ use App\Http\Controllers\API\BaseController as BaseController;
 use App\Models\User;
 use App\Models\Region;
 use Illuminate\Support\Facades\Auth;
+use Mail;
+use App\Mail\ForgotPassword;
 use Validator;
    
 class RegisterController extends BaseController
@@ -40,10 +42,10 @@ class RegisterController extends BaseController
             'c_password' => 'required|same:password',
             'region'=>'required',
             'device_type'=>'required',
-            'devicetoken'=>'required'
-            
+            'devicetoken'=>'required',  
+
         ]);
-   
+        
         if($validator->fails()){
             return $this->sendError('Validation Error.', $validator->errors());       
         }
@@ -65,7 +67,7 @@ class RegisterController extends BaseController
         return $this->sendResponse($success, 'User register successfully.');
     }
     }
-
+    
      /**
      * Social login api
      *
@@ -146,7 +148,7 @@ class RegisterController extends BaseController
                 $user = User::create($input);
                 $success['token'] =  $user->createToken('MyApp')->accessToken;
                 $success['name'] =  $user->name;
-                  $success['id'] =  $user->id;
+                $success['id'] =  $user->id;
                 $success['region'] =  ($user->region != '') ? $user->region : '';  
            
                 return $this->sendResponse($success, 'User register successfully.');
@@ -181,5 +183,58 @@ class RegisterController extends BaseController
         else{ 
             return $this->sendError('Unauthorised.', ['error'=>'Unauthorised']);
         } 
+    }
+
+     public function forgotPassword(Request $request){
+        
+        $email = $request->email;
+        $user = User::where('email', $request->get('email'))->first();
+        if($user){
+            $otp =  mt_rand(1000,9999);
+            $user->otp = $otp;
+            $user->save();
+            Mail::to($email)->send(new ForgotPassword($user->name,$otp));
+            $success['message'] = 'Please check your email for new password';
+            return $this->sendResponse($success, 'Please check your email for code to change new password.');
+            
+        }else{
+           return $this->sendError('User Not Found.', ['error'=>'Unauthorised']);
+        }
+        
+        
+    }
+
+    public function ChangePassword(Request $request){
+        
+        $password = $request->password;
+        $email = $request->email;
+        $user = User::where('email', $request->get('email'))->update([
+            'password' => bcrypt($password)
+        ]);
+        if($user){
+            $userdata = User::where('email', $request->get('email'))->first();
+            $success['user'] = $userdata;
+            return $this->sendResponse($success, 'Password Updated Successfully');
+            
+        }else{
+           return $this->sendError('Something went wrong.', ['error'=>'Something went wrong']);
+        }
+        
+        
+    }
+
+      public function VerifyOTP(Request $request){
+        
+        $otp = $request->otp;
+        $user = User::where('otp', $request->get('otp'))->where('email', $request->get('email'))->first();
+        if($user){
+            $success = 200;
+            return $this->sendResponse($success, 'Please check your email for code to change new password.');
+            
+        }else{
+           return $this->sendError('OTP NOT Found.', ['error'=>'Unauthorised']);
+        }
+        
+        
     }
 }
