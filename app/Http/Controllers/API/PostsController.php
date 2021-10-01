@@ -500,41 +500,50 @@ class PostsController extends BaseController
             $result['filters'] = $data;
            }
 
-           $user_login = Auth::user();
+           if(isset($request->latitude) && isset($request->longitude)){
+              $lat1 = $request->latitude;
+              $long1 = $request->longitude;
+              foreach ($posts as $post_new) {
 
-           return $user_login;
+                 $post_user_lat_long =  User::where('id',$value->user_id)->first();
+                 $lat2 = $post_user_lat_long->latitude;
+                 $long2 = $post_user_lat_long->longitude;
 
-           /*foreach ($posts as $value) {
-
-              $post_user = User::where('id',$value->user_id)->first();
-              $profile_user_region = Region::where('region',$user_login->region)->first();
-              $post_user_region = Region::where('region',$value->region)->first();
-
-            $distance = distance($profile_user_region->latitude,$profile_user_region->longitude,$post_user_region->latitude,$post_user_region->longitude);
-            return $distance;
-           }*/
-
+                 $distance = distance($lat1, $long1, $lat2, $long2, 'K');
+                  $post_new->distance=$distance;
+               
+              }
+           }
 
            
+
             
+
            $result['posts'] = $posts; 
+
+
 
             return $this->sendResponse($result, 'Get All Posts Successfully.');
           
     }
 
-      public function distance($lat1,$long1,$lat,$long)
-    {
-        //this distance is finded in KM
-        return "ROUND(6371 * acos(cos(radians(" . $lat . "))
-                * cos(radians(" . $lat1 . "))
-                * cos(radians(" . $long1 . ") - radians(" . $long . "))
-                + sin(radians(" .$lat. "))
-                * sin(radians(" .$lat1. "))),2)";
-    }
+        function distance($lat1, $lon1, $lat2, $lon2, $unit) {
 
-  
-   
+          $theta = $lon1 - $lon2;
+          $dist = sin(deg2rad($lat1)) * sin(deg2rad($lat2)) +  cos(deg2rad($lat1)) * cos(deg2rad($lat2)) * cos(deg2rad($theta));
+          $dist = acos($dist);
+          $dist = rad2deg($dist);
+          $miles = $dist * 60 * 1.1515;
+          $unit = strtoupper($unit);
+
+          if ($unit == "K") {
+              return ($miles * 1.609344);
+          } else if ($unit == "N") {
+              return ($miles * 0.8684);
+          } else {
+              return $miles;
+          }
+        }
 
     public function getpostsall(Request $request){
 
