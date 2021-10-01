@@ -499,6 +499,23 @@ class PostsController extends BaseController
             $result['filters'] = $data;
            }
 
+           $user_login = Auth::user();
+
+           foreach ($posts as $value) {
+
+              $post_user = User::where('id',$value->user_id)->first();
+              $profile_user_region = Region::where('region',$user_login->region)->first();
+              $post_user_region = Region::where('region',$post_user->region)->first();
+
+            return Region::select(DB::raw("ROUND(6371 * acos(cos(radians(" . $profile_user_region->latitude . "))
+                    * cos(radians(latitude))
+                    * cos(radians(longitude) - radians(" . $profile_user_region->longitude . "))
+                    + sin(radians(" .$profile_user_region->latitude. "))
+                    * sin(radians(latitude))),2) AS distance")) 
+                ->where('id',$post_user_region->id)
+                ->get(); 
+           }
+
 
            
             
