@@ -505,7 +505,7 @@ class PostsController extends BaseController
               $long1 = $request->longitude;
               foreach ($posts as $post_new) {
 
-                 $post_user_lat_long =  User::where('id',$value->user_id)->first();
+                 $post_user_lat_long =  User::where('id',$post_new->user_id)->first();
                  $lat2 = $post_user_lat_long->latitude;
                  $long2 = $post_user_lat_long->longitude;
 
