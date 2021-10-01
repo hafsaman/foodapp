@@ -506,18 +506,22 @@ class PostsController extends BaseController
               foreach ($posts as $post_new) {
 
                  $post_user_lat_long =  User::where('id',$post_new->user_id)->first();
-                 $lat2 = $post_user_lat_long->latitude;
-                 $long2 = $post_user_lat_long->longitude;
 
-                 $distance = $this->distance($lat1, $long1, $lat2, $long2, 'K');
+                 if($post_user_lat_long->latitude){
+                    $lat2 = $post_user_lat_long->latitude;
+                    $long2 = $post_user_lat_long->longitude;
+
+                   $distance = $this->distance($lat1, $long1, $lat2, $long2, 'K');
+                 }else{
+                   $distance = "";
+                 }
+                 
                   $post_new->distance=$distance;
                
               }
            }
 
            $result['posts'] = $posts; 
-
-
 
             return $this->sendResponse($result, 'Get All Posts Successfully.');
           
