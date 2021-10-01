@@ -502,6 +502,8 @@ class PostsController extends BaseController
 
            $user_login = Auth::user();
 
+           return $user_login;
+
            /*foreach ($posts as $value) {
 
               $post_user = User::where('id',$value->user_id)->first();
