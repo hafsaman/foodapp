@@ -506,15 +506,10 @@ class PostsController extends BaseController
 
               $post_user = User::where('id',$value->user_id)->first();
               $profile_user_region = Region::where('region',$user_login->region)->first();
-              $post_user_region = Region::where('region',$post_user->region)->first();
+              $post_user_region = Region::where('region',$value->region)->first();
 
-            return Region::select(DB::raw("ROUND(6371 * acos(cos(radians(" . $profile_user_region->latitude . "))
-                    * cos(radians(latitude))
-                    * cos(radians(longitude) - radians(" . $profile_user_region->longitude . "))
-                    + sin(radians(" .$profile_user_region->latitude. "))
-                    * sin(radians(latitude))),2) AS distance")) 
-                ->where('id',$post_user_region->id)
-                ->get(); 
+            $distance = distance($profile_user_region->latitude,$profile_user_region->longitude,$post_user_region->latitude,$post_user_region->longitude);
+            return $distance;
            }
 
 
@@ -525,6 +520,18 @@ class PostsController extends BaseController
             return $this->sendResponse($result, 'Get All Posts Successfully.');
           
     }
+
+      public function distance($lat1,$long1,$lat,$long)
+    {
+        //this distance is finded in KM
+        return "ROUND(6371 * acos(cos(radians(" . $lat . "))
+                * cos(radians(" . $lat1 . "))
+                * cos(radians(" . $long1 . ") - radians(" . $long . "))
+                + sin(radians(" .$lat. "))
+                * sin(radians(" .$lat1. "))),2)";
+    }
+
+  
    
 
     public function getpostsall(Request $request){
