@@ -502,7 +502,7 @@ class PostsController extends BaseController
 
            $user_login = Auth::user();
 
-           foreach ($posts as $value) {
+           /*foreach ($posts as $value) {
 
               $post_user = User::where('id',$value->user_id)->first();
               $profile_user_region = Region::where('region',$user_login->region)->first();
@@ -510,7 +510,7 @@ class PostsController extends BaseController
 
             $distance = distance($profile_user_region->latitude,$profile_user_region->longitude,$post_user_region->latitude,$post_user_region->longitude);
             return $distance;
-           }
+           }*/
 
 
            
