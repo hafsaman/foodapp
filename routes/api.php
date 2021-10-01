@@ -51,7 +51,7 @@ Route::get('follow/{id}', [UserController::class, 'follow']);
 Route::get('unfollow/{id}', [UserController::class, 'unfollow']);
 Route::get('getfollwer', [UserController::class, 'getfollwer']);
 
-
+Route::get('getlatlong', [PostsController::class, 'getlatlong']);
 Route::post('createpost', [PostsController::class, 'createpost']);
 Route::post('editpost', [PostsController::class, 'editpost']);
 Route::post('deletepostgallary', [PostsController::class, 'deletepostgallary']);

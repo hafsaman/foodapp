@@ -545,6 +545,15 @@ class PostsController extends BaseController
           }
         }
 
+        public  function getlatlong(Request $request) {
+
+            $user = Auth::user();
+            $result['latitude'] = $user->latitude;
+            $result['longitude'] = $user->longitude;
+            return $this->sendResponse($result, 'Get Lat Long Successfully.');
+        }
+
+
     public function getpostsall(Request $request){
 
        $limit=$request->limit;
