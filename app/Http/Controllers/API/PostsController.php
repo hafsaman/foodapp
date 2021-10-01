@@ -17,6 +17,7 @@ use App\Models\User_Follower;
 use App\Models\UserNotification;
 use App\Models\Labels;
 use App\Models\UserLabels;
+use App\Models\Region;
 use App\Models\Ratings;
 //use Illuminate\Support\Facades\Auth;
 use Validator;
