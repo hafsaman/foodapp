@@ -13,7 +13,7 @@ class Posts extends Model
 {
     use HasFactory;
      protected $table='posts';
-     protected $appends = ['media_path','region_data'];
+     protected $appends = ['media_path','region_data','users_data'];
     protected $fillable = [
         'id',  'title',  'media_path','user_id','comment','is_shopping','price','region','seasonal','unit'
     ];
@@ -29,6 +29,10 @@ class Posts extends Model
 
     public function getRegionDataAttribute(){
         return Region::where('region',$this->region)->first();
+    }
+
+     public function getUsersDataAttribute(){
+        return User::where('id',$this->user_id)->first();
     }
 
    
