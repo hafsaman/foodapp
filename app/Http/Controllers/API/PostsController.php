@@ -175,7 +175,6 @@ class PostsController extends BaseController
          
             'comment' => 'required',
              'shopping' => 'required',
-            'region' =>'required',
             'postmedia'=>'required'
         ]);
     
@@ -188,12 +187,17 @@ class PostsController extends BaseController
         }else{
           $input['seasonal'] = '0';
         }
+
+        if(isset($request->region)){
+           $input['region'] = $request->region;
+        }else{
+          $input['region'] = '';
+        }
         $input['title'] = $request->title;
         $input['comment'] = $request->comment;
         $input['is_shopping'] =$request->shopping;
         $input['unit'] = $request->unit;
         $input['price'] = $request->price;
-        $input['region']=$request->region;
         $input['user_id'] = Auth::user()->id;
         $posts = Posts::create($input);
         
