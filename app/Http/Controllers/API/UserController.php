@@ -335,7 +335,7 @@ class UserController extends BaseController
            $phoneno = $users->phoneno;
         }
 
-        if($request->region){
+        if(isset($request->region)){
           $region = $request->region;
         }else{
            $region = $users->region;
