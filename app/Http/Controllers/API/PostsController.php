@@ -358,7 +358,7 @@ class PostsController extends BaseController
           // Rating filter
 
           $user_ids =  User::join('ratings','users.id','=','ratings.user_id')
-                        ->select('users.*',DB::raw('avg(ratings.rate) as rating'))
+                        ->select('users.*',DB::raw('ROUND(avg(ratings.rate) ,0)  as rating'))
                         ->groupBy('users.id')
                         ->havingRaw('avg(ratings.rate) = '.$request->rating)
                         ->pluck('id');
@@ -392,7 +392,7 @@ class PostsController extends BaseController
             // region rating filter
 
            $user_ids =  User::join('ratings','users.id','=','ratings.user_id')
-                          ->select('users.*',DB::raw('avg(ratings.rate) as rating'))
+                          ->select('users.*',DB::raw('ROUND(avg(ratings.rate) ,0) as rating'))
                           ->groupBy('users.id')
                           ->havingRaw('avg(ratings.rate) = '.$request->rating)
                           ->where('users.region',$request->region)
@@ -407,7 +407,7 @@ class PostsController extends BaseController
 
           if($labelcheck->user_id == '0'){
 
-            $user_id_chk = Ratings::select('ratings.*',DB::raw('avg(ratings.rate) as rating'))
+            $user_id_chk = Ratings::select('ratings.*',DB::raw('ROUND(avg(ratings.rate) ,0) as rating'))
                         ->groupBy('ratings.id')
                         ->havingRaw('avg(ratings.rate) = '.$request->rating)
                          ->pluck('ratings.user_id');
@@ -417,7 +417,7 @@ class PostsController extends BaseController
            
           }else{
               
-              $user_id_chk = Ratings::select('ratings.*',DB::raw('avg(ratings.rate) as rating'))
+              $user_id_chk = Ratings::select('ratings.*',DB::raw('ROUND(avg(ratings.rate) ,0) as rating'))
                         ->groupBy('ratings.id')
                         ->havingRaw('avg(ratings.rate) = '.$request->rating)
                          ->pluck('ratings.user_id');
@@ -438,9 +438,9 @@ class PostsController extends BaseController
           if($labelcheck->user_id == '0'){
 
             $user_id_chk =  User::join('ratings','users.id','=','ratings.user_id')
-                          ->select('users.*',DB::raw('avg(ratings.rate) as rating'))
+                          ->select('users.*',DB::raw('ROUND(avg(ratings.rate) ,0) as rating'))
                           ->groupBy('users.id')
-                          ->havingRaw('avg(ratings.rate) = '.$request->rating)
+                          ->havingRaw('ROUND(avg(ratings.rate) ,0) = '.$request->rating)
                           ->where('users.region',$request->region)
                           ->pluck('id');
             if(count($user_id_chk) > 0){
@@ -455,9 +455,9 @@ class PostsController extends BaseController
           }else{
 
               $user_id_chk =  User::join('ratings','users.id','=','ratings.user_id')
-                          ->select('users.*',DB::raw('avg(ratings.rate) as rating'))
+                          ->select('users.*',DB::raw('ROUND(avg(ratings.rate) ,0) as rating'))
                           ->groupBy('users.id')
-                          ->havingRaw('avg(ratings.rate) = '.$request->rating)
+                          ->havingRaw('ROUND(avg(ratings.rate) ,0) = '.$request->rating)
                           ->where('users.region',$request->region)
                           ->pluck('id');
 
