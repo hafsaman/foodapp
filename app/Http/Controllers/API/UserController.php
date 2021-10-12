@@ -207,7 +207,7 @@ class UserController extends BaseController
             $user_labeldefault=Labels::whereIn('id',$user_label_defaultadded)->get()->toArray();
             $labels = array_merge($user_label,$user_labeldefault);
             
-            $user_rating=Ratings::where('user_id',$users->id)->avg('rate');
+            $user_rating=Ratings::where('rate_id',$users->id)->avg('rate');
             $recommendation=Ratings::where('rate_id',$users->id)->orderby('id','DESC')->first();
             $shopping = Posts::where('user_id',$users->id)->where('is_shopping','yes')->get();
             $OrBuy =  OrBuy::where('user_id',$users->id)->first();
