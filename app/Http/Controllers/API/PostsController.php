@@ -360,7 +360,7 @@ class PostsController extends BaseController
           $user_ids =  User::join('ratings','users.id','=','ratings.user_id')
                         ->select('users.*',DB::raw('round(avg(ratings.rate) ,0)  as rating'))
                         ->groupBy('users.id')
-                        ->havingRaw('avg(ratings.rate) = '.$request->rating)
+                        ->havingRaw('round(avg(ratings.rate) ,0) = '.$request->rating)
                         ->pluck('id');
        
          
